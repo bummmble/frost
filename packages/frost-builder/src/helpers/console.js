@@ -6,10 +6,10 @@ const warningColor = chalk.rgb(255,165, 0); //warning
 const errorColor = chalk.red();
 
 const Logger = {
-	success: msg => successColor(msg),
-	info: msg => infoColor(msg),
-	warning: msg => warningColor(msg),
-	error: msg => errorColor(msg)
+	success: msg => console.log(successColor(msg)),
+	info: msg => console.log(infoColor(msg)),
+	warning: msg => console.warn(warningColor(msg)),
+	error: msg => console.error(errorColor(msg))
 };
 
 export default Logger;
