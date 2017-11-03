@@ -32,6 +32,8 @@ export default (target, env = 'development', config = {}) => {
     hasVendor,
     serverOutput,
     clientOutput,
+    hasHmr,
+    hmrMiddleware
   } = buildEntryAndOutput(config, isServer);
 
   const prefix = chalk.bold(target.toUpperCase());
@@ -74,8 +76,18 @@ export default (target, env = 'development', config = {}) => {
     performance: config.performance || {},
     externals: isServer ? getExternals(Root) : undefined,
     entry: removeEmptyKeys({
-      vendors: hasVendor ? [vendorEntry].filter(Boolean) : null,
-      main: hasMain ? [mainEntry].filter(Boolean) : null,
+      vendors: hasVendor ? [
+        hasVendor && hasHmr
+          ? hmrMiddleware
+          : null
+        vendorEntry,
+      ].filter(Boolean) : null,
+      main: hasMain ? [
+        hasMain && hasHmr
+          ? hmrMiddleware
+          : null,
+        mainEntry
+      ].filter(Boolean) : null,
     }),
 
     output: {

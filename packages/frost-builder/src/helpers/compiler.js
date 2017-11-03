@@ -35,6 +35,8 @@ const buildEntryAndOutput = ({ entry, output, hmr }, isServer) => {
     hasVendor,
     clientOutput,
     serverOutput,
+    hmrMiddleware,
+    hasHmr
   };
 };
 
