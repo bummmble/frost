@@ -3,6 +3,7 @@ import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
 import StatsPlugin from 'stats-webpack-plugin';
 import ExtractCssChunks from 'extract-css-chunks-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+import MissingModules from './MissingModules';
 
 const basePlugins = (env, webpackTarget, isDev, isProd) => {
   return [
@@ -16,6 +17,7 @@ const basePlugins = (env, webpackTarget, isDev, isProd) => {
     // Improves OS Compat
     // See: https://github.com/Urthen/case-sensitive-paths-webpack-plugin
     new CaseSensitivePathsPlugin(),
+    new MissingModules();
 
     isDev ? new webpack.NamedModulesPlugin() : null,
     isDev ? new webpack.NoEmitOnErrorsPlugin() : null,
