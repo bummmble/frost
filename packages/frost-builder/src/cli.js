@@ -23,12 +23,21 @@ const cli = meow(`
 	Usage:
 		$ frost <command>
 
+  Options:
+    --verbose, -v       Extensive messages to help with debugging
+    --quiet, -q         Silences all but important messages
+
 	Commands:
     build               Builds production versions of both client and server
 		build:client        Builds a production version of the client
     build:server        Builds a production version of the server
     clean:              Cleans the output directories
-`);
+`, {
+  alias: {
+    v: 'verbose',
+    q: 'quiet'
+  }
+});
 
 const input = cli.input;
 const flags = cli.flags;
