@@ -30,20 +30,20 @@ export default {
       deadcode: true,
       flipComparisons: false,
       mangle: false,
-      mergeVars: false
+      mergeVars: false,
     },
     uglifyOptions: {
       compress: {
         unsafe_math: true,
         unsafe_proto: true,
         keep_infinity: true,
-        passes: 2
+        passes: 2,
       },
       output: {
         ascii_only: true,
-        comments: false
-      }
-    }
+        comments: false,
+      },
+    },
   },
   images: {
     progressive: true,
@@ -59,5 +59,5 @@ export default {
   eslint: {},
   performance: {},
   pwa: {},
-  verbose: true
+  verbose: true,
 };

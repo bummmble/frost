@@ -33,7 +33,7 @@ export default (target, env = 'development', config = {}) => {
     serverOutput,
     clientOutput,
     hasHmr,
-    hmrMiddleware
+    hmrMiddleware,
   } = buildEntryAndOutput(config, isServer);
 
   const prefix = chalk.bold(target.toUpperCase());
@@ -55,12 +55,14 @@ export default (target, env = 'development', config = {}) => {
     sourceMap: config.sourceMaps,
   };
 
-  const postcssLoaderOptions = config.postcss ? {
-    loader: 'postcss-loader',
-    query: {
-      sourceMap: config.sourceMaps
-    }
-  } : null;
+  const postcssLoaderOptions = config.postcss
+    ? {
+        loader: 'postcss-loader',
+        query: {
+          sourceMap: config.sourceMaps,
+        },
+      }
+    : null;
 
   const plugins = PluginManager(
     env,
@@ -69,7 +71,7 @@ export default (target, env = 'development', config = {}) => {
     isProd,
     isServer,
     hasVendor,
-    hasHmr
+    hasHmr,
   );
 
   console.log(Logger.info(chalk.underline(`${prefix} Configuration`)));
@@ -80,7 +82,7 @@ export default (target, env = 'development', config = {}) => {
     console.log(`→ Enable Source Maps: ${Logger.info(devtool)}`);
     console.log(`→ Use Cache Loader: ${Logger.info(config.sourceMaps)}`);
   }
-  
+
   return {
     name,
     devtool,
@@ -89,18 +91,14 @@ export default (target, env = 'development', config = {}) => {
     performance: config.performance || {},
     externals: isServer ? getExternals(Root) : undefined,
     entry: removeEmptyKeys({
-      vendors: hasVendor ? [
-        hasVendor && hasHmr
-          ? hmrMiddleware
-          : null
-        vendorEntry,
-      ].filter(Boolean) : null,
-      main: hasMain ? [
-        hasMain && hasHmr
-          ? hmrMiddleware
-          : null,
-        mainEntry
-      ].filter(Boolean) : null,
+      vendors: hasVendor
+        ? [hasVendor && hasHmr ? hmrMiddleware : null, vendorEntry].filter(
+            Boolean,
+          )
+        : null,
+      main: hasMain
+        ? [hasMain && hasHmr ? hmrMiddleware : null, mainEntry].filter(Boolean)
+        : null,
     }),
 
     output: {
@@ -140,7 +138,7 @@ export default (target, env = 'development', config = {}) => {
                     loader: 'css-loader',
                     options: cssLoaderOptions,
                   },
-                  postcssLoaderOptions
+                  postcssLoaderOptions,
                 ].filter(Boolean),
               })
             : [
@@ -149,7 +147,7 @@ export default (target, env = 'development', config = {}) => {
                   loader: 'css-loader/locals',
                   options: cssLoaderOptions,
                 },
-                postcssLoaderOptions
+                postcssLoaderOptions,
               ].filter(Boolean),
         },
         {

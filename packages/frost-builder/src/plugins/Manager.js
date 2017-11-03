@@ -5,6 +5,7 @@ import ExtractCssChunks from 'extract-css-chunks-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import ServiceWorkerPlugin from 'serviceworker-webpack-plugin';
 import BabiliMinifyPlugin from 'babel-minify-webpack-plugin';
+import UglifyPlugin from 'uglifyjs-webpack-plugin';
 
 import MissingModules from './MissingModules';
 import ChunkHashPlugin from '../plugins/ChunkHash';
@@ -37,7 +38,12 @@ const basePlugins = (env, webpackTarget, isDev, isProd) => {
   ].filter(Boolean);
 };
 
-const clientPlugins = (isDev, isProd, hasVendor, { compression, pwa }) => {
+const clientPlugins = (
+  isDev,
+  isProd,
+  hasVendor,
+  { compression, pwa, sourceMaps },
+) => {
   return [
     hasVendor
       ? new webpack.optimize.CommonsChunkPlugin({
@@ -67,14 +73,25 @@ const clientPlugins = (isDev, isProd, hasVendor, { compression, pwa }) => {
       ? new BabiliMinifyPlugin(compression.babiliClientOptions)
       : null,
 
-    pwa.hasServiceWorker ? new ServiceWorkerPlugin({
-      entry: pwa.serviceWorkerEntry,
-      exclude: ['*hot-update', '**/*.map', '**/stats.json']
-    }) : null
+    isProd && compression.type === 'uglify'
+      ? new UglifyPlugin({
+          sourcemap: sourceMaps,
+          parallel: true,
+          cache: true,
+          uglifyOptions: compression.uglifyOptions,
+        })
+      : null,
+
+    pwa.hasServiceWorker
+      ? new ServiceWorkerPlugin({
+          entry: pwa.serviceWorkerEntry,
+          exclude: ['*hot-update', '**/*.map', '**/stats.json'],
+        })
+      : null,
   ].filter(Boolean);
 };
 
-const serverPlugins = (isDev, isProd, {compression}) => {
+const serverPlugins = (isDev, isProd, { compression }) => {
   return [
     new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
     isProd
@@ -90,7 +107,16 @@ const serverPlugins = (isDev, isProd, {compression}) => {
   ];
 };
 
-export default (env, webpackTarget, isDev, isProd, isServer, hasVendor, hasHmr, config) => {
+export default (
+  env,
+  webpackTarget,
+  isDev,
+  isProd,
+  isServer,
+  hasVendor,
+  hasHmr,
+  config,
+) => {
   const base = basePlugins(env, webpackTarget, isDev, isProd);
   const plugins = isServer
     ? base.concat(...serverPlugins(isDev, isProd, config))

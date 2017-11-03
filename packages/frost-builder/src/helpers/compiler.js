@@ -26,7 +26,8 @@ const buildEntryAndOutput = ({ entry, output, hmr }, isServer) => {
   const clientOutput = output.client;
   const serverOutput = output.server;
 
-  const hmrMiddleware = "webpack-hot-middleware/client?path=/__webpack_hmr&timeout=10000&reload=true&noInfo=true&overlay=false";
+  const hmrMiddleware =
+    'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=10000&reload=true&noInfo=true&overlay=false';
   const hasHmr = !isServer && isDev && hmr;
   return {
     mainEntry,
@@ -36,7 +37,7 @@ const buildEntryAndOutput = ({ entry, output, hmr }, isServer) => {
     clientOutput,
     serverOutput,
     hmrMiddleware,
-    hasHmr
+    hasHmr,
   };
 };
 
