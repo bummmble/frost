@@ -89,6 +89,16 @@ export default (target, env = 'development', config = {}) => {
 						loader: 'css-loader/locals',
 						options: cssLoaderOptions
 					}
+				},
+				{
+					test: config.files.fonts,
+					loader: 'file-loader',
+					options: {
+						name: isProd 
+							? 'file-[hash:base62:8].[ext]'
+							: '[path][name].[ext]',
+							emitFile: isClient
+					}
 				}
 			]
 		}
