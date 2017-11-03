@@ -17,3 +17,29 @@ export const flattenArray = arr => {
 	flatten(arr, res);
 	return res;
 };
+
+export const compactArray = arr => {
+	const res = [];
+	for (let i = 0; i < arr.length; i++) {
+		const el = arr[i];
+		if (el != null) {
+			res.push(el);
+		}
+	}
+	return res;
+};
+
+export const concatAllArray = arr => {
+	const res = [];
+	for (let i = 0; i < arr.length; i++) {
+		const value = arr[i];
+		if (Array.isArray(value)) {
+			res.push(value);
+		}
+	}
+	return res;
+};
+
+export const uniqueArrayElements = arr => {
+	return Array.from(new Set(arr).values());
+};
