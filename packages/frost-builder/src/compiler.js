@@ -128,6 +128,15 @@ export default (target, env = 'development', config = {}) => {
               options: config.images
             }
           ]
+        },
+        {
+          test: config.files.video,
+          use: {
+            loader: 'url-loader',
+            options: {
+              limit: 10000
+            }
+          }
         }
       ],
     },
