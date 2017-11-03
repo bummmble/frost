@@ -1,0 +1,14 @@
+{
+	"name": "frost-builder",
+	"version": "0.2.0",
+	"author": {
+		"name": "Forrest Collins",
+		"email": "Forrdev@gmail.com",
+		"url": "Forrdev.com"
+	},
+	"bin": {
+		"frost": "bin/frost"
+	},
+	"main": "dist/index.js",
+	"license": "MIT"
+}
