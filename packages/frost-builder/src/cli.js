@@ -14,33 +14,32 @@ const cli = meow(`
 
 const input = cli.input;
 const flags = cli.flags;
-const tasks = [
-	{ task: 'build:client', commands: [buildClient] }
-];
+const tasks = [{ task: 'build:client', commands: [buildClient] }];
 
 function execute(commands, config) {
-	return each(commands, (item) => item(config))
-
+  return each(commands, item => item(config));
 }
 async function executeTasks() {
-	const config = await getConfig(flags);
-	for (const name of input) {
-		for (const task of tasks) {
-			if (task.task === name) {
-				try {
-					await execute(task.commands, config);
-				} catch (error) {
-					console.error(chalk.bold.red(`Failed to execute task ${name}. Error ${error}`));
-					console.error(error);
-					process.exit(1);
-				}
-			}
-		}
-	}
+  const config = await getConfig(flags);
+  for (const name of input) {
+    for (const task of tasks) {
+      if (task.task === name) {
+        try {
+          await execute(task.commands, config);
+        } catch (error) {
+          console.error(
+            chalk.bold.red(`Failed to execute task ${name}. Error ${error}`),
+          );
+          console.error(error);
+          process.exit(1);
+        }
+      }
+    }
+  }
 }
 
 if (input.length > 0) {
-	process.nextTick(executeTasks);
+  process.nextTick(executeTasks);
 } else {
-	command.showHelp();
+  command.showHelp();
 }

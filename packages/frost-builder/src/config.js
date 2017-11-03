@@ -7,46 +7,43 @@ import defaults from './defaults';
 
 const Root = getRoot();
 const resolveFor = [
-	'entry.client',
-	'entry.server',
-	'entry.clientVendor',
-	'output.server',
-	'output.client'
+  'entry.client',
+  'entry.server',
+  'entry.clientVendor',
+  'output.server',
+  'output.client',
 ];
 
 const configLoader = cosmiconfig('frost', {
-	stopDir: Root
+  stopDir: Root,
 });
 
 const configPromise = configLoader
-	.load(Root)
-	.then(results => {
-		const merged = defaultsDeep(results.config, defaults);
-		return resolvePaths(merged);
-	})
-	.catch(error => {
-		throw new Error(`Error parsing frost-config file: ${error}`);
-	})
+  .load(Root)
+  .then(results => {
+    const merged = defaultsDeep(results.config, defaults);
+    return resolvePaths(merged);
+  })
+  .catch(error => {
+    throw new Error(`Error parsing frost-config file: ${error}`);
+  });
 
 const getConfig = async flags => {
-	return await configPromise
-		.then(config => {
-			for (const key in flags) {
-				set(config, key, flags[key]);
-			}
-			return config;
-		})
+  return await configPromise.then(config => {
+    for (const key in flags) {
+      set(config, key, flags[key]);
+    }
+    return config;
+  });
 };
 
 const resolvePaths = config => {
-	resolveFor.forEach(loc => {
-		if (get(config, loc) != null) {
-			set(config, entry, resolve(Root, get(config, loc)));
-		}
-	});
-	return config;
+  resolveFor.forEach(loc => {
+    if (get(config, loc) != null) {
+      set(config, entry, resolve(Root, get(config, loc)));
+    }
+  });
+  return config;
 };
 
-export {
-	getConfig
-}
+export { getConfig };

@@ -6,14 +6,12 @@ import compiler from '../compiler';
 import formatOutput from '../format/output';
 
 const buildClient = (config = {}) => {
-	const webpackConfig = compiler('client', 'production', config);
-	return new Promise((resolve, reject) => {
-		webpack(webpackConfig, (error, stats) => {
-			return resolve(formatOutput(error, stats));
-		});
-	});
+  const webpackConfig = compiler('client', 'production', config);
+  return new Promise((resolve, reject) => {
+    webpack(webpackConfig, (error, stats) => {
+      return resolve(formatOutput(error, stats));
+    });
+  });
 };
 
-export {
-	buildClient
-}
+export { buildClient };

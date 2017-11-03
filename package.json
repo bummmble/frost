@@ -1,7 +1,18 @@
 {
 	"private": true,
-	"devDependencies": {
-		"lerna": "^2.4.0"
+	"scripts": {
+		"prettier": "node ./scripts/prettier/index.js write-changed",
+		"prettier-all": "node ./scripts/prettier/index.js write"
 	},
-	"workspaces": ["packages/*"]
+	"devDependencies": {
+		"chalk": "^2.3.0",
+		"child_process": "^1.0.2",
+		"glob": "^7.1.2",
+		"lerna": "^2.4.0",
+		"path": "^0.12.7",
+		"prettier": "^1.7.4"
+	},
+	"workspaces": [
+		"packages/*"
+	]
 }
