@@ -4,6 +4,7 @@ import StatsPlugin from 'stats-webpack-plugin';
 import ExtractCssChunks from 'extract-css-chunks-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import ServiceWorkerPlugin from 'serviceworker-webpack-plugin';
+import BabiliMinifyPlugin from 'babel-minify-webpack-plugin';
 
 import MissingModules from './MissingModules';
 import ChunkHashPlugin from '../plugins/ChunkHash';
@@ -36,7 +37,7 @@ const basePlugins = (env, webpackTarget, isDev, isProd) => {
   ].filter(Boolean);
 };
 
-const clientPlugins = (isDev, isProd, hasVendor) => {
+const clientPlugins = (isDev, isProd, hasVendor, { compression, pwa }) => {
   return [
     hasVendor
       ? new webpack.optimize.CommonsChunkPlugin({
@@ -62,6 +63,10 @@ const clientPlugins = (isDev, isProd, hasVendor) => {
         })
       : null,
 
+    isProd && compression.type === 'babili'
+      ? new BabiliMinifyPlugin(compression.babiliClientOptions)
+      : null,
+
     pwa.hasServiceWorker ? new ServiceWorkerPlugin({
       entry: pwa.serviceWorkerEntry,
       exclude: ['*hot-update', '**/*.map', '**/stats.json']
@@ -69,7 +74,7 @@ const clientPlugins = (isDev, isProd, hasVendor) => {
   ].filter(Boolean);
 };
 
-const serverPlugins = (isDev, isProd) => {
+const serverPlugins = (isDev, isProd, {compression}) => {
   return [
     new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
     isProd
@@ -81,13 +86,14 @@ const serverPlugins = (isDev, isProd) => {
           reportFilename: 'report.html',
         })
       : null,
+    isProd ? new BabiliMinifyPlugin(compression.babiliServerOptions) : null,
   ];
 };
 
-export default (env, webpackTarget, isDev, isProd, isServer, hasVendor, hasHmr) => {
+export default (env, webpackTarget, isDev, isProd, isServer, hasVendor, hasHmr, config) => {
   const base = basePlugins(env, webpackTarget, isDev, isProd);
   const plugins = isServer
-    ? base.concat(...serverPlugins(isDev, isProd))
-    : base.concat(...clientPlugins(isDev, isProd, hasVendor, hasHmr));
+    ? base.concat(...serverPlugins(isDev, isProd, config))
+    : base.concat(...clientPlugins(isDev, isProd, hasVendor, hasHmr, config));
   return plugins;
 };
