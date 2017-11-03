@@ -32,6 +32,18 @@ export default {
       mangle: false,
       mergeVars: false
     },
+    uglifyOptions: {
+      compress: {
+        unsafe_math: true,
+        unsafe_proto: true,
+        keep_infinity: true,
+        passes: 2
+      },
+      output: {
+        ascii_only: true,
+        comments: false
+      }
+    }
   },
   images: {
     progressive: true,
