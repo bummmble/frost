@@ -5,7 +5,7 @@ import { get as getRoot } from 'app-root-dir';
 import chalk from 'chalk';
 import ExtractCssChunks from 'extract-css-chunks-webpack-plugin';
 
-import { removeEmptyKeys } from './utils';
+import { removeEmptyKeys } from './helpers/utils';
 
 const Root = getRoot();
 
