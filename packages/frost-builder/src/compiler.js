@@ -55,6 +55,13 @@ export default (target, env = 'development', config = {}) => {
     sourceMap: config.sourceMaps,
   };
 
+  const postcssLoaderOptions = config.postcss ? {
+    loader: 'postcss-loader',
+    query: {
+      sourceMap: config.sourceMaps
+    }
+  } : null;
+
   const plugins = PluginManager(
     env,
     webpackTarget,
@@ -128,6 +135,7 @@ export default (target, env = 'development', config = {}) => {
                     loader: 'css-loader',
                     options: cssLoaderOptions,
                   },
+                  postcssLoaderOptions
                 ].filter(Boolean),
               })
             : [
@@ -136,6 +144,7 @@ export default (target, env = 'development', config = {}) => {
                   loader: 'css-loader/locals',
                   options: cssLoaderOptions,
                 },
+                postcssLoaderOptions
               ].filter(Boolean),
         },
         {
