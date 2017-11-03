@@ -36,7 +36,13 @@ export default (target, env = 'development', config = {}) => {
   const prefix = chalk.bold(target.toUpperCase());
   const devtool = config.sourceMaps ? 'source-map' : null;
   const loaderCache = resolve(Root, cacheHash('loader', pkg, target, env));
-  
+  const cacheLoader = config.cacheLoader ? {
+    loader: 'cache-loader',
+    options: {
+      cacheDirectory: loaderCache
+    }
+  }: null;
+
   const cssLoaderOptions = {
     modules: true,
     localIdentName: '[local]-[hash:base62:8]',
@@ -77,24 +83,33 @@ export default (target, env = 'development', config = {}) => {
         },
         {
           test: config.files.babel,
-          use: {
-            loader: 'babel-loader',
-            options: config.babel,
-          },
+          use: [
+            cacheLoader,
+            {
+              loader: 'babel-loader',
+              options: config.babel
+            }
+          ].filter(Boolean)
         },
         {
           test: config.files.styles,
           use: isClient
             ? ExtractCssChunks.extract({
-                use: {
-                  loader: 'css-loader',
-                  options: cssLoaderOptions,
-                },
+                use: [
+                  cacheLoader,
+                  {
+                    loader: 'css-loader',
+                    options: cssLoaderOptions
+                  }
+                ].filter(Boolean)
               })
-            : {
+            : [
+              cacheLoader,
+              {
                 loader: 'css-loader/locals',
-                options: cssLoaderOptions,
-              },
+                options: cssLoaderOptions
+              }
+            ].filter(Boolean)
         },
         {
           test: config.files.fonts,
