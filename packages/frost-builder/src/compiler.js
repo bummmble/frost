@@ -50,7 +50,7 @@ export default (target, env = 'development', config = {}) => {
     sourceMap: config.sourceMaps,
   };
 
-  const plugins = PluginManager(env, webpackTarget, isDev, isProd, isServer);
+  const plugins = PluginManager(env, webpackTarget, isDev, isProd, isServer, hasVendor);
 
   return {
     name,

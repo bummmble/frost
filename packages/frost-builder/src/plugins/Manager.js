@@ -24,8 +24,14 @@ const basePlugins = (env, webpackTarget, isDev, isProd) => {
   ].filter(Boolean);
 };
 
-const clientPlugins = (isDev, isProd) => {
+const clientPlugins = (isDev, isProd, hasVendor) => {
   return [
+    hasVendor ? new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      children: true,
+      minChunks: 2,
+      async: true
+    }) : null,
     new ExtractCssChunks({
       filename: isDev ? '[name].css' : '[name]-[contenthash:base62:8].css',
     }),
@@ -38,7 +44,7 @@ const serverPlugins = (isDev, isProd) => {
   return [new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 })];
 };
 
-export default (env, webpackTarget, isDev, isProd, isServer) => {
+export default (env, webpackTarget, isDev, isProd, isServer, hasVendor) => {
   const base = basePlugins(env, webpackTarget, isDev, isProd);
   const plugins = isServer
     ? base.concat(...serverPlugins(isDev, isProd))
