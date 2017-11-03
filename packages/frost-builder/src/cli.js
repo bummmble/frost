@@ -5,6 +5,11 @@ import { buildClient } from './commands/build';
 import { each } from './helpers/utils';
 import Logger from './helpers/console';
 
+const pkg = require('../package.json');
+const appPkg = require(Root + '/package.json');
+const appInfo = `running on ${Logger.info(appPkg.name)}-${Logger.info(appPkg.version)}`;
+console.log(chalk.bold(`Frost ${chalk.magenta(`v ${pkg.version}`)} ${appInfo}`));
+
 const cli = meow(`
 	Usage:
 		$ frost <command>
@@ -29,7 +34,7 @@ async function executeTasks() {
           await execute(task.commands, config);
         } catch (error) {
           console.error(
-            chalk.bold.red(`Failed to execute task ${name}. Error ${error}`),
+            Logger.error(`Failed to execute task ${name}. Error ${error}`),
           );
           console.error(error);
           process.exit(1);
