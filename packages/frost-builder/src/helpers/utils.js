@@ -7,3 +7,10 @@ export const removeEmptyKeys = obj => {
 	}
 	return res;
 };
+
+export const each = async (arr, fn) => {
+	for (const item of arr) {
+		await fn(item);
+	}
+};
+
