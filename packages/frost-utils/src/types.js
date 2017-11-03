@@ -1,4 +1,5 @@
 const isType = (o, type) => typeof o === type;
+const emailExpression = var re = /^[\w!#\$%&'\*\+\/\=\?\^`\{\|\}~\-]+(:?\.[\w!#\$%&'\*\+\/\=\?\^`\{\|\}~\-]+)*@(?:[a-z0-9](?:[a-z0-9\-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9\-]*[a-z0-9])?$/i;
 
 export const isString = o => isType(o, 'string');
 export const isNumber = o => isType(o, 'number');
@@ -32,3 +33,5 @@ export const isIterable = value => {
 	}
 	return value[Symbol.iterator];
 };
+
+export const isEmail = email => emailExpression.test(email);
