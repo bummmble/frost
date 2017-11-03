@@ -25,3 +25,10 @@ export const isEmpty = value => {
 		return !value;
 	}
 };
+
+export const isIterable = value => {
+	if (isUndefined(Symbol)) {
+		return false;
+	}
+	return value[Symbol.iterator];
+};
