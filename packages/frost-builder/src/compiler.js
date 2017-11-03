@@ -5,6 +5,7 @@ import { get as getRoot } from 'app-root-dir';
 import chalk from 'chalk';
 import ExtractCssChunks from 'extract-css-chunks-webpack-plugin';
 
+import { configureCompiler, buildEntryAndOutput } from './helpers/compiler';
 import { removeEmptyKeys } from './helpers/utils';
 import getExternals from './helpers/externals';
 import PluginManager from './plugins/Manager';
@@ -12,20 +13,24 @@ import PluginManager from './plugins/Manager';
 const Root = getRoot();
 
 export default (target, env = 'development', config = {}) => {
-  const isClient = target === 'client';
-  const isServer = target === 'server';
-  const isDev = env === 'development';
-  const isProd = env === 'production';
-  const name = isServer ? 'server' : 'client';
-  const webpackTarget = isServer ? 'node' : 'web';
+  const {
+    isClient,
+    isServer,
+    isDev,
+    isProd,
+    name,
+    webpackTarget
+  } = configureCompiler(target, env);
 
-  const mainEntry = isServer ? entry.server : entry.client;
-  const vendorEntry = isServer ? entry.serverVendor : entry.clientVendor;
-  const hasMain = existsSync(mainEntry);
-  const hasVendor = existsSync(vendorEntry);
-  const clientOutput = config.output.client;
-  const serverOutput = config.output.server;
-
+  const {
+    mainEntry,
+    vendorEntry,
+    hasMain,
+    hasVendor,
+    serverOutput,
+    clientOutput,
+  } = buildEntryAndOutput(config, isServer);
+  
   const prefix = chalk.bold(target.toUpperCase());
   const devtool = config.sourceMaps ? 'source-map' : null;
 
