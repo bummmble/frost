@@ -3,6 +3,7 @@ import { resolve } from 'path';
 import { existsSync } from 'fs';
 import { get as getRoot } from 'app-root-dir';
 import chalk from 'chalk';
+import ExtractCssChunks from 'extract-css-chunks-webpack-plugin';
 
 import { removeEmptyKeys } from './utils';
 
@@ -25,6 +26,13 @@ export default (target, env = 'development', config = {}) => {
 
 	const prefix = chalk.bold(target.toUpperCase());
 	const devtool = config.sourceMaps ? 'source-map' : null;
+
+	const cssLoaderOptions = {
+		modules: true,
+		localIdentName: '[local]-[hash:base62:8]',
+		minimize: false,
+		sourceMap: config.sourceMaps
+	};
 
 	return {
 		name,
@@ -60,6 +68,18 @@ export default (target, env = 'development', config = {}) => {
 					use: {
 						loader: 'babel-loader',
 						options: config.babel
+					}
+				},
+				{
+					test: config.files.styles,
+					use: isClient ? ExtractCssChunks.extract({
+						use: {
+							loader: 'css-loader',
+							options: cssLoaderOptions
+						}
+					}) : {
+						loader: 'css-loader/locals',
+						options: cssLoaderOptions
 					}
 				}
 			]
