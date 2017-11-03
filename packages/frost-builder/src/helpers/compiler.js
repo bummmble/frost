@@ -18,7 +18,7 @@ const configureCompiler = (target, env) => {
   };
 };
 
-const buildEntryAndOutput = ({ entry, output }, isServer) => {
+const buildEntryAndOutput = ({ entry, output, hmr }, isServer) => {
   const mainEntry = isServer ? entry.server : entry.client;
   const vendorEntry = isServer ? entry.serverVendor : entry.clientVendor;
   const hasMain = existsSync(mainEntry);
@@ -26,6 +26,8 @@ const buildEntryAndOutput = ({ entry, output }, isServer) => {
   const clientOutput = output.client;
   const serverOutput = output.server;
 
+  const hmrMiddleware = "webpack-hot-middleware/client?path=/__webpack_hmr&timeout=10000&reload=true&noInfo=true&overlay=false";
+  const hasHmr = !isServer && isDev && hmr;
   return {
     mainEntry,
     vendorEntry,

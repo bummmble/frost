@@ -19,6 +19,7 @@ export default {
   },
 
   cacheLoader: {},
+  hmr: true,
   postcss: true,
   sourceMaps: true,
   compression: {},
