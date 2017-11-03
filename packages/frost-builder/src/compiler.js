@@ -111,6 +111,16 @@ export default (target, env = 'development', config = {}) => {
     modules: {
       rules: [
         {
+          config.eslint ? {
+            test: config.file.babel,
+            include: [config.entry.client, config.entry.server],
+            enforce: 'pre',
+            use: {
+              loader: 'eslint-loader'
+            }
+          }
+        },
+        {
           test: config.files.babel,
           loader: 'source-map-loader',
           enforce: 'pre',
