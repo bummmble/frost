@@ -10,3 +10,18 @@ export const isNull = o => o === null;
 export const isNullOrUndefined = o => isUndefined(o) || isNull(o);
 export const isStringOrNumber = o => isString(o) || isNumber(o);
 export const isArray = Array.isArray;
+
+export const isEmpty = value => {
+	if (isArray(value)) {
+		return value.length === 0;
+	} else if (isObject(value)) {
+		if (value) {
+			for (const key in value) {
+				return false;
+			}
+		}
+		return true;
+	} else {
+		return !value;
+	}
+};
