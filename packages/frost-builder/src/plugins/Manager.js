@@ -2,6 +2,7 @@ import webpack from 'webpack';
 import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
 import StatsPlugin from 'stats-webpack-plugin';
 import ExtractCssChunks from 'extract-css-chunks-webpack-plugin';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 
 const basePlugins = (env, webpackTarget, isDev, isProd) => {
   return [
@@ -37,11 +38,27 @@ const clientPlugins = (isDev, isProd, hasVendor) => {
     }),
 
     isProd ? new StatsPlugin('stats.json') : null,
+    isProd ? new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+      defaultSizes: 'gzip',
+      logLevel: 'silent',
+      openAnalyzer: false,
+      reportFilename: 'report.html'
+    }) : null
   ].filter(Boolean);
 };
 
 const serverPlugins = (isDev, isProd) => {
-  return [new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 })];
+  return [
+    new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
+    isProd ? new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+      defaultSizes: 'parsed',
+      logLevel: 'silent',
+      openAnalyzer: false,
+      reportFilename: 'report.html'
+    }) : null
+  ];
 };
 
 export default (env, webpackTarget, isDev, isProd, isServer, hasVendor) => {
