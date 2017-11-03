@@ -3,7 +3,9 @@ import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
 import StatsPlugin from 'stats-webpack-plugin';
 import ExtractCssChunks from 'extract-css-chunks-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+
 import MissingModules from './MissingModules';
+import ChunkHashPlugin from '../plugins/ChunkHash';
 
 const basePlugins = (env, webpackTarget, isDev, isProd) => {
   return [
@@ -23,6 +25,13 @@ const basePlugins = (env, webpackTarget, isDev, isProd) => {
     isDev ? new webpack.NoEmitOnErrorsPlugin() : null,
 
     isProd ? new webpack.HashedModuleIdsPlugin() : null,
+
+    // This is used to guarentee that our generated [chunkhash]'s are different ONLY
+    // if the content for the respective chunks have changed. This allows for maximization
+    // of a long-term browser caching strategy for the client bundle, avoiding cases
+    // where browsers end up having to download all of the chunks again even though
+    // only one or two may have changed
+    isProd ? new ChunkHashPlugin() : null,
     isProd ? new webpack.optimize.ModuleConcatenationPlugin() : null,
   ].filter(Boolean);
 };
