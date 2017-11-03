@@ -21,6 +21,15 @@ export default {
   postcss: true,
   sourceMaps: true,
   compression: {},
+  images: {
+    progressive: true,
+    optimizationLevel: 7,
+    interlaced: false,
+    pngquant: {
+      quality: '65-90',
+      speed: 4
+    }
+  },
   babel: {},
   prettier: {},
   eslint: {},

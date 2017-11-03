@@ -119,6 +119,16 @@ export default (target, env = 'development', config = {}) => {
             emitFile: isClient,
           },
         },
+        {
+          test: config.files.images,
+          use: [
+            'file-loader',
+            {
+              loader: 'image-webpack-loader',
+              options: config.images
+            }
+          ]
+        }
       ],
     },
     plugins: [...plugins],
