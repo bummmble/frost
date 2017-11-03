@@ -1,5 +1,7 @@
 import meow from 'meow';
 import chalk from 'chalk';
+import updateNotifier from 'update-notifier';
+
 import { Root, getConfig } from './config';
 import {
   buildClient,
@@ -15,9 +17,15 @@ const appPkg = require(Root + '/package.json');
 const appInfo = `running on ${Logger.info(appPkg.name)}-${Logger.info(
   appPkg.version,
 )}`;
+
 console.log(
   chalk.bold(`Frost ${chalk.magenta(`v ${pkg.version}`)} ${appInfo}`),
 );
+
+updateNotifier({
+  pkg,
+  updateCheckInterval: 1000 * 60 * 60
+}).notify();
 
 const cli = meow(
   `
