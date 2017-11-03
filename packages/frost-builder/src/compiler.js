@@ -7,6 +7,7 @@ import ExtractCssChunks from 'extract-css-chunks-webpack-plugin';
 
 import { configureCompiler, buildEntryAndOutput } from './helpers/compiler';
 import { removeEmptyKeys } from './helpers/utils';
+import Logger from './helpers/console';
 import getExternals from './helpers/externals';
 import cacheHash from './helpers/hash';
 import PluginManager from './plugins/Manager';
@@ -51,6 +52,11 @@ export default (target, env = 'development', config = {}) => {
   };
 
   const plugins = PluginManager(env, webpackTarget, isDev, isProd, isServer, hasVendor);
+
+  console.log(Logger.info(chalk.underline(`${prefix} Configuration`)));
+  console.log(`→ Environment: ${Logger.info(env)}`);
+  console.log(`→ Webpack Target: ${Logger.info(webpackTarget)}`);
+  
 
   return {
     name,
