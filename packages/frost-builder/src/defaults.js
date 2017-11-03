@@ -22,7 +22,17 @@ export default {
   hmr: true,
   postcss: true,
   sourceMaps: true,
-  compression: {},
+  compression: {
+    type: 'babili',
+    babiliClientOptions: {},
+    babiliServerOptions: {
+      booleans: false,
+      deadcode: true,
+      flipComparisons: false,
+      mangle: false,
+      mergeVars: false
+    },
+  },
   images: {
     progressive: true,
     optimizationLevel: 7,
