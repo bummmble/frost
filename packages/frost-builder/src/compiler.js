@@ -65,6 +65,14 @@ export default (target, env = 'development', config = {}) => {
 			rules: [
 				{
 					test: config.files.babel,
+					loader: 'source-map-loader',
+					enforce: 'pre',
+					options: {
+						quiet: true
+					}
+				},
+				{
+					test: config.files.babel,
 					use: {
 						loader: 'babel-loader',
 						options: config.babel
