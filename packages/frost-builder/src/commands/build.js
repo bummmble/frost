@@ -4,6 +4,9 @@ import { remove } from 'fs-extra';
 
 import compiler from '../compiler';
 import formatOutput from '../format/output';
+import { promisify } from '../helpers/utils';
+
+const removePromise = promisify(remove);
 
 const buildClient = (config = {}) => {
   const webpackConfig = compiler('client', 'production', config);
@@ -23,4 +26,12 @@ const buildServer = (config = {}) => {
   });
 };
 
-export { buildClient, buildServer };
+const cleanClient = (config = {}) => {
+  return removePromise(config.output.client);
+};
+
+const cleanServer = (config = {}) => {
+  return removePromise(config.output.server);
+};
+
+export { buildClient, buildServer, cleanClient, cleanServer };

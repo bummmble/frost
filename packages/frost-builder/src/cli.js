@@ -1,7 +1,12 @@
 import meow from 'meow';
 import chalk from 'chalk';
 import { Root, getConfig } from './config';
-import { buildClient, buildServer } from './commands/build';
+import {
+  buildClient,
+  buildServer,
+  cleanClient,
+  cleanServer,
+} from './commands/build';
 import { each } from './helpers/utils';
 import Logger from './helpers/console';
 
@@ -22,14 +27,19 @@ const cli = meow(`
     build               Builds production versions of both client and server
 		build:client        Builds a production version of the client
     build:server        Builds a production version of the server
+    clean:              Cleans the output directories
 `);
 
 const input = cli.input;
 const flags = cli.flags;
 const tasks = [
-  { task: 'build', commands: [buildClient, buildServer] },
-  { task: 'build:client', commands: [buildClient] },
-  { task: 'build:server', commands: [buildServer] },
+  {
+    task: 'build',
+    commands: [cleanClient, cleanServer, buildClient, buildServer],
+  },
+  { task: 'build:client', commands: [cleanClient, buildClient] },
+  { task: 'build:server', commands: [cleanServer, buildServer] },
+  { task: 'clean', commands: [cleanServer, cleanClient] },
 ];
 
 function execute(commands, config) {
