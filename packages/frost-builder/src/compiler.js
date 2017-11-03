@@ -6,6 +6,7 @@ import chalk from 'chalk';
 import ExtractCssChunks from 'extract-css-chunks-webpack-plugin';
 
 import { removeEmptyKeys } from './helpers/utils';
+import getExternals from './helpers/externals';
 
 const Root = getRoot();
 
@@ -40,7 +41,7 @@ export default (target, env = 'development', config = {}) => {
 		target: webpackTarget,
 		context: Root,
 		performance: config.performance || {},
-		// externals
+		externals: isServer ? getExternals(Root) : undefined,
 		entry: removeEmptyKeys({
 			vendors: hasVendor ? [
 				vendorEntry
