@@ -3,6 +3,7 @@ import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
 import StatsPlugin from 'stats-webpack-plugin';
 import ExtractCssChunks from 'extract-css-chunks-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+import ServiceWorkerPlugin from 'serviceworker-webpack-plugin';
 
 import MissingModules from './MissingModules';
 import ChunkHashPlugin from '../plugins/ChunkHash';
@@ -60,6 +61,11 @@ const clientPlugins = (isDev, isProd, hasVendor) => {
           reportFilename: 'report.html',
         })
       : null,
+
+    pwa.hasServiceWorker ? new ServiceWorkerPlugin({
+      entry: pwa.serviceWorkerEntry,
+      exclude: ['*hot-update', '**/*.map', '**/stats.json']
+    }) : null
   ].filter(Boolean);
 };
 
