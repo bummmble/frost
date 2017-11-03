@@ -15,7 +15,7 @@ export default {
     styles: /\.(css|sss|pcss)$/,
     images: /\.(jpg|png|gif)$/,
     fonts: /\.(eot|svg|otf|ttf|woff|woff2)$/,
-    video: /\.(mp4|webm)$/
+    video: /\.(mp4|webm)$/,
   },
 
   cacheLoader: {},
@@ -28,8 +28,8 @@ export default {
     interlaced: false,
     pngquant: {
       quality: '65-90',
-      speed: 4
-    }
+      speed: 4,
+    },
   },
   babel: {},
   prettier: {},

@@ -46,4 +46,4 @@ const resolvePaths = config => {
   return config;
 };
 
-export { getConfig };
+export { Root, getConfig };

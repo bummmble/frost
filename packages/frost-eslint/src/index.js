@@ -1,5 +1,3 @@
 module.exports = {
-	extends: [
-		'./rules/base.yml'
-	]
+  extends: ['./rules/base.yml'],
 };

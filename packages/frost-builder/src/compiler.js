@@ -22,7 +22,7 @@ export default (target, env = 'development', config = {}) => {
     isDev,
     isProd,
     name,
-    webpackTarget
+    webpackTarget,
   } = configureCompiler(target, env);
 
   const {
@@ -37,12 +37,14 @@ export default (target, env = 'development', config = {}) => {
   const prefix = chalk.bold(target.toUpperCase());
   const devtool = config.sourceMaps ? 'source-map' : null;
   const loaderCache = resolve(Root, cacheHash('loader', pkg, target, env));
-  const cacheLoader = config.cacheLoader ? {
-    loader: 'cache-loader',
-    options: {
-      cacheDirectory: loaderCache
-    }
-  }: null;
+  const cacheLoader = config.cacheLoader
+    ? {
+        loader: 'cache-loader',
+        options: {
+          cacheDirectory: loaderCache,
+        },
+      }
+    : null;
 
   const cssLoaderOptions = {
     modules: true,
@@ -51,12 +53,18 @@ export default (target, env = 'development', config = {}) => {
     sourceMap: config.sourceMaps,
   };
 
-  const plugins = PluginManager(env, webpackTarget, isDev, isProd, isServer, hasVendor);
+  const plugins = PluginManager(
+    env,
+    webpackTarget,
+    isDev,
+    isProd,
+    isServer,
+    hasVendor,
+  );
 
   console.log(Logger.info(chalk.underline(`${prefix} Configuration`)));
   console.log(`→ Environment: ${Logger.info(env)}`);
   console.log(`→ Webpack Target: ${Logger.info(webpackTarget)}`);
-  
 
   return {
     name,
@@ -93,9 +101,9 @@ export default (target, env = 'development', config = {}) => {
             cacheLoader,
             {
               loader: 'babel-loader',
-              options: config.babel
-            }
-          ].filter(Boolean)
+              options: config.babel,
+            },
+          ].filter(Boolean),
         },
         {
           test: config.files.styles,
@@ -105,17 +113,17 @@ export default (target, env = 'development', config = {}) => {
                   cacheLoader,
                   {
                     loader: 'css-loader',
-                    options: cssLoaderOptions
-                  }
-                ].filter(Boolean)
+                    options: cssLoaderOptions,
+                  },
+                ].filter(Boolean),
               })
             : [
-              cacheLoader,
-              {
-                loader: 'css-loader/locals',
-                options: cssLoaderOptions
-              }
-            ].filter(Boolean)
+                cacheLoader,
+                {
+                  loader: 'css-loader/locals',
+                  options: cssLoaderOptions,
+                },
+              ].filter(Boolean),
         },
         {
           test: config.files.fonts,
@@ -131,19 +139,19 @@ export default (target, env = 'development', config = {}) => {
             'file-loader',
             {
               loader: 'image-webpack-loader',
-              options: config.images
-            }
-          ]
+              options: config.images,
+            },
+          ],
         },
         {
           test: config.files.video,
           use: {
             loader: 'url-loader',
             options: {
-              limit: 10000
-            }
-          }
-        }
+              limit: 10000,
+            },
+          },
+        },
       ],
     },
     plugins: [...plugins],

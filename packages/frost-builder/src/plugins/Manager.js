@@ -17,7 +17,7 @@ const basePlugins = (env, webpackTarget, isDev, isProd) => {
     // Improves OS Compat
     // See: https://github.com/Urthen/case-sensitive-paths-webpack-plugin
     new CaseSensitivePathsPlugin(),
-    new MissingModules();
+    new MissingModules(),
 
     isDev ? new webpack.NamedModulesPlugin() : null,
     isDev ? new webpack.NoEmitOnErrorsPlugin() : null,
@@ -29,37 +29,43 @@ const basePlugins = (env, webpackTarget, isDev, isProd) => {
 
 const clientPlugins = (isDev, isProd, hasVendor) => {
   return [
-    hasVendor ? new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      children: true,
-      minChunks: 2,
-      async: true
-    }) : null,
+    hasVendor
+      ? new webpack.optimize.CommonsChunkPlugin({
+          name: 'vendor',
+          children: true,
+          minChunks: 2,
+          async: true,
+        })
+      : null,
     new ExtractCssChunks({
       filename: isDev ? '[name].css' : '[name]-[contenthash:base62:8].css',
     }),
 
     isProd ? new StatsPlugin('stats.json') : null,
-    isProd ? new BundleAnalyzerPlugin({
-      analyzerMode: 'static',
-      defaultSizes: 'gzip',
-      logLevel: 'silent',
-      openAnalyzer: false,
-      reportFilename: 'report.html'
-    }) : null
+    isProd
+      ? new BundleAnalyzerPlugin({
+          analyzerMode: 'static',
+          defaultSizes: 'gzip',
+          logLevel: 'silent',
+          openAnalyzer: false,
+          reportFilename: 'report.html',
+        })
+      : null,
   ].filter(Boolean);
 };
 
 const serverPlugins = (isDev, isProd) => {
   return [
     new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
-    isProd ? new BundleAnalyzerPlugin({
-      analyzerMode: 'static',
-      defaultSizes: 'parsed',
-      logLevel: 'silent',
-      openAnalyzer: false,
-      reportFilename: 'report.html'
-    }) : null
+    isProd
+      ? new BundleAnalyzerPlugin({
+          analyzerMode: 'static',
+          defaultSizes: 'parsed',
+          logLevel: 'silent',
+          openAnalyzer: false,
+          reportFilename: 'report.html',
+        })
+      : null,
   ];
 };
 

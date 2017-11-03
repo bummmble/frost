@@ -1,8 +1,9 @@
 import meow from 'meow';
 import chalk from 'chalk';
-import { getConfig } from './config';
+import { Root, getConfig } from './config';
 import { buildClient } from './commands/build';
 import { each } from './helpers/utils';
+import Logger from './helpers/console';
 
 const cli = meow(`
 	Usage:
