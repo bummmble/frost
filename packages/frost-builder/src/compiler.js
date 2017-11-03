@@ -7,6 +7,7 @@ import ExtractCssChunks from 'extract-css-chunks-webpack-plugin';
 
 import { removeEmptyKeys } from './helpers/utils';
 import getExternals from './helpers/externals';
+import PluginManager from './plugins/Manager';
 
 const Root = getRoot();
 
@@ -34,6 +35,14 @@ export default (target, env = 'development', config = {}) => {
 		minimize: false,
 		sourceMap: config.sourceMaps
 	};
+
+	const plugins = PluginManager(
+		env,
+		webpackTarget,
+		isDev,
+		isProd,
+		isServer
+	);
 
 	return {
 		name,
@@ -102,6 +111,7 @@ export default (target, env = 'development', config = {}) => {
 					}
 				}
 			]
-		}
+		},
+		plugins: [...plugins]
 	};	
 }

@@ -40,7 +40,7 @@ const serverPlugins = (isDev, isProd) => {
 	];
 };
 
-export default (env, webpackTarget, isDev, isProd, isServer, isClient) => {
+export default (env, webpackTarget, isDev, isProd, isServer) => {
 	const base = basePlugins(env, webpackTarget, isDev, isProd);
 	const plugins = isServer
 		? base.concat(...serverPlugins(isDev, isProd))
