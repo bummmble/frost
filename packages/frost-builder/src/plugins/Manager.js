@@ -24,7 +24,6 @@ const basePlugins = (env, webpackTarget, isDev, isProd) => {
 
     isDev ? new webpack.NamedModulesPlugin() : null,
     isDev ? new webpack.NoEmitOnErrorsPlugin() : null,
-
     isProd ? new webpack.HashedModuleIdsPlugin() : null,
 
     // This is used to guarentee that our generated [chunkhash]'s are different ONLY
@@ -51,6 +50,7 @@ const clientPlugins = (isDev, isProd, hasVendor) => {
       filename: isDev ? '[name].css' : '[name]-[contenthash:base62:8].css',
     }),
 
+    hasHmr ? new webpack.HotModuleReplacementPlugin() : null,
     isProd ? new StatsPlugin('stats.json') : null,
     isProd
       ? new BundleAnalyzerPlugin({
@@ -84,10 +84,10 @@ const serverPlugins = (isDev, isProd) => {
   ];
 };
 
-export default (env, webpackTarget, isDev, isProd, isServer, hasVendor) => {
+export default (env, webpackTarget, isDev, isProd, isServer, hasVendor, hasHmr) => {
   const base = basePlugins(env, webpackTarget, isDev, isProd);
   const plugins = isServer
     ? base.concat(...serverPlugins(isDev, isProd))
-    : base.concat(...clientPlugins(isDev, isProd));
+    : base.concat(...clientPlugins(isDev, isProd, hasVendor, hasHmr));
   return plugins;
 };

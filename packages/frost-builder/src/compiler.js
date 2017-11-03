@@ -62,6 +62,7 @@ export default (target, env = 'development', config = {}) => {
     isProd,
     isServer,
     hasVendor,
+    hasHmr
   );
 
   console.log(Logger.info(chalk.underline(`${prefix} Configuration`)));
