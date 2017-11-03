@@ -43,3 +43,28 @@ export const concatAllArray = arr => {
 export const uniqueArrayElements = arr => {
 	return Array.from(new Set(arr).values());
 };
+
+export const flatMapArray = (arr, fn) => {
+	const res = [];
+	for (let i = 0; i < arr.length; i++) {
+		const result = fn.call(arr, arr[i], i);
+		if (Array.isArray(result)) {
+			res.push(result);
+		} 
+	}
+	return res;
+};
+
+export const groupArray = (arr, fn) => {
+	const res = {};
+	for (let i = 0; i < arr.length; i++) {
+		const result = fn.call(arr, arr[i], i);
+		if (!res[result]) {
+			res[result] = [];
+		}
+		res[result].push(arr[i]);
+	}
+	return res;
+};
+
+
