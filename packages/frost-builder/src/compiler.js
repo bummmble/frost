@@ -20,6 +20,49 @@ export default (target, env = 'development', config = {}) => {
 	const vendorEntry = isServer ? entry.serverVendor : entry.clientVendor;
 	const hasMain = existsSync(mainEntry);
 	const hasVendor = existsSync(vendorEntry);
+	const clientOutput = config.output.client;
+	const serverOutput = config.output.server;
 
 	const prefix = chalk.bold(target.toUpperCase());
+	const devtool = config.sourceMaps ? 'source-map' : null;
+
+	return {
+		name,
+		devtool,
+		target: webpackTarget,
+		context: Root,
+		performance: config.performance || {},
+		// externals
+		entry: removeEmptyKeys({
+			vendors: hasVendor ? [
+				vendorEntry
+			].filter(Boolean) : null,
+			main: hasMain ? [
+				mainEntry
+			].filter(Boolean) : null
+		}),
+
+		output: {
+			libraryTarget: isServer ? 'commonjs2' : 'var',
+			filename: isDev || isServer
+				? '[name].js'
+				: '[name]-[chunkhash].js',
+			chunkFilename: isDev || isServer
+				? '[name].js'
+				: '[name]-[chunkhash].js',
+			path: isServer ? serverOutput : clientOutput
+		},
+
+		modules: {
+			rules: [
+				{
+					test: config.files.babel,
+					use: {
+						loader: 'babel-loader',
+						options: config.babel
+					}
+				}
+			]
+		}
+	};	
 }
