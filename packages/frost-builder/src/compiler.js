@@ -76,6 +76,11 @@ export default (target, env = 'development', config = {}) => {
   console.log(`→ Environment: ${Logger.info(env)}`);
   console.log(`→ Webpack Target: ${Logger.info(webpackTarget)}`);
 
+  if (config.verbose) {
+    console.log(`→ Enable Source Maps: ${Logger.info(devtool)}`);
+    console.log(`→ Use Cache Loader: ${Logger.info(config.sourceMaps)}`);
+  }
+  
   return {
     name,
     devtool,
