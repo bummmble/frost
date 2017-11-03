@@ -8,9 +8,11 @@ import ExtractCssChunks from 'extract-css-chunks-webpack-plugin';
 import { configureCompiler, buildEntryAndOutput } from './helpers/compiler';
 import { removeEmptyKeys } from './helpers/utils';
 import getExternals from './helpers/externals';
+import cacheHash from './helpers/hash';
 import PluginManager from './plugins/Manager';
 
 const Root = getRoot();
+const pkg = require(resolve(Root, 'package.json'));
 
 export default (target, env = 'development', config = {}) => {
   const {
@@ -30,10 +32,11 @@ export default (target, env = 'development', config = {}) => {
     serverOutput,
     clientOutput,
   } = buildEntryAndOutput(config, isServer);
-  
+
   const prefix = chalk.bold(target.toUpperCase());
   const devtool = config.sourceMaps ? 'source-map' : null;
-
+  const loaderCache = resolve(Root, cacheHash('loader', pkg, target, env));
+  
   const cssLoaderOptions = {
     modules: true,
     localIdentName: '[local]-[hash:base62:8]',
