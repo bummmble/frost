@@ -67,4 +67,19 @@ export const groupArray = (arr, fn) => {
 	return res;
 };
 
+export const partitionArray = (arr, pred, ctx) => {
+	const first = [];
+	const second = [];
+	arr.forEach((el, index) => {
+		if (pred.call(ctx, el, index, arr)) {
+			first.push(el);
+		} else {
+			second.push(el);
+		}
+	});
+
+	return [first, second];
+};
+
+
 
