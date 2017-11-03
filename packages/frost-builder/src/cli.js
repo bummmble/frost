@@ -1,26 +1,36 @@
 import meow from 'meow';
 import chalk from 'chalk';
 import { Root, getConfig } from './config';
-import { buildClient } from './commands/build';
+import { buildClient, buildServer } from './commands/build';
 import { each } from './helpers/utils';
 import Logger from './helpers/console';
 
 const pkg = require('../package.json');
 const appPkg = require(Root + '/package.json');
-const appInfo = `running on ${Logger.info(appPkg.name)}-${Logger.info(appPkg.version)}`;
-console.log(chalk.bold(`Frost ${chalk.magenta(`v ${pkg.version}`)} ${appInfo}`));
+const appInfo = `running on ${Logger.info(appPkg.name)}-${Logger.info(
+  appPkg.version,
+)}`;
+console.log(
+  chalk.bold(`Frost ${chalk.magenta(`v ${pkg.version}`)} ${appInfo}`),
+);
 
 const cli = meow(`
 	Usage:
 		$ frost <command>
 
 	Commands:
+    build               Builds production versions of both client and server
 		build:client        Builds a production version of the client
+    build:server        Builds a production version of the server
 `);
 
 const input = cli.input;
 const flags = cli.flags;
-const tasks = [{ task: 'build:client', commands: [buildClient] }];
+const tasks = [
+  { task: 'build', commands: [buildClient, buildServer] },
+  { task: 'build:client', commands: [buildClient] },
+  { task: 'build:server', commands: [buildServer] },
+];
 
 function execute(commands, config) {
   return each(commands, item => item(config));

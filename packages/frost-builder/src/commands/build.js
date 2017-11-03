@@ -14,4 +14,13 @@ const buildClient = (config = {}) => {
   });
 };
 
-export { buildClient };
+const buildServer = (config = {}) => {
+  const webpackConfig = compiler('server', 'production', config);
+  return new Promise(resolve => {
+    webpack(webpackConfig, (error, stats) => {
+      return resolve(formatOutput(error, stats));
+    });
+  });
+};
+
+export { buildClient, buildServer };
