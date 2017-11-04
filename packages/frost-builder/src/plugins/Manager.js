@@ -9,7 +9,8 @@ import UglifyPlugin from 'uglifyjs-webpack-plugin';
 import SriPlugin from 'webpack-subresource-integrity';
 
 import MissingModules from './MissingModules';
-import ChunkHashPlugin from '../plugins/ChunkHash';
+import ChunkHashPlugin from './ChunkHash';
+import Progress from './Progress';
 
 const basePlugins = (env, webpackTarget, isDev, isProd) => {
   return [
@@ -25,6 +26,10 @@ const basePlugins = (env, webpackTarget, isDev, isProd) => {
     new CaseSensitivePathsPlugin(),
     new MissingModules(),
 
+    process.stdout.isTTY ? new Progress({
+      prefix: 'frost'
+    }) : null,
+    
     isDev ? new webpack.NamedModulesPlugin() : null,
     isDev ? new webpack.NoEmitOnErrorsPlugin() : null,
     isProd ? new webpack.HashedModuleIdsPlugin() : null,
