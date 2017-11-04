@@ -80,4 +80,18 @@ export const objectMap = (obj, cb, ctx) => {
   return result;
 };
 
+export const partitionObject = (obj, cb, ctx) => {
+  const first = {};
+  const second = {};
+  objectForEach(obj, (value, key) => {
+    if (cb.call(ctx, value, key, obj)) {
+      first[key] = value;
+    } else {
+      second[key] = value;
+    }
+  });
+
+  return [first, second];
+};
+
 export const emptyObject = {};
