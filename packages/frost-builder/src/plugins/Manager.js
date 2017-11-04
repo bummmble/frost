@@ -26,10 +26,12 @@ const basePlugins = (env, webpackTarget, isDev, isProd) => {
     new CaseSensitivePathsPlugin(),
     new MissingModules(),
 
-    process.stdout.isTTY ? new Progress({
-      prefix: 'frost'
-    }) : null,
-    
+    process.stdout.isTTY
+      ? new Progress({
+          prefix: 'frost',
+        })
+      : null,
+
     isDev ? new webpack.NamedModulesPlugin() : null,
     isDev ? new webpack.NoEmitOnErrorsPlugin() : null,
     isProd ? new webpack.HashedModuleIdsPlugin() : null,
@@ -78,10 +80,12 @@ const clientPlugins = (
     // Subresource Integrity is a security feature that allows browsers to verify
     // that the files they fetch are delivered without manipulation
     // https://www.npmjs.com/package/webpack-subresource-integrity
-    isProd ? new SriPlugin({
-      hashFuncNames: [ 'sha256', 'sha512' ],
-      enabled: true
-    }) : null,
+    isProd
+      ? new SriPlugin({
+          hashFuncNames: ['sha256', 'sha512'],
+          enabled: true,
+        })
+      : null,
 
     isProd && compression.type === 'babili'
       ? new BabiliMinifyPlugin(compression.babiliClientOptions)

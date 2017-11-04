@@ -24,7 +24,7 @@ console.log(
 
 updateNotifier({
   pkg,
-  updateCheckInterval: 1000 * 60 * 60
+  updateCheckInterval: 1000 * 60 * 60,
 }).notify();
 
 const cli = meow(

@@ -1,6 +1,8 @@
 'use strict';
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+function _interopDefault(ex) {
+  return ex && typeof ex === 'object' && 'default' in ex ? ex['default'] : ex;
+}
 
 var meow = _interopDefault(require('meow'));
 var chalk = _interopDefault(require('chalk'));
@@ -12,13 +14,21 @@ var path = require('path');
 var webpack = _interopDefault(require('webpack'));
 var fsExtra = require('fs-extra');
 var fs$1 = require('fs');
-var ExtractCssChunks = _interopDefault(require('extract-css-chunks-webpack-plugin'));
+var ExtractCssChunks = _interopDefault(
+  require('extract-css-chunks-webpack-plugin'),
+);
 var loaderUtils = require('loader-utils');
-var CaseSensitivePathsPlugin = _interopDefault(require('case-sensitive-paths-webpack-plugin'));
+var CaseSensitivePathsPlugin = _interopDefault(
+  require('case-sensitive-paths-webpack-plugin'),
+);
 var StatsPlugin = _interopDefault(require('stats-webpack-plugin'));
 var webpackBundleAnalyzer = require('webpack-bundle-analyzer');
-var ServiceWorkerPlugin = _interopDefault(require('serviceworker-webpack-plugin'));
-var BabiliMinifyPlugin = _interopDefault(require('babel-minify-webpack-plugin'));
+var ServiceWorkerPlugin = _interopDefault(
+  require('serviceworker-webpack-plugin'),
+);
+var BabiliMinifyPlugin = _interopDefault(
+  require('babel-minify-webpack-plugin'),
+);
 var UglifyPlugin = _interopDefault(require('uglifyjs-webpack-plugin'));
 var SriPlugin = _interopDefault(require('webpack-subresource-integrity'));
 var ora = _interopDefault(require('ora'));
@@ -215,8 +225,8 @@ const warningColor = chalk.rgb(255, 165, 0); //warning
 const errorColor = chalk.red();
 
 const dotindex = c => {
-	const m = /\.[^.]*$/.exec(c);
-	return m ? m.index + 1 : c.length;
+  const m = /\.[^.]*$/.exec(c);
+  return m ? m.index + 1 : c.length;
 };
 
 const Logger = {
@@ -225,63 +235,69 @@ const Logger = {
   warning: msg => warningColor(msg),
   error: msg => errorColor(msg),
   clearConsole: () => {
-  	process.stdout.write(
-  		process.platform === 'win32'
-  			? '\x1Bc'
-  			: '\x1B[2J\x1B[3J\x1B[H'
-  	);
+    process.stdout.write(
+      process.platform === 'win32' ? '\x1Bc' : '\x1B[2J\x1B[3J\x1B[H',
+    );
   },
   table: (inputRows, config = {}) => {
-  	const align = config.align;
-  	const stringLength = config.stringLength;
-  	const dotsizes= inputRows.reduce((acc, row) => {
-  		row.forEach((c, index) => {
-  			const n = dotindex(c);
-  			if (!acc[index] || n > acc[index]) {
-  				acc[index] = n;
-  			}
-  		});
-  		return acc;
-  	}, []);
+    const align = config.align;
+    const stringLength = config.stringLength;
+    const dotsizes = inputRows.reduce((acc, row) => {
+      row.forEach((c, index) => {
+        const n = dotindex(c);
+        if (!acc[index] || n > acc[index]) {
+          acc[index] = n;
+        }
+      });
+      return acc;
+    }, []);
 
-  	const rows = inputRows.map(row => {
-  		return row.map((column, index) => {
-  			const c = String(column);
-  			if (align[index] === '.') {
-  				const idx = dotindex(c);
-  				const size = dotsizes[index] + (/\./.test(c) ? 1 : 2)
-  					- (stringLength(c) - idx);
-  				return c + Array(size).join(' ');
-  			}
-  			return c;
-  		});
-  	});
+    const rows = inputRows.map(row => {
+      return row.map((column, index) => {
+        const c = String(column);
+        if (align[index] === '.') {
+          const idx = dotindex(c);
+          const size =
+            dotsizes[index] + (/\./.test(c) ? 1 : 2) - (stringLength(c) - idx);
+          return c + Array(size).join(' ');
+        }
+        return c;
+      });
+    });
 
-  	const sizes = rows.reduce((acc, row) => {
-  		row.forEach((c, index) => {
-  			const n = stringLength(c);
-  			if (!acc[index] || n > acc[index]) {
-  				acc[index] = n;
-  			}
-  		});
-  		return acc;
-  	}, []);
+    const sizes = rows.reduce((acc, row) => {
+      row.forEach((c, index) => {
+        const n = stringLength(c);
+        if (!acc[index] || n > acc[index]) {
+          acc[index] = n;
+        }
+      });
+      return acc;
+    }, []);
 
-  	return rows.map(row => {
-  		return row.map((c, index) => {
-  			const n = (sizes[index] - stringLength(c)) || 0;
-  			const s = Array(Math.max(n + 1, 1)).join(' ');
-  			if (align[index] === 'r' || align[index] === '.') {
-  				return s + c;
-  			}
-  			if (align[index] === 'c') {
-  				return Array(Math.ceil(n / 2 + 1)).join(' ')
-  					+ c + Array(Math.floor(n / 2 + 1)).join(' ');
-  			}
-  			return c + s;
-  		}).join(' ').replace(/\s+$/, '')
-  	}).join('\n');
-  }
+    return rows
+      .map(row => {
+        return row
+          .map((c, index) => {
+            const n = sizes[index] - stringLength(c) || 0;
+            const s = Array(Math.max(n + 1, 1)).join(' ');
+            if (align[index] === 'r' || align[index] === '.') {
+              return s + c;
+            }
+            if (align[index] === 'c') {
+              return (
+                Array(Math.ceil(n / 2 + 1)).join(' ') +
+                c +
+                Array(Math.floor(n / 2 + 1)).join(' ')
+              );
+            }
+            return c + s;
+          })
+          .join(' ')
+          .replace(/\s+$/, '');
+      })
+      .join('\n');
+  },
 };
 
 var getExternals = root => {
@@ -303,7 +319,12 @@ const digestType = 'base62';
 const digestLength = 4;
 
 const generateHash = pkg => {
-  return loaderUtils.getHashDigest(JSON.stringify(pkg), hashType, digestType, digestLength);
+  return loaderUtils.getHashDigest(
+    JSON.stringify(pkg),
+    hashType,
+    digestType,
+    digestLength,
+  );
 };
 
 var cacheHash = (type, pkg, target, env) => {
@@ -365,7 +386,12 @@ class ChunkHash {
           .sort(compareModules)
           .map(getSource)
           .reduce(concatenateSource, '');
-        const hash = loaderUtils.getHashDigest(source, hashType$1, digestType$1, digestLength$1);
+        const hash = loaderUtils.getHashDigest(
+          source,
+          hashType$1,
+          digestType$1,
+          digestLength$1,
+        );
 
         chunkHash.digest = function() {
           return hash;
@@ -378,130 +404,122 @@ class ChunkHash {
 const Root$2 = appRootDir.get();
 
 class Progress {
-	constructor({ prefix }) {
-		this.prefix = prefix;
-	}
+  constructor({ prefix }) {
+    this.prefix = prefix;
+  }
 
-	apply(compiler) {
-		let spinner = null;
-		let last = null;
-		const prefix = this.prefix
-			? this.prefix + ' '
-			: '';
+  apply(compiler) {
+    let spinner = null;
+    let last = null;
+    const prefix = this.prefix ? this.prefix + ' ' : '';
 
-		function display(message) {
-			if (message !== '') {
-				spinner.text = prefix + message;
-				spinner.render();
-			} else {
-				spinner.succeed(prefix + 'Done!');
-			}
-		}
+    function display(message) {
+      if (message !== '') {
+        spinner.text = prefix + message;
+        spinner.render();
+      } else {
+        spinner.succeed(prefix + 'Done!');
+      }
+    }
 
-		function moduleDone(module) {
-			let index;
-			let id = last;
+    function moduleDone(module) {
+      let index;
+      let id = last;
 
-			index = id.lastIndexOf(' ');
-			id = index === -1
-				? id
-				: id.slice(index + 1, id.length);
+      index = id.lastIndexOf(' ');
+      id = index === -1 ? id : id.slice(index + 1, id.length);
 
-			index = id.lastIndexOf('!');
-			id = index === -1
-				? id
-				: id.slice(index + 1, id.length);
+      index = id.lastIndexOf('!');
+      id = index === -1 ? id : id.slice(index + 1, id.length);
 
-			index = id.indexOf('?');
-			id = index === -1
-				? id
-				: id.slice(0, index);
+      index = id.indexOf('?');
+      id = index === -1 ? id : id.slice(0, index);
 
-			id = path.relative(Root$2, id).replace(/^node_modules\//, '~/');
+      id = path.relative(Root$2, id).replace(/^node_modules\//, '~/');
 
-			if (id.startsWith('"') && id.endsWith('"')) {
-				id = id.slice(1, -1);
-			}
+      if (id.startsWith('"') && id.endsWith('"')) {
+        id = id.slice(1, -1);
+      }
 
-			if (id.includes('|')) return;
-			if (id.startsWith('..')) return;
-			if (/^[a-zA-Z0-9\-_/~\.]{0,50}$/.test(id)) {
-				display(`Building Modules ${id}...`);
-			}
-		}
+      if (id.includes('|')) return;
+      if (id.startsWith('..')) return;
+      if (/^[a-zA-Z0-9\-_/~\.]{0,50}$/.test(id)) {
+        display(`Building Modules ${id}...`);
+      }
+    }
 
-		compiler.plugin('compilation', compilation => {
-			if (compilation.compiler.isChild()) return;
+    compiler.plugin('compilation', compilation => {
+      if (compilation.compiler.isChild()) return;
 
-			spinner = ora({ interval: 16 });
-			spinner.start();
+      spinner = ora({ interval: 16 });
+      spinner.start();
 
-			display(0, 'compiling');
+      display(0, 'compiling');
 
-			compilation.plugin('build-module', module => {
-				last = module.identifier();
-			});
-			compilation.plugin('failed-module', moduleDone);
-			compilation.plugin('success-module', moduleDone);
+      compilation.plugin('build-module', module => {
+        last = module.identifier();
+      });
+      compilation.plugin('failed-module', moduleDone);
+      compilation.plugin('success-module', moduleDone);
 
-			const syncHooks = {
-				'seal': 'Sealing',
-				'optimize': 'Optimizing',
-				'optimize-modules-basic': 'Optimizing Modules',
-				'optimize-chunks-basic': 'Optimizing chunks',
-				'optimize-chunk-modules': 'Optimizing chunk modules',
-				'optimize-module-order': 'Optimizing module order',
-				'optimize-module-ids': 'Optimizing module ids',
-				'optimize-chunk-order': 'Optimizing chunk order',
-				'optimizing-chunk-ids': 'Optimizing chunk ids',
-				'before-hash': 'Hashing',
-				'before-module-assets': 'Processing module assets',
-				'before-chunk-assets': 'Processing chunk assets',
-				'record': 'Recording'
-			};
+      const syncHooks = {
+        seal: 'Sealing',
+        optimize: 'Optimizing',
+        'optimize-modules-basic': 'Optimizing Modules',
+        'optimize-chunks-basic': 'Optimizing chunks',
+        'optimize-chunk-modules': 'Optimizing chunk modules',
+        'optimize-module-order': 'Optimizing module order',
+        'optimize-module-ids': 'Optimizing module ids',
+        'optimize-chunk-order': 'Optimizing chunk order',
+        'optimizing-chunk-ids': 'Optimizing chunk ids',
+        'before-hash': 'Hashing',
+        'before-module-assets': 'Processing module assets',
+        'before-chunk-assets': 'Processing chunk assets',
+        record: 'Recording',
+      };
 
-			Object.keys(syncHooks).forEach(name => {
-				let pass = 0;
-				const message = syncHooks[name];
-				compilation.plugin(name, () => {
-					if (pass++ > 0) {
-						display(message + ` [pass ${pass}]`);
-					} else {
-						display(message);
-					}
-				});
-			});
+      Object.keys(syncHooks).forEach(name => {
+        let pass = 0;
+        const message = syncHooks[name];
+        compilation.plugin(name, () => {
+          if (pass++ > 0) {
+            display(message + ` [pass ${pass}]`);
+          } else {
+            display(message);
+          }
+        });
+      });
 
-			compilation.plugin('optimize-tree', (chunks, modules, cb) => {
-				display('Optimizing tree');
-				cb();
-			});
+      compilation.plugin('optimize-tree', (chunks, modules, cb) => {
+        display('Optimizing tree');
+        cb();
+      });
 
-			compilation.plugin('additional-assets', cb => {
-				display('Processing assets');
-				cb();
-			});
+      compilation.plugin('additional-assets', cb => {
+        display('Processing assets');
+        cb();
+      });
 
-			compilation.plugin('optimize-chunk-assets', (chunks, cb) => {
-				display('Optimizing chunk assets');
-				cb();
-			});
+      compilation.plugin('optimize-chunk-assets', (chunks, cb) => {
+        display('Optimizing chunk assets');
+        cb();
+      });
 
-			compilation.plugin('optimize-assets', (assets, cb) => {
-				display('Optimizing assets');
-				cb();
-			});
-		});
+      compilation.plugin('optimize-assets', (assets, cb) => {
+        display('Optimizing assets');
+        cb();
+      });
+    });
 
-		compiler.plugin('emit', (compilation, cb) => {
-			display('Emitting');
-			cb();
-		});
+    compiler.plugin('emit', (compilation, cb) => {
+      display('Emitting');
+      cb();
+    });
 
-		compiler.plugin('done', () => {
-			display('');
-		});
-	}
+    compiler.plugin('done', () => {
+      display('');
+    });
+  }
 }
 
 const basePlugins = (env, webpackTarget, isDev, isProd) => {
@@ -518,10 +536,12 @@ const basePlugins = (env, webpackTarget, isDev, isProd) => {
     new CaseSensitivePathsPlugin(),
     new MissingModules(),
 
-    process.stdout.isTTY ? new Progress({
-      prefix: 'frost'
-    }) : null,
-    
+    process.stdout.isTTY
+      ? new Progress({
+          prefix: 'frost',
+        })
+      : null,
+
     isDev ? new webpack.NamedModulesPlugin() : null,
     isDev ? new webpack.NoEmitOnErrorsPlugin() : null,
     isProd ? new webpack.HashedModuleIdsPlugin() : null,
@@ -570,10 +590,12 @@ const clientPlugins = (
     // Subresource Integrity is a security feature that allows browsers to verify
     // that the files they fetch are delivered without manipulation
     // https://www.npmjs.com/package/webpack-subresource-integrity
-    isProd ? new SriPlugin({
-      hashFuncNames: [ 'sha256', 'sha512' ],
-      enabled: true
-    }) : null,
+    isProd
+      ? new SriPlugin({
+          hashFuncNames: ['sha256', 'sha512'],
+          enabled: true,
+        })
+      : null,
 
     isProd && compression.type === 'babili'
       ? new BabiliMinifyPlugin(compression.babiliClientOptions)
@@ -666,7 +688,10 @@ var compiler = (target, env = 'development', config = {}) => {
 
   const prefix = chalk.bold(target.toUpperCase());
   const devtool = config.sourceMaps ? 'source-map' : null;
-  const loaderCache = path.resolve(Root$1, cacheHash('loader', pkg$1, target, env));
+  const loaderCache = path.resolve(
+    Root$1,
+    cacheHash('loader', pkg$1, target, env),
+  );
   const cacheLoader = config.cacheLoader
     ? {
         loader: 'cache-loader',
@@ -738,14 +763,16 @@ var compiler = (target, env = 'development', config = {}) => {
 
     modules: {
       rules: [
-          config.eslint ? {
-            test: config.file.babel,
-            include: [config.entry.client, config.entry.server],
-            enforce: 'pre',
-            use: {
-              loader: 'eslint-loader'
+        config.eslint
+          ? {
+              test: config.file.babel,
+              include: [config.entry.client, config.entry.server],
+              enforce: 'pre',
+              use: {
+                loader: 'eslint-loader',
+              },
             }
-          } : {},
+          : {},
         {
           test: config.files.babel,
           loader: 'source-map-loader',
@@ -894,7 +921,7 @@ console.log(
 
 updateNotifier({
   pkg,
-  updateCheckInterval: 1000 * 60 * 60
+  updateCheckInterval: 1000 * 60 * 60,
 }).notify();
 
 const cli = meow(
