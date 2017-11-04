@@ -32,3 +32,16 @@ export const shallowEqual = (a, b) => {
 
   return true;
 };
+
+export const objectEvery = (obj, cb, ctx) => {
+  for (const name in object) {
+    if (obj.hasOwnProperty(name)) {
+      if (!cb.call(ctx, obj[name], name, obj)) {
+        return false;
+      }
+    }
+  }
+  return true;
+};
+
+export const emptyObject = {};
