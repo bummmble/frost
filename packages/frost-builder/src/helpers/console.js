@@ -24,7 +24,7 @@ const Logger = {
   },
   table: (inputRows, config = {}) => {
   	const align = config.align;
-  	const stringLength = config.stringLength || s => String(s).length;
+  	const stringLength = config.stringLength;
   	const dotsizes= inputRows.reduce((acc, row) => {
   		row.forEach((c, index) => {
   			const n = dotindex(c);
