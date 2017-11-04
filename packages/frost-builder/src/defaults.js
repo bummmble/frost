@@ -45,6 +45,7 @@ export default {
       },
     },
   },
+  locale: {},
   images: {
     progressive: true,
     optimizationLevel: 7,
