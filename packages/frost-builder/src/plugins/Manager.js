@@ -6,6 +6,7 @@ import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import ServiceWorkerPlugin from 'serviceworker-webpack-plugin';
 import BabiliMinifyPlugin from 'babel-minify-webpack-plugin';
 import UglifyPlugin from 'uglifyjs-webpack-plugin';
+import SriPlugin from 'webpack-subresource-integrity';
 
 import MissingModules from './MissingModules';
 import ChunkHashPlugin from '../plugins/ChunkHash';
@@ -68,6 +69,14 @@ const clientPlugins = (
           reportFilename: 'report.html',
         })
       : null,
+
+    // Subresource Integrity is a security feature that allows browsers to verify
+    // that the files they fetch are delivered without manipulation
+    // https://www.npmjs.com/package/webpack-subresource-integrity
+    isProd ? new SriPlugin({
+      hashFuncNames: [ 'sha256', 'sha512' ],
+      enabled: true
+    }) : null,
 
     isProd && compression.type === 'babili'
       ? new BabiliMinifyPlugin(compression.babiliClientOptions)
