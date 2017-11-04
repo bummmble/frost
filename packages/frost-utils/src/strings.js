@@ -1,7 +1,12 @@
 const hypenPattern = /-(.)/g;
+const uppercasePattern = /([A-Z])/g;
 
-export function camelize(string) {
+export const camelize = string => {
 	return string.replace(hypenPattern, (_, character) => {
 		return character.toUpperCase();
 	});
 }
+
+export const hyphenate = string => {
+	return string.replace(uppercasePattern, '-$1').toLowerCase();
+};
