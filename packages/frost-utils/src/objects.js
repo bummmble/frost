@@ -80,6 +80,17 @@ export const objectMap = (obj, cb, ctx) => {
   return result;
 };
 
+export const objectSome = (obj, cb, ctx) => {
+  for (const name in obj) {
+    if (obj.hasOwnProperty(name)) {
+      if (cb.call(ctx, obj[name], name, obj)) {
+        return true;
+      }
+    }
+  }
+  return false;
+};
+
 export const partitionObject = (obj, cb, ctx) => {
   const first = {};
   const second = {};
@@ -92,6 +103,10 @@ export const partitionObject = (obj, cb, ctx) => {
   });
 
   return [first, second];
+};
+
+export const partitionObjectByKeys = (source, whitelist) => {
+  return partitionObject(source, (_, key) => whitelist.has(key));
 };
 
 export const emptyObject = {};
