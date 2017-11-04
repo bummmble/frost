@@ -58,4 +58,12 @@ export const objectFilter = (obj, cb, ctx) => {
   return result;
 };
 
+export const objectForEach = (obj, cb, ctx) => {
+  for (const name in obj) {
+    if (obj.hasOwnProperty(name)) {
+      cb.call(ctx, obj[name], name, obj);
+    }
+  }
+};
+
 export const emptyObject = {};
