@@ -62,6 +62,11 @@ const tasks = [
   { task: 'clean', commands: [cleanServer, cleanClient] },
 ];
 
+// Prevent deprecation messages
+if (!flags.verbose) {
+  process.noDeprecation = true;
+}
+
 function execute(commands, config) {
   return each(commands, item => item(config));
 }

@@ -14,12 +14,12 @@
 		"eslint-plugin-babel": "^4.1.2",
 		"eslint-plugin-no-use-extend-native": "^0.3.12",
 		"glob": "^7.1.2",
-		"lerna": "^2.4.0",
+		"lerna": "^2.5.1",
 		"minimist": "^1.2.0",
 		"path": "^0.12.7",
 		"prettier": "^1.7.4",
 		"rollup": "^0.50.0",
 		"rollup-plugin-commonjs": "^8.2.6",
 		"rollup-plugin-node-resolve": "^3.0.0"
-	},
+	}
 }
