@@ -25,6 +25,8 @@ export default {
   compression: {
     type: 'babili',
     babiliClientOptions: {},
+
+    // Basic compression for server, we don't want dead code
     babiliServerOptions: {
       booleans: false,
       deadcode: true,
@@ -34,13 +36,19 @@ export default {
     },
     uglifyOptions: {
       compress: {
+        // Only risky for some rare floating point operations
         unsafe_math: true,
+        // Optimize expressions like Array.prototype.map.call into [].map.call
         unsafe_proto: true,
+        // Good for chrome perf
         keep_infinity: true,
+        // Try hard to export less code
         passes: 2,
       },
       output: {
+        // Fix for problematic code like emojis
         ascii_only: true,
+        // Remove all the comments!
         comments: false,
       },
     },
