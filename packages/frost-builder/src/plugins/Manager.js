@@ -34,7 +34,7 @@ const basePlugins = (env, webpackTarget, isDev, isProd) => {
 
     isDev ? new webpack.NamedModulesPlugin() : null,
     isDev ? new webpack.NoEmitOnErrorsPlugin() : null,
-    
+
     // Generates IDs that preserve over builds
     // https://github.com/webpack/webpack.js.org/issues/652#issuecomment-273324529
     isProd ? new webpack.HashedModuleIdsPlugin() : null,
@@ -69,7 +69,7 @@ const clientPlugins = (
     }),
 
     hasHmr ? new webpack.HotModuleReplacementPlugin() : null,
-    
+
     // Let the server side renderer know about our client assets
     // https://github.com/FormidableLabs/webpack-stats-plugin
     isProd ? new StatsPlugin('stats.json') : null,

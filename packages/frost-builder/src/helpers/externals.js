@@ -8,16 +8,19 @@ const root = 'node_modules';
 const BuiltIns = new Set(builtinModules);
 const Modules = new Set();
 const Binaries = new Set();
-const WebpackRequired = new Set(['react-universal-component', 'webpack-flush-chunks']);
+const WebpackRequired = new Set([
+  'react-universal-component',
+  'webpack-flush-chunks',
+]);
 
-const nodePackages = readdirSync(root).filter(dirname => dirname.charAt(0) !== '.');
+const nodePackages = readdirSync(root).filter(
+  dirname => dirname.charAt(0) !== '.',
+);
 nodePackages.forEach(pkg => {
   let json;
   try {
     json = readJsonSync(resolve(root, pkg, 'package.json'));
-  } catch (error) {
-
-  }
+  } catch (error) {}
 
   if (json.module || json.style || json['jsnext:main']) {
     Modules.add(name);
@@ -48,7 +51,7 @@ const Problematic = new Set([
   'ajv',
   'colors',
   'express',
-  'jsdom'
+  'jsdom',
 ]);
 
 console.log('ESM:', Modules);
@@ -56,7 +59,9 @@ console.log('Binaries:', Binaries);
 console.log('Problematic:', Problematic);
 
 export const isLoaderSpecific = req => {
-  return !!(/\.(eot|woff|woff2|ttf|otf|svg|png|jpg|jpeg|gif|webp|webm|ico|mp4|mp3|ogg|html|pdf|swf|css|scss|sass|sss|less)$/.exec(req));
+  return !!/\.(eot|woff|woff2|ttf|otf|svg|png|jpg|jpeg|gif|webp|webm|ico|mp4|mp3|ogg|html|pdf|swf|css|scss|sass|sss|less)$/.exec(
+    req,
+  );
 };
 
 export default () => {
@@ -94,5 +99,5 @@ export default () => {
     }
 
     return cb(Null, `commonjs ${req}`);
-  }
+  };
 };

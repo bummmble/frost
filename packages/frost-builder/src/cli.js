@@ -9,6 +9,7 @@ import {
   cleanClient,
   cleanServer,
 } from './commands/build';
+import { start as startDevServer } from './commands/dev';
 import { each } from './helpers/utils';
 import Logger from './helpers/console';
 
@@ -37,6 +38,7 @@ const cli = meow(
     --quiet, -q         Silences all but important messages
 
 	Commands:
+    dev                 Starts a dev server
     build               Builds production versions of both client and server
 		build:client        Builds a production version of the client
     build:server        Builds a production version of the server
@@ -53,6 +55,7 @@ const cli = meow(
 const input = cli.input;
 const flags = cli.flags;
 const tasks = [
+  { task: 'dev', commands: [cleanClient, cleanServer, startDevServer] },
   {
     task: 'build',
     commands: [cleanClient, cleanServer, buildClient, buildServer],
