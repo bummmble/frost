@@ -1,14 +1,14 @@
 export default pkg => {
-	let banner = `/*! ${pkg.name} v${pkg.version}`;
+  let banner = `/*! ${pkg.name} v${pkg.version}`;
 
-	if (pkg.author) {
-		if (typeof pkg.author === 'object') {
-			banner += ` by ${pkg.author.name} <${pkg.author.email}>`
-		} else if (typeof pkg.author === 'string') {
-			banner += ` by ${pkg.author}`
-		}
-	}
+  if (pkg.author) {
+    if (typeof pkg.author === 'object') {
+      banner += ` by ${pkg.author.name} <${pkg.author.email}>`;
+    } else if (typeof pkg.author === 'string') {
+      banner += ` by ${pkg.author}`;
+    }
+  }
 
-	banner += ` */`
-	return banner;
+  banner += ` */`;
+  return banner;
 };
