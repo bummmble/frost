@@ -158,3 +158,89 @@ if (command.flags.inputBinary) {
   ];
 }
 
+try {
+  eachOfSeries(targets, (envInputs, targetId, envCallback) => {
+    const input = lookupBest(envInputs);
+    if (input) {
+      eachOfSeries(formats, (format, formatIndex, formatCallback) => {
+        const transpilers = getTranspilers(command.flags.transpiler, {
+          minified: command.flags.minified,
+          presets: [],
+          plugins: [],
+          targetUnstable
+        });
+
+        eachOfSeries(transpilers, (currentTranspiler, transpilerId, variantCallback) => {
+          const outputFile = outputMatrix[`${targetId}-${transpilerId}-${format}`];
+          if (outputFile) {
+            return bundleTo({ input, targetId, transpilerId, currentTranspiler, format, outputFile, variantCallback });
+          } else {
+            return variantCallback(null);
+          }
+        }, formatCallback);
+      }, envCallback);
+    } else {
+      envCallback(null);
+    }
+  })
+} catch (error) {
+  console.error(error);
+  process.exit(1);
+}
+
+function lookupBest(candidates) {
+  const filtered = candidates.filter(fileExists.sync);
+  return filtered[0];
+}
+
+function bundleTo({ input, targetId, transpilerId, currentTranspiler, format, outputFile, variantCallback}) {
+  const prefix = 'process.env.';
+  const env = {
+    [`${prefix}NAME`]: JSON.stringify(pkg.name),
+    [`${prefix}VERSION`]: JSON.stringify(pkg.version),
+    [`${prefix}TARGET`]: JSON.stringify(targetId)
+  };
+
+  return rollup({
+    input,
+    cache,
+    onwarn: error => console.warn(chalk.red(` - ${error.message}`)),
+    external(dependency) {
+      if (dependency == input) {
+        return false;
+      }
+      if (isAbsolute(dependency)) {
+        const relativePath = relative(Root, dependency);
+        return Boolean(/node_modules/.exec(relativePath));
+      }
+
+      return dependency.charAt(0) !== '.';
+    },
+    plguins: [
+      nodeResolve({
+        extensions: ['.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
+        jsnext: true,
+        module: true,
+        main: true
+      }),
+      commonjs({
+        include: 'node_modules/**'
+      }),
+      yamlPlugin(),
+      jsonPlugin(),
+      currentTranspiler,
+    ].filter(Boolean)
+  })
+  .then(({ write }) => write({
+    format: rollupFormats[format],
+    name,
+    banner: transpilerId === 'binary' ? `#!/usr/bin/env node\n\n${banner}` : '',
+    sourcemap: command.flags.sourcemap,
+    file: outputFile
+  }))
+  .then(() => variantCallback(null))
+  .catch(err => {
+    console.error(err);
+    variantCallback(`Error during bundling ${format}: ${error}`);
+  })
+}
