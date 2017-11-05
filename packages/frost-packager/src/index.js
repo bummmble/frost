@@ -115,3 +115,46 @@ const banner = getBanner(pkg);
 const targets = {};
 const formats = ['esmodule', 'commonjs'];
 
+if (command.flags.inputNode) {
+  targets.node = [command.flags.inputNode];
+} else {
+  targets.node= [
+    'src/node/public.js',
+    'src/node/export.js',
+    'src/node.js',
+    'src/server/public.js',
+    'src/server/export.js',
+    'src/server.js',
+    'src/public.js',
+    'src/export.js',
+    'src/index.js'
+  ];
+}
+
+if (command.flags.inputWeb) {
+  targets.web = [command.flags.inputWeb];
+} else {
+  targets.web = [
+    'src/web/public.js',
+    'src/web/export.js',
+    'src/web.js',
+    'src/browser/public.js',
+    'src/browser/export.js',
+    'src/browser.js',
+    'src/client/public.js',
+    'src/client/export.js',
+    'src/client.js',
+    'client/index.js'
+  ];
+}
+
+if (command.flags.inputBinary) {
+  targets.binary = [command.flags.inputBinary];
+} else {
+  targets.binary = [
+    'src/binary.js',
+    'src/script.js',
+    'src/cli.js'
+  ];
+}
+
