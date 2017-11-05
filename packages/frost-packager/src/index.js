@@ -13,6 +13,7 @@ import yamlPlugin from 'rollup-plugin-yaml';
 
 import getTranspilers from './transpilers';
 import getBanner from './banner';
+import execute from './helpers/execute';
 
 const Root = getRoot();
 const pkg = require(resolve(Root, 'package.json'));
@@ -94,20 +95,38 @@ const outputMatrix = {
 
 const outputFolder = command.flags.outputFolder;
 if (outputFolder) {
-  outputMatrix['node-classic-commonjs'] = `${outputFolder}/node.classic.commonjs.js`;
-  outputMatrix['node-classic-esmdule'] = `${outputFolder}/node.classic.esmodule.js`;
-  outputMatrix['node-es2015-commonjs'] = `${outputFolder}/node.es2015.commonjs.js`;
-  outputMatrix['node-es2015-esmodule'] = `${outputFolder}/node.es2015.esmodule.js`;
-  outputMatrix['node-modern-commonjs'] = `${outputFolder}/node.modern.commonjs.js`;
-  outputMatrix['node-modern-esmodule'] = `${outputFolder}/node.modern.esmodule.js`;
-  outputMatrix['web-classic-esmodule'] = `${outputFolder}/web.classic.esmodule.js`;
-  outputMatrix['web-es2015-esmodule'] = `${outputFolder}/web.es2015.esmodule.js`;
-  outputMatrix['web-modern-esmodule'] = `${outputFolder}/web.modern.esmodule.js`;
-};
+  outputMatrix[
+    'node-classic-commonjs'
+  ] = `${outputFolder}/node.classic.commonjs.js`;
+  outputMatrix[
+    'node-classic-esmdule'
+  ] = `${outputFolder}/node.classic.esmodule.js`;
+  outputMatrix[
+    'node-es2015-commonjs'
+  ] = `${outputFolder}/node.es2015.commonjs.js`;
+  outputMatrix[
+    'node-es2015-esmodule'
+  ] = `${outputFolder}/node.es2015.esmodule.js`;
+  outputMatrix[
+    'node-modern-commonjs'
+  ] = `${outputFolder}/node.modern.commonjs.js`;
+  outputMatrix[
+    'node-modern-esmodule'
+  ] = `${outputFolder}/node.modern.esmodule.js`;
+  outputMatrix[
+    'web-classic-esmodule'
+  ] = `${outputFolder}/web.classic.esmodule.js`;
+  outputMatrix[
+    'web-es2015-esmodule'
+  ] = `${outputFolder}/web.es2015.esmodule.js`;
+  outputMatrix[
+    'web-modern-esmodule'
+  ] = `${outputFolder}/web.modern.esmodule.js`;
+}
 
 const rollupFormats = {
   commonjs: 'cjs',
-  esmodule: 'es'
+  esmodule: 'es',
 };
 
 const name = pkg.name || camelCase(pkg.name);
@@ -118,7 +137,7 @@ const formats = ['esmodule', 'commonjs'];
 if (command.flags.inputNode) {
   targets.node = [command.flags.inputNode];
 } else {
-  targets.node= [
+  targets.node = [
     'src/node/public.js',
     'src/node/export.js',
     'src/node.js',
@@ -127,7 +146,7 @@ if (command.flags.inputNode) {
     'src/server.js',
     'src/public.js',
     'src/export.js',
-    'src/index.js'
+    'src/index.js',
   ];
 }
 
@@ -144,45 +163,58 @@ if (command.flags.inputWeb) {
     'src/client/public.js',
     'src/client/export.js',
     'src/client.js',
-    'client/index.js'
+    'client/index.js',
   ];
 }
 
 if (command.flags.inputBinary) {
   targets.binary = [command.flags.inputBinary];
 } else {
-  targets.binary = [
-    'src/binary.js',
-    'src/script.js',
-    'src/cli.js'
-  ];
+  targets.binary = ['src/binary.js', 'src/script.js', 'src/cli.js'];
 }
 
 try {
   eachOfSeries(targets, (envInputs, targetId, envCallback) => {
     const input = lookupBest(envInputs);
     if (input) {
-      eachOfSeries(formats, (format, formatIndex, formatCallback) => {
-        const transpilers = getTranspilers(command.flags.transpiler, {
-          minified: command.flags.minified,
-          presets: [],
-          plugins: [],
-          targetUnstable
-        });
+      eachOfSeries(
+        formats,
+        (format, formatIndex, formatCallback) => {
+          const transpilers = getTranspilers(command.flags.transpiler, {
+            minified: command.flags.minified,
+            presets: [],
+            plugins: [],
+            targetUnstable,
+          });
 
-        eachOfSeries(transpilers, (currentTranspiler, transpilerId, variantCallback) => {
-          const outputFile = outputMatrix[`${targetId}-${transpilerId}-${format}`];
-          if (outputFile) {
-            return bundleTo({ input, targetId, transpilerId, currentTranspiler, format, outputFile, variantCallback });
-          } else {
-            return variantCallback(null);
-          }
-        }, formatCallback);
-      }, envCallback);
+          eachOfSeries(
+            transpilers,
+            (currentTranspiler, transpilerId, variantCallback) => {
+              const outputFile =
+                outputMatrix[`${targetId}-${transpilerId}-${format}`];
+              if (outputFile) {
+                return bundleTo({
+                  input,
+                  targetId,
+                  transpilerId,
+                  currentTranspiler,
+                  format,
+                  outputFile,
+                  variantCallback,
+                });
+              } else {
+                return variantCallback(null);
+              }
+            },
+            formatCallback,
+          );
+        },
+        envCallback,
+      );
     } else {
       envCallback(null);
     }
-  })
+  });
 } catch (error) {
   console.error(error);
   process.exit(1);
@@ -193,12 +225,20 @@ function lookupBest(candidates) {
   return filtered[0];
 }
 
-function bundleTo({ input, targetId, transpilerId, currentTranspiler, format, outputFile, variantCallback}) {
+function bundleTo({
+  input,
+  targetId,
+  transpilerId,
+  currentTranspiler,
+  format,
+  outputFile,
+  variantCallback,
+}) {
   const prefix = 'process.env.';
   const env = {
     [`${prefix}NAME`]: JSON.stringify(pkg.name),
     [`${prefix}VERSION`]: JSON.stringify(pkg.version),
-    [`${prefix}TARGET`]: JSON.stringify(targetId)
+    [`${prefix}TARGET`]: JSON.stringify(targetId),
   };
 
   return rollup({
@@ -221,26 +261,30 @@ function bundleTo({ input, targetId, transpilerId, currentTranspiler, format, ou
         extensions: ['.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
         jsnext: true,
         module: true,
-        main: true
+        main: true,
       }),
       commonjs({
-        include: 'node_modules/**'
+        include: 'node_modules/**',
       }),
       yamlPlugin(),
       jsonPlugin(),
       currentTranspiler,
-    ].filter(Boolean)
+      transpilerId === 'binary' ? execute() : null,
+    ].filter(Boolean),
   })
-  .then(({ write }) => write({
-    format: rollupFormats[format],
-    name,
-    banner: transpilerId === 'binary' ? `#!/usr/bin/env node\n\n${banner}` : '',
-    sourcemap: command.flags.sourcemap,
-    file: outputFile
-  }))
-  .then(() => variantCallback(null))
-  .catch(err => {
-    console.error(err);
-    variantCallback(`Error during bundling ${format}: ${error}`);
-  })
+    .then(({ write }) =>
+      write({
+        format: rollupFormats[format],
+        name,
+        banner:
+          transpilerId === 'binary' ? `#!/usr/bin/env node\n\n${banner}` : '',
+        sourcemap: command.flags.sourcemap,
+        file: outputFile,
+      }),
+    )
+    .then(() => variantCallback(null))
+    .catch(err => {
+      console.error(err);
+      variantCallback(`Error during bundling ${format}: ${error}`);
+    });
 }
