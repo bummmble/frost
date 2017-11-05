@@ -35,13 +35,18 @@ export const isIterable = value => {
 };
 
 export const isNode = obj => {
-  const doc = obj ? (obj.ownerDocument || obj) : document;
+  const doc = obj ? obj.ownerDocument || obj : document;
   const defaultView = doc.defaultView || window;
-  return !!(obj && (
-    isFunction(defaultView.Node)
+  return !!(
+    obj &&
+    (isFunction(defaultView.Node)
       ? obj instanceof defaultView.Node
-      : isObject(obj) && isNumber(obj.nodeType) && isString(obj.nodeName)
-  ));
+      : isObject(obj) && isNumber(obj.nodeType) && isString(obj.nodeName))
+  );
+};
+
+export const isTextNode = obj => {
+  return isNode(obj) && obj.nodeType == 3;
 };
 
 //export const isEmail = email => emailExpression.test(email);
