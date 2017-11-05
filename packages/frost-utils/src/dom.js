@@ -52,3 +52,13 @@ export const getElementRect = el => {
     bottom: Math.round(rect.bottom) - docEl.clientTop
   };
 };
+
+export const getElementPosition = el => {
+  const rect = getElementRect(el);
+  return {
+    x: rect.left,
+    y: rect.top,
+    width: rect.right - rect.left,
+    height: rect.bottom - rect.top
+  };
+};
