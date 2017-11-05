@@ -1,6 +1,17 @@
 import chalk from 'chalk';
 import { formatWebpack } from './webpack';
 
+const isMultiStats = stats => stats.stats;
+const getCompileTime = stats => {
+  if (isMultiStats(stats)) {
+    return stats.stats
+      .reduce((time, stats) => {
+        return Math.max(time, getCompileTime(stats))
+      }, 0);
+  }
+  return stats.endTime - stats.startTime;
+};
+
 export default (error, stats, target) => {
   if (error) {
     const msg = `Fatal error while compiling ${target}. Error: ${error}`;
@@ -27,5 +38,7 @@ export default (error, stats, target) => {
     console.log(warnings.join('\n\n'));
   }
 
+  const compileTime = getCompileTime(stats);
+  console.log(chalk.green(`${target} compiled in: ${compileTime}ms`));
   return Promise.resolve(true);
 };

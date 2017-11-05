@@ -839,6 +839,7 @@ var compiler = (target, env = 'development', config = {}) => {
       filename: isDev || isServer ? '[name].js' : '[name]-[chunkhash].js',
       chunkFilename: isDev || isServer ? '[name].js' : '[name]-[chunkhash].js',
       path: isServer ? serverOutput : clientOutput,
+      crossOriginLoading: 'anonymous'
     },
 
     module: {
@@ -951,6 +952,17 @@ const formatWebpack = json => {
   return { errors, warnings };
 };
 
+const isMultiStats = stats => stats.stats;
+const getCompileTime = stats => {
+  if (isMultiStats(stats)) {
+    return stats.stats
+      .reduce((time, stats) => {
+        return Math.max(time, getCompileTime(stats))
+      }, 0);
+  }
+  return stats.endTime - stats.startTime;
+};
+
 var formatOutput = (error, stats, target) => {
   if (error) {
     const msg = `Fatal error while compiling ${target}. Error: ${error}`;
@@ -977,6 +989,8 @@ var formatOutput = (error, stats, target) => {
     console.log(warnings.join('\n\n'));
   }
 
+  const compileTime = getCompileTime(stats);
+  console.log(chalk.green(`${target} compiled in: ${compileTime}`));
   return Promise.resolve(true);
 };
 
