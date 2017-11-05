@@ -91,3 +91,27 @@ const outputMatrix = {
   'webpack-modern-esmodule': pkg['web:modern'] || pkg['browser:modern'] || null,
   'binary-binary-commonjs': binaryOutput || null,
 };
+
+const outputFolder = command.flags.outputFolder;
+if (outputFolder) {
+  outputMatrix['node-classic-commonjs'] = `${outputFolder}/node.classic.commonjs.js`;
+  outputMatrix['node-classic-esmdule'] = `${outputFolder}/node.classic.esmodule.js`;
+  outputMatrix['node-es2015-commonjs'] = `${outputFolder}/node.es2015.commonjs.js`;
+  outputMatrix['node-es2015-esmodule'] = `${outputFolder}/node.es2015.esmodule.js`;
+  outputMatrix['node-modern-commonjs'] = `${outputFolder}/node.modern.commonjs.js`;
+  outputMatrix['node-modern-esmodule'] = `${outputFolder}/node.modern.esmodule.js`;
+  outputMatrix['web-classic-esmodule'] = `${outputFolder}/web.classic.esmodule.js`;
+  outputMatrix['web-es2015-esmodule'] = `${outputFolder}/web.es2015.esmodule.js`;
+  outputMatrix['web-modern-esmodule'] = `${outputFolder}/web.modern.esmodule.js`;
+};
+
+const rollupFormats = {
+  commonjs: 'cjs',
+  esmodule: 'es'
+};
+
+const name = pkg.name || camelCase(pkg.name);
+const banner = getBanner(pkg);
+const targets = {};
+const formats = ['esmodule', 'commonjs'];
+
