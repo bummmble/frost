@@ -1,4 +1,7 @@
 {
 	"name": "frost-utils",
-	"version": "0.1.0"
+	"version": "0.1.0",
+	"scripts": {
+		"build": "node ./build.js"
+	}
 }
