@@ -53,6 +53,7 @@ const clientPlugins = (
   isDev,
   isProd,
   hasVendor,
+  hasHmr,
   { compression, pwa, sourceMaps },
 ) => {
   return [

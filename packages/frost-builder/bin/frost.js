@@ -1,8 +1,6 @@
 'use strict';
 
-function _interopDefault(ex) {
-  return ex && typeof ex === 'object' && 'default' in ex ? ex['default'] : ex;
-}
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var meow = _interopDefault(require('meow'));
 var chalk = _interopDefault(require('chalk'));
@@ -13,25 +11,22 @@ var lodash = require('lodash');
 var path = require('path');
 var webpack = _interopDefault(require('webpack'));
 var fsExtra = require('fs-extra');
-var fs$1 = require('fs');
-var ExtractCssChunks = _interopDefault(
-  require('extract-css-chunks-webpack-plugin'),
-);
+var fs = require('fs');
+var ExtractCssChunks = _interopDefault(require('extract-css-chunks-webpack-plugin'));
+var builtinModules = _interopDefault(require('builtin-modules'));
 var loaderUtils = require('loader-utils');
-var CaseSensitivePathsPlugin = _interopDefault(
-  require('case-sensitive-paths-webpack-plugin'),
-);
+var CaseSensitivePathsPlugin = _interopDefault(require('case-sensitive-paths-webpack-plugin'));
 var StatsPlugin = _interopDefault(require('stats-webpack-plugin'));
 var webpackBundleAnalyzer = require('webpack-bundle-analyzer');
-var ServiceWorkerPlugin = _interopDefault(
-  require('serviceworker-webpack-plugin'),
-);
-var BabiliMinifyPlugin = _interopDefault(
-  require('babel-minify-webpack-plugin'),
-);
+var ServiceWorkerPlugin = _interopDefault(require('serviceworker-webpack-plugin'));
+var BabiliMinifyPlugin = _interopDefault(require('babel-minify-webpack-plugin'));
 var UglifyPlugin = _interopDefault(require('uglifyjs-webpack-plugin'));
 var SriPlugin = _interopDefault(require('webpack-subresource-integrity'));
 var ora = _interopDefault(require('ora'));
+var webpackDevMiddleware = _interopDefault(require('webpack-dev-middleware'));
+var webpackHotMiddleware = _interopDefault(require('webpack-hot-middleware'));
+var webpackHotServerMiddleware = _interopDefault(require('webpack-hot-server-middleware'));
+var express = _interopDefault(require('express'));
 
 var defaults = {
   entry: {
@@ -56,10 +51,12 @@ var defaults = {
   cacheLoader: {},
   hmr: true,
   postcss: true,
-  sourceMaps: true,
+  sourceMaps: false,
   compression: {
     type: 'babili',
     babiliClientOptions: {},
+
+    // Basic compression for server, we don't want dead code
     babiliServerOptions: {
       booleans: false,
       deadcode: true,
@@ -69,13 +66,19 @@ var defaults = {
     },
     uglifyOptions: {
       compress: {
+        // Only risky for some rare floating point operations
         unsafe_math: true,
+        // Optimize expressions like Array.prototype.map.call into [].map.call
         unsafe_proto: true,
+        // Good for chrome perf
         keep_infinity: true,
+        // Try hard to export less code
         passes: 2,
       },
       output: {
+        // Fix for problematic code like emojis
         ascii_only: true,
+        // Remove all the comments!
         comments: false,
       },
     },
@@ -90,7 +93,10 @@ var defaults = {
       speed: 4,
     },
   },
-  babel: {},
+  babel: {
+    presets: [],
+    plugins: []
+  },
   prettier: {},
   eslint: {},
   performance: {},
@@ -133,7 +139,7 @@ const getConfig = async flags => {
 const resolvePaths = config => {
   resolveFor.forEach(loc => {
     if (lodash.get(config, loc) != null) {
-      lodash.set(config, entry, path.resolve(Root, lodash.get(config, loc)));
+      lodash.set(config, loc, path.resolve(Root, lodash.get(config, loc)));
     }
   });
   return config;
@@ -157,11 +163,11 @@ const configureCompiler = (target, env) => {
   };
 };
 
-const buildEntryAndOutput = ({ entry, output, hmr }, isServer) => {
+const buildEntryAndOutput = ({ entry, output, hmr }, isServer, isDev) => {
   const mainEntry = isServer ? entry.server : entry.client;
   const vendorEntry = isServer ? entry.serverVendor : entry.clientVendor;
-  const hasMain = fs$1.existsSync(mainEntry);
-  const hasVendor = fs$1.existsSync(vendorEntry);
+  const hasMain = fs.existsSync(mainEntry);
+  const hasVendor = fs.existsSync(vendorEntry);
   const clientOutput = output.client;
   const serverOutput = output.server;
 
@@ -222,8 +228,6 @@ const promisify = fn => {
 const infoColor = chalk.rgb(135, 206, 250); //info
 const successColor = chalk.rgb(102, 205, 170); //success
 const warningColor = chalk.rgb(255, 165, 0); //warning
-const errorColor = chalk.red();
-
 const dotindex = c => {
   const m = /\.[^.]*$/.exec(c);
   return m ? m.index + 1 : c.length;
@@ -233,7 +237,7 @@ const Logger = {
   success: msg => successColor(msg),
   info: msg => infoColor(msg),
   warning: msg => warningColor(msg),
-  error: msg => errorColor(msg),
+  error: msg => chalk.red(msg),
   clearConsole: () => {
     process.stdout.write(
       process.platform === 'win32' ? '\x1Bc' : '\x1B[2J\x1B[3J\x1B[H',
@@ -300,18 +304,98 @@ const Logger = {
   },
 };
 
-var getExternals = root => {
-  const nodeModules = path.resolve(root, 'node_modules');
-  const externals = fs
-    .readdirSync(nodeModules)
-    .filter(
-      x => !/\.bin|react-universal-component|webpack-flush-chunks/.test(x),
-    )
-    .reduce((acc, curr) => {
-      acc[curr] = `commonjs ${curr}`;
-      return acc;
-    }, {});
-  return externals;
+const root = 'node_modules';
+
+const BuiltIns = new Set(builtinModules);
+const Modules = new Set();
+const Binaries = new Set();
+const nodePackages = fs.readdirSync(root).filter(
+  dirname => dirname.charAt(0) !== '.',
+);
+nodePackages.forEach(pkg => {
+  let json;
+  try {
+    json = fsExtra.readJsonSync(path.resolve(root, pkg, 'package.json'));
+  } catch (error) {}
+
+  if (json.module || json.style || json['jsnext:main']) {
+    Modules.add(pkg);
+  }
+
+  // Config for Node-Pre-Gyp
+  // See https://www.npmjs.com/package/node-pre-gyp
+  if (json.binary != null) {
+    Binaries.add(pkg);
+  }
+});
+
+const Problematic = new Set([
+  // 'intl' is included in one block. No reason to bundle everything
+  'intl',
+
+  // 'mime-db' for mime-types. Naturally very large
+  'mime-db',
+
+  // 'encoding' uses dynamic iconv loading
+  'encoding',
+
+  // Native code helper
+  'node-gyp',
+  'node-pre-gyp',
+
+  // These modules use dynamic requires which do not play well with Webpacj
+  'ajv',
+  'colors',
+  'express',
+  'jsdom',
+]);
+
+console.log('ESM:', Modules);
+console.log('Binaries:', Binaries);
+console.log('Problematic:', Problematic);
+
+const isLoaderSpecific = req => {
+  return !!/\.(eot|woff|woff2|ttf|otf|svg|png|jpg|jpeg|gif|webp|webm|ico|mp4|mp3|ogg|html|pdf|swf|css|scss|sass|sss|less)$/.exec(
+    req,
+  );
+};
+
+var getExternals = () => {
+  return (context, req, cb) => {
+    const basename = req.split('/')[0];
+
+    // Externalize builtins
+    if (BuiltIns.has(basename)) {
+      return cb(null, `commonjs ${req}`);
+    }
+
+    // Externalize binaries
+    if (Binaries.has(basename)) {
+      return cb(null, `commonjs ${req}`);
+    }
+
+    // Externalize problematic commonjs
+    if (Problematic.has(basename)) {
+      return cb(null, `commonjs ${req}`);
+    }
+
+    // Ignore inline files
+    if (basename.charAt(0) === '.') {
+      return cb();
+    }
+
+    // Inline all modules
+    if (Modules.has(basename)) {
+      return cb();
+    }
+
+    // Inline modules that need a webpack env
+    if (isLoaderSpecific(req)) {
+      return cb();
+    }
+
+    return cb(Null, `commonjs ${req}`);
+  };
 };
 
 const hashType = 'sha256';
@@ -319,12 +403,7 @@ const digestType = 'base62';
 const digestLength = 4;
 
 const generateHash = pkg => {
-  return loaderUtils.getHashDigest(
-    JSON.stringify(pkg),
-    hashType,
-    digestType,
-    digestLength,
-  );
+  return loaderUtils.getHashDigest(JSON.stringify(pkg), hashType, digestType, digestLength);
 };
 
 var cacheHash = (type, pkg, target, env) => {
@@ -386,12 +465,7 @@ class ChunkHash {
           .sort(compareModules)
           .map(getSource)
           .reduce(concatenateSource, '');
-        const hash = loaderUtils.getHashDigest(
-          source,
-          hashType$1,
-          digestType$1,
-          digestLength$1,
-        );
+        const hash = loaderUtils.getHashDigest(source, hashType$1, digestType$1, digestLength$1);
 
         chunkHash.digest = function() {
           return hash;
@@ -544,6 +618,9 @@ const basePlugins = (env, webpackTarget, isDev, isProd) => {
 
     isDev ? new webpack.NamedModulesPlugin() : null,
     isDev ? new webpack.NoEmitOnErrorsPlugin() : null,
+
+    // Generates IDs that preserve over builds
+    // https://github.com/webpack/webpack.js.org/issues/652#issuecomment-273324529
     isProd ? new webpack.HashedModuleIdsPlugin() : null,
 
     // This is used to guarentee that our generated [chunkhash]'s are different ONLY
@@ -560,6 +637,7 @@ const clientPlugins = (
   isDev,
   isProd,
   hasVendor,
+  hasHmr,
   { compression, pwa, sourceMaps },
 ) => {
   return [
@@ -576,6 +654,9 @@ const clientPlugins = (
     }),
 
     hasHmr ? new webpack.HotModuleReplacementPlugin() : null,
+
+    // Let the server side renderer know about our client assets
+    // https://github.com/FormidableLabs/webpack-stats-plugin
     isProd ? new StatsPlugin('stats.json') : null,
     isProd
       ? new webpackBundleAnalyzer.BundleAnalyzerPlugin({
@@ -674,8 +755,9 @@ var compiler = (target, env = 'development', config = {}) => {
     clientOutput,
     hasHmr,
     hmrMiddleware,
-  } = buildEntryAndOutput(config, isServer);
+  } = buildEntryAndOutput(config, isServer, isDev);
 
+  /* const DefaultLocale = config.locale.default;
   const SupportedLocales = config.locale.supported;
 
   const SupportedLanguages = (() => {
@@ -684,14 +766,11 @@ var compiler = (target, env = 'development', config = {}) => {
       languages.add(lang.split('-')[0]);
     }
     return Array.from(languages.keys());
-  })();
+  })(); */
 
   const prefix = chalk.bold(target.toUpperCase());
-  const devtool = config.sourceMaps ? 'source-map' : null;
-  const loaderCache = path.resolve(
-    Root$1,
-    cacheHash('loader', pkg$1, target, env),
-  );
+  const devtool = config.sourceMaps ? 'source-map' : false;
+  const loaderCache = path.resolve(Root$1, cacheHash('loader', pkg$1, target, env));
   const cacheLoader = config.cacheLoader
     ? {
         loader: 'cache-loader',
@@ -725,6 +804,7 @@ var compiler = (target, env = 'development', config = {}) => {
     isServer,
     hasVendor,
     hasHmr,
+    config
   );
 
   console.log(Logger.info(chalk.underline(`${prefix} Configuration`)));
@@ -761,11 +841,11 @@ var compiler = (target, env = 'development', config = {}) => {
       path: isServer ? serverOutput : clientOutput,
     },
 
-    modules: {
+    module: {
       rules: [
         config.eslint
           ? {
-              test: config.file.babel,
+              test: config.files.babel,
               include: [config.entry.client, config.entry.server],
               enforce: 'pre',
               use: {
@@ -846,9 +926,28 @@ var compiler = (target, env = 'development', config = {}) => {
   };
 };
 
+const formatRaw = (message, isError) => {
+  let lines = message.split('\n');
+
+  if (lines.length > 2 && lines[1] === '') {
+    lines.splice(1, 1);
+  }
+  if (lines[0].lastIndexOf('!') !== -1) {
+    lines[0] = lines[0].substr(lines[0].lastIndexOf('!') + 1);
+  }
+
+  lines = lines.filter(line => lines.indexOf(' @ ') !== 0);
+  if (!lines[0] || !lines[1]) {
+    return lines.join('\n');
+  }
+
+  message = lines.join('\n');
+  return message.trim();
+};
+
 const formatWebpack = json => {
-  const errors = json.errors.map(message => formatWebpack(message, true));
-  const warnings = json.warnings.map(message => formatWebpack(message, false));
+  const errors = json.errors.map(message => formatRaw(message, true));
+  const warnings = json.warnings.map(message => formatRaw(message, false));
   return { errors, warnings };
 };
 
@@ -869,7 +968,7 @@ var formatOutput = (error, stats, target) => {
 
   if (errors.length) {
     console.log(chalk.red(`Failed to compile ${target}`));
-    console.log(messages.errors.join('\n\n'));
+    console.log(errors.join('\n\n'));
     return Promise.reject(`Failed to compile ${target}`);
   }
 
@@ -909,6 +1008,58 @@ const cleanServer = (config = {}) => {
   return removePromise(config.output.server);
 };
 
+//import { createExpressServer } from '../../../frost-server/src/index';
+const create = (config = {}) => {
+  const clientConfig = compiler('client', 'development', config);
+  const serverConfig = compiler('server', 'development', config);
+  const multiCompiler = webpack([clientConfig, serverConfig]);
+  const clientCompiler = multiCompiler.compilers[0];
+
+  const devMiddleware = webpackDevMiddleware(multiCompiler, {
+    publicPath: config.output.public,
+    quiet: true,
+    noInfo: true,
+  });
+  const hotMiddleware = webpackHotMiddleware(clientCompiler);
+  const hotServerMiddleware = webpackHotServerMiddleware(multiCompiler, {
+    serverRendererOptions: {
+      outputPath: config.output.client,
+    },
+  });
+
+  return {
+    middleware: [devMiddleware, hotMiddleware, hotServerMiddleware],
+    multiCompiler,
+  };
+};
+
+const connect = (server, multiCompiler) => {
+  let serverIsStarted = false;
+  multiCompiler.plugin('invalid', () => {
+    console.log('Frost dev server compiling');
+  });
+
+  multiCompiler.plugin('done', async (error, stats) => {
+    await formatOutput(error, stats);
+    if (!stats.hasErrors() && !serverIsStarted) {
+      serverIsStarted = true;
+      server.listen(process.env.SERVER_PORT, () => {
+        console.log(
+          `Frost dev server started at port ${process.env.SERVER_PORT}`,
+        );
+      });
+    }
+  });
+};
+
+const start = (config = {}) => {
+  const { middleware, multiCompiler } = create(config);
+  const server = express();
+  server.use(...middleware);
+
+  connect(server, multiCompiler);
+};
+
 const pkg = require('../package.json');
 const appPkg = require(Root + '/package.json');
 const appInfo = `running on ${Logger.info(appPkg.name)}-${Logger.info(
@@ -934,6 +1085,7 @@ const cli = meow(
     --quiet, -q         Silences all but important messages
 
 	Commands:
+    dev                 Starts a dev server
     build               Builds production versions of both client and server
 		build:client        Builds a production version of the client
     build:server        Builds a production version of the server
@@ -950,6 +1102,7 @@ const cli = meow(
 const input = cli.input;
 const flags = cli.flags;
 const tasks = [
+  { task: 'dev', commands: [cleanClient, cleanServer, start] },
   {
     task: 'build',
     commands: [cleanClient, cleanServer, buildClient, buildServer],
@@ -959,9 +1112,15 @@ const tasks = [
   { task: 'clean', commands: [cleanServer, cleanClient] },
 ];
 
+// Prevent deprecation messages
+if (!flags.verbose) {
+  process.noDeprecation = true;
+}
+
 function execute(commands, config) {
   return each(commands, item => item(config));
 }
+
 async function executeTasks() {
   const config = await getConfig(flags);
   for (const name of input) {

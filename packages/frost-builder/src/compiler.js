@@ -34,9 +34,9 @@ export default (target, env = 'development', config = {}) => {
     clientOutput,
     hasHmr,
     hmrMiddleware,
-  } = buildEntryAndOutput(config, isServer);
+  } = buildEntryAndOutput(config, isServer, isDev);
 
-  const DefaultLocale = config.locale.default;
+  /* const DefaultLocale = config.locale.default;
   const SupportedLocales = config.locale.supported;
 
   const SupportedLanguages = (() => {
@@ -45,10 +45,10 @@ export default (target, env = 'development', config = {}) => {
       languages.add(lang.split('-')[0]);
     }
     return Array.from(languages.keys());
-  })();
+  })(); */
 
   const prefix = chalk.bold(target.toUpperCase());
-  const devtool = config.sourceMaps ? 'source-map' : null;
+  const devtool = config.sourceMaps ? 'source-map' : false;
   const loaderCache = resolve(Root, cacheHash('loader', pkg, target, env));
   const cacheLoader = config.cacheLoader
     ? {
@@ -83,6 +83,7 @@ export default (target, env = 'development', config = {}) => {
     isServer,
     hasVendor,
     hasHmr,
+    config
   );
 
   console.log(Logger.info(chalk.underline(`${prefix} Configuration`)));
@@ -119,11 +120,11 @@ export default (target, env = 'development', config = {}) => {
       path: isServer ? serverOutput : clientOutput,
     },
 
-    modules: {
+    module: {
       rules: [
         config.eslint
           ? {
-              test: config.file.babel,
+              test: config.files.babel,
               include: [config.entry.client, config.entry.server],
               enforce: 'pre',
               use: {

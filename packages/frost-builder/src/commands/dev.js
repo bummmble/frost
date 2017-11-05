@@ -5,7 +5,8 @@ import webpackHotMiddleware from 'webpack-hot-middleware';
 import webpackHotServerMiddleware from 'webpack-hot-server-middleware';
 import compiler from '../compiler';
 import formatOutput from '../format/output';
-import { createExpressServer } from '../../../frost-server/src/index';
+//import { createExpressServer } from '../../../frost-server/src/index';
+import express from 'express';
 
 export const create = (config = {}) => {
   const clientConfig = compiler('client', 'development', config);
@@ -52,13 +53,8 @@ export const connect = (server, multiCompiler) => {
 
 export const start = (config = {}) => {
   const { middleware, multiCompiler } = create(config);
-  const server = createExpressServer({
-    staticConfig: {
-      public: config.output.public,
-      path: config.output.client,
-    },
-    beforeFallback: [...middleware],
-  });
+  const server = express();
+  server.use(...middleware);
 
   connect(server, multiCompiler);
 };

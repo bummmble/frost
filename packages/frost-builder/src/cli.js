@@ -73,6 +73,7 @@ if (!flags.verbose) {
 function execute(commands, config) {
   return each(commands, item => item(config));
 }
+
 async function executeTasks() {
   const config = await getConfig(flags);
   for (const name of input) {

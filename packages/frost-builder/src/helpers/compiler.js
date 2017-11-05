@@ -18,7 +18,7 @@ const configureCompiler = (target, env) => {
   };
 };
 
-const buildEntryAndOutput = ({ entry, output, hmr }, isServer) => {
+const buildEntryAndOutput = ({ entry, output, hmr }, isServer, isDev) => {
   const mainEntry = isServer ? entry.server : entry.client;
   const vendorEntry = isServer ? entry.serverVendor : entry.clientVendor;
   const hasMain = existsSync(mainEntry);

@@ -18,7 +18,7 @@ export default (error, stats, target) => {
 
   if (errors.length) {
     console.log(chalk.red(`Failed to compile ${target}`));
-    console.log(messages.errors.join('\n\n'));
+    console.log(errors.join('\n\n'));
     return Promise.reject(`Failed to compile ${target}`);
   }
 

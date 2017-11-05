@@ -23,7 +23,7 @@ nodePackages.forEach(pkg => {
   } catch (error) {}
 
   if (json.module || json.style || json['jsnext:main']) {
-    Modules.add(name);
+    Modules.add(pkg);
   }
 
   // Config for Node-Pre-Gyp

@@ -18,8 +18,8 @@ const formatRaw = (message, isError) => {
 };
 
 const formatWebpack = json => {
-  const errors = json.errors.map(message => formatWebpack(message, true));
-  const warnings = json.warnings.map(message => formatWebpack(message, false));
+  const errors = json.errors.map(message => formatRaw(message, true));
+  const warnings = json.warnings.map(message => formatRaw(message, false));
   return { errors, warnings };
 };
 

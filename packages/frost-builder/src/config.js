@@ -40,7 +40,7 @@ const getConfig = async flags => {
 const resolvePaths = config => {
   resolveFor.forEach(loc => {
     if (get(config, loc) != null) {
-      set(config, entry, resolve(Root, get(config, loc)));
+      set(config, loc, resolve(Root, get(config, loc)));
     }
   });
   return config;

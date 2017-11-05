@@ -21,7 +21,7 @@ export default {
   cacheLoader: {},
   hmr: true,
   postcss: true,
-  sourceMaps: true,
+  sourceMaps: false,
   compression: {
     type: 'babili',
     babiliClientOptions: {},
@@ -63,7 +63,10 @@ export default {
       speed: 4,
     },
   },
-  babel: {},
+  babel: {
+    presets: [],
+    plugins: []
+  },
   prettier: {},
   eslint: {},
   performance: {},
