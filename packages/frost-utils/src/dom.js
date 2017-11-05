@@ -30,3 +30,25 @@ export const getActiveElement = doc => {
     return doc.body;
   }
 };
+
+export const getElementRect = el => {
+  const docEl = el.ownerDocument.documentElement;
+
+  if (!('getBoundingClientRect' in el) || !containsNode(docEl, el)) {
+    return {
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0
+    };
+  }
+
+  const rect = el.getBoundingClientRect();
+
+  return {
+    left: Math.round(rect.left) - docEl.clientLeft,
+    right: Math.round(rect.right) - docEl.clientLeft,
+    top: Math.round(rect.top) - docEl.clientTop,
+    bottom: Math.round(rect.bottom) - docEl.clientTop
+  };
+};
