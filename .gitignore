@@ -8,6 +8,7 @@ packages/*/build.js
 packages/*/.cache
 packages/*/bin
 
+packages/frost-packager
 packages/frost-builder/client
 packages/frost-builder/server
 packages/frost-builder/build
