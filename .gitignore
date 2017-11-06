@@ -11,4 +11,5 @@ packages/*/bin
 packages/frost-builder/client
 packages/frost-builder/server
 packages/frost-builder/build
+packages/frost-build/bin
 packages/frost-builder/frost.config.js
