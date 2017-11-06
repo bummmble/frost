@@ -43,5 +43,6 @@ export {
   getElementPosition,
 } from './dom';
 
+export { promisify, each } from './promise';
 export { Environment } from './environment';
 export { Logger } from './logger';
