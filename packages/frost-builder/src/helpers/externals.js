@@ -2,6 +2,7 @@ import { readdirSync } from 'fs';
 import { resolve } from 'path';
 import { readJsonSync } from 'fs-extra';
 import builtinModules from 'builtin-modules';
+import Logger from './console';
 
 const root = 'node_modules';
 
@@ -54,9 +55,9 @@ const Problematic = new Set([
   'jsdom',
 ]);
 
-console.log('ESM:', Modules);
-console.log('Binaries:', Binaries);
-console.log('Problematic:', Problematic);
+console.log(Logger.info(`ESM: ${Modules}`));
+console.log(Logger.info(`Binaries: ${Binaries}`));
+console.log(Logger.info(`Problematic: ${Problematic}`));
 
 export const isLoaderSpecific = req => {
   return !!/\.(eot|woff|woff2|ttf|otf|svg|png|jpg|jpeg|gif|webp|webm|ico|mp4|mp3|ogg|html|pdf|swf|css|scss|sass|sss|less)$/.exec(

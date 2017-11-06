@@ -44,3 +44,4 @@ export {
 } from './dom';
 
 export { Environment } from './environment';
+export { Logger } from './logger';

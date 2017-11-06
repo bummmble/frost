@@ -15,7 +15,7 @@ const getCompileTime = stats => {
 export default (error, stats, target) => {
   if (error) {
     const msg = `Fatal error while compiling ${target}. Error: ${error}`;
-    console.log(chalk.red(msg));
+    console.log(Logger.error(msg));
     return Promise.reject(msg);
   }
 
@@ -28,7 +28,7 @@ export default (error, stats, target) => {
   }
 
   if (errors.length) {
-    console.log(chalk.red(`Failed to compile ${target}`));
+    console.log(Logger.error(`Failed to compile ${target}`));
     console.log(errors.join('\n\n'));
     return Promise.reject(`Failed to compile ${target}`);
   }
