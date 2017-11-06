@@ -394,7 +394,7 @@ var getExternals = () => {
       return cb();
     }
 
-    return cb(Null, `commonjs ${req}`);
+    return cb(null, `commonjs ${req}`);
   };
 };
 
@@ -713,7 +713,7 @@ const serverPlugins = (isDev, isProd, { compression }) => {
         })
       : null,
     isProd ? new BabiliMinifyPlugin(compression.babiliServerOptions) : null,
-  ];
+  ].filter(Boolean)
 };
 
 var PluginManager = (
@@ -990,7 +990,7 @@ var formatOutput = (error, stats, target) => {
   }
 
   const compileTime = getCompileTime(stats);
-  console.log(chalk.green(`${target} compiled in: ${compileTime}`));
+  console.log(chalk.green(`${target} compiled in: ${compileTime}ms`));
   return Promise.resolve(true);
 };
 
@@ -1000,7 +1000,7 @@ const buildClient = (config = {}) => {
   const webpackConfig = compiler('client', 'production', config);
   return new Promise((resolve$$1, reject) => {
     webpack(webpackConfig, (error, stats) => {
-      return resolve$$1(formatOutput(error, stats));
+      return resolve$$1(formatOutput(error, stats, 'client'));
     });
   });
 };
@@ -1009,7 +1009,7 @@ const buildServer = (config = {}) => {
   const webpackConfig = compiler('server', 'production', config);
   return new Promise(resolve$$1 => {
     webpack(webpackConfig, (error, stats) => {
-      return resolve$$1(formatOutput(error, stats));
+      return resolve$$1(formatOutput(error, stats, 'server'));
     });
   });
 };
@@ -1025,7 +1025,9 @@ const cleanServer = (config = {}) => {
 //import { createExpressServer } from '../../../frost-server/src/index';
 const create = (config = {}) => {
   const clientConfig = compiler('client', 'development', config);
+  console.log(clientConfig);
   const serverConfig = compiler('server', 'development', config);
+  console.log(serverConfig);
   const multiCompiler = webpack([clientConfig, serverConfig]);
   const clientCompiler = multiCompiler.compilers[0];
 
@@ -1053,8 +1055,8 @@ const connect = (server, multiCompiler) => {
     console.log('Frost dev server compiling');
   });
 
-  multiCompiler.plugin('done', async (error, stats) => {
-    await formatOutput(error, stats);
+  multiCompiler.plugin('done', stats => {
+   // await formatOutput(error, stats);
     if (!stats.hasErrors() && !serverIsStarted) {
       serverIsStarted = true;
       server.listen(process.env.SERVER_PORT, () => {

@@ -98,6 +98,6 @@ export default () => {
       return cb();
     }
 
-    return cb(Null, `commonjs ${req}`);
+    return cb(null, `commonjs ${req}`);
   };
 };

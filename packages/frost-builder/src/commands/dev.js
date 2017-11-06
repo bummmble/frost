@@ -38,8 +38,8 @@ export const connect = (server, multiCompiler) => {
     console.log('Frost dev server compiling');
   });
 
-  multiCompiler.plugin('done', async (error, stats) => {
-    await formatOutput(error, stats);
+  multiCompiler.plugin('done', stats => {
+   // await formatOutput(error, stats);
     if (!stats.hasErrors() && !serverIsStarted) {
       serverIsStarted = true;
       server.listen(process.env.SERVER_PORT, () => {

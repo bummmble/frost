@@ -12,7 +12,7 @@ const buildClient = (config = {}) => {
   const webpackConfig = compiler('client', 'production', config);
   return new Promise((resolve, reject) => {
     webpack(webpackConfig, (error, stats) => {
-      return resolve(formatOutput(error, stats));
+      return resolve(formatOutput(error, stats, 'client'));
     });
   });
 };
@@ -21,7 +21,7 @@ const buildServer = (config = {}) => {
   const webpackConfig = compiler('server', 'production', config);
   return new Promise(resolve => {
     webpack(webpackConfig, (error, stats) => {
-      return resolve(formatOutput(error, stats));
+      return resolve(formatOutput(error, stats, 'server'));
     });
   });
 };
