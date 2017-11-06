@@ -31,14 +31,14 @@ Using the builder from the command line is easy. Either install the builder glob
 
 ```
 Usage
-	$ frost
+$ frost
 
 Options:
-	--verbose, -v  		Includes extensive messages to helper with developer experience
-	--quiet, -q  		Surpresses everything but important warnings and errors
+    --verbose, -v  		Includes extensive messages to helper with developer experience  
+    --quiet, -q  		Surpresses everything but important warnings and errors
 
 Commands:
-    build  		        Cleans the build directories and the produces a production build of client and server
+    build  		Cleans the build directories and builds production client and server bundles
     build:client        Functions the same as build but only acts on the client bundles
     build:server        Functions the same as build but only acts on the server bundles
     dev                 Spins up a dev server with HMR
