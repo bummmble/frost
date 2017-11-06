@@ -39,7 +39,7 @@ export const connect = (server, multiCompiler) => {
   });
 
   multiCompiler.plugin('done', stats => {
-   // await formatOutput(error, stats);
+    formatOutput(false, stats);
     if (!stats.hasErrors() && !serverIsStarted) {
       serverIsStarted = true;
       server.listen(process.env.SERVER_PORT, () => {

@@ -1025,9 +1025,7 @@ const cleanServer = (config = {}) => {
 //import { createExpressServer } from '../../../frost-server/src/index';
 const create = (config = {}) => {
   const clientConfig = compiler('client', 'development', config);
-  console.log(clientConfig);
   const serverConfig = compiler('server', 'development', config);
-  console.log(serverConfig);
   const multiCompiler = webpack([clientConfig, serverConfig]);
   const clientCompiler = multiCompiler.compilers[0];
 
@@ -1056,7 +1054,7 @@ const connect = (server, multiCompiler) => {
   });
 
   multiCompiler.plugin('done', stats => {
-   // await formatOutput(error, stats);
+    formatOutput(false, stats);
     if (!stats.hasErrors() && !serverIsStarted) {
       serverIsStarted = true;
       server.listen(process.env.SERVER_PORT, () => {
