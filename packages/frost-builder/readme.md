@@ -38,10 +38,10 @@ Options:
 	--quiet, -q  		Surpresses everything but important warnings and errors
 
 Commands:
-    build  		Cleans the build directories and the produces a production build of client and server
+    build  		        Cleans the build directories and the produces a production build of client and server
     build:client        Functions the same as build but only acts on the client bundles
     build:server        Functions the same as build but only acts on the server bundles
-    dev           Spins up a dev server with HMR
+    dev                 Spins up a dev server with HMR
     clean               Cleans up the client and server build directories
 ```
 
