@@ -2,6 +2,7 @@ import chalk from 'chalk';
 import glob from 'glob';
 import { resolve } from 'path';
 import { get as getRoot } from 'app-root-dir';
+import { exec } from '../helpers/exec';
 
 const Root = getRoot();
 const isWindows = process.platform === 'win32';
@@ -34,7 +35,7 @@ export default ({ prettier }, mode) => {
 		args.push(`--${shouldWrite ? 'write' : 'l'}`);
 
 		try {
-			// exec
+			exec(prettierCmd, [...args, ...files]).trim();
 		} catch (e) {
 			if (!shouldWrite) {
 				process.exit(1);
