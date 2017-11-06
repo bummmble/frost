@@ -1,5 +1,6 @@
 import chalk from 'chalk';
 import { formatWebpack } from './webpack';
+import Logger from '../helpers/console';
 
 const isMultiStats = stats => stats.stats;
 const getCompileTime = stats => {
@@ -23,7 +24,7 @@ export default (error, stats, target) => {
 
   const isSuccessful = !errors.length && !warnings.length;
   if (isSuccessful) {
-    console.log(chalk.green(`Compiled ${target} successfully`));
+    console.log(Logger.success(`Compiled ${target} successfully`));
   }
 
   if (errors.length) {
@@ -33,11 +34,11 @@ export default (error, stats, target) => {
   }
 
   if (warnings.length && !errors.length) {
-    console.log(chalk.yellow(`Compiled ${target} with warnings`));
+    console.log(Logger.warning(`Compiled ${target} with warnings`));
     console.log(warnings.join('\n\n'));
   }
 
   const compileTime = getCompileTime(stats);
-  console.log(chalk.green(`${target} compiled in: ${compileTime}ms`));
+  console.log(Logger.info(`${target} compiled in: ${compileTime}ms`));
   return Promise.resolve(true);
 };
