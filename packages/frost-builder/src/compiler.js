@@ -83,7 +83,7 @@ export default (target, env = 'development', config = {}) => {
     isServer,
     hasVendor,
     hasHmr,
-    config
+    config,
   );
 
   console.log(Logger.info(chalk.underline(`${prefix} Configuration`)));
@@ -118,7 +118,7 @@ export default (target, env = 'development', config = {}) => {
       filename: isDev || isServer ? '[name].js' : '[name]-[chunkhash].js',
       chunkFilename: isDev || isServer ? '[name].js' : '[name]-[chunkhash].js',
       path: isServer ? serverOutput : clientOutput,
-      crossOriginLoading: 'anonymous'
+      crossOriginLoading: 'anonymous',
     },
 
     module: {

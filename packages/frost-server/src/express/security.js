@@ -2,19 +2,26 @@ import helmet from 'helmet';
 import parameterProtection from 'hpp';
 import uuid from 'uuid';
 
-export default (server) => {
-	// Don't expose software infomation
-	server.disable('x-powered-by');
+export default (server, { enableNonce = true }) => {
+  if (enableNonce) {
+    server.use((req, res, next) => {
+      res.locals.nonce = uuid();
+      next();
+    });
+  }
 
-	// Prevent HTTP Parameter pollution
-	server.use(parameterProtection());
+  // Don't expose software infomation
+  server.disable('x-powered-by');
 
-	// Sets X-XSS-Protection header to prevent reflected XSS attacks
-	server.use(helmet.xssFilter());
+  // Prevent HTTP Parameter pollution
+  server.use(parameterProtection());
 
-	// Mitigates clickjacking attacks by setting the X-Frame-Options header
-	server.use(helmet.frameguard('deny'));
+  // Sets X-XSS-Protection header to prevent reflected XSS attacks
+  server.use(helmet.xssFilter());
 
-	server.use(helmet.ieNoOpen());
-	server.use(helmet.noSniff());
-}
+  // Mitigates clickjacking attacks by setting the X-Frame-Options header
+  server.use(helmet.frameguard('deny'));
+
+  server.use(helmet.ieNoOpen());
+  server.use(helmet.noSniff());
+};

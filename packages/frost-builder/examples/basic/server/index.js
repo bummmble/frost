@@ -1,4 +1,4 @@
 function startServer() {
-	console.log('starting server');
+  console.log('starting server');
 }
 startServer();

@@ -9,10 +9,15 @@ const defaultStatic = {
   path: 'build/client',
 };
 
-export default ({ staticConfig = defaultStatic, afterSecurity = [], beforeFallback = [] }) => {
+export default ({
+  staticConfig = defaultStatic,
+  afterSecurity = [],
+  beforeFallback = [],
+  enableNonce = false,
+}) => {
   const server = express();
   createError(server);
-  createSecurity(server);
+  createSecurity(server, { enableNonce });
 
   if (afterSecurity.length > 0) {
     afterSecurity.forEach(middleware => {
@@ -23,7 +28,7 @@ export default ({ staticConfig = defaultStatic, afterSecurity = [], beforeFallba
       }
     });
   }
-  
+
   createCore(server);
   if (staticConfig) {
     server.use(staticConfig.public, express.static(staticConfig.path));

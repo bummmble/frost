@@ -1,6 +1,8 @@
 'use strict';
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+function _interopDefault(ex) {
+  return ex && typeof ex === 'object' && 'default' in ex ? ex['default'] : ex;
+}
 
 var meow = _interopDefault(require('meow'));
 var chalk = _interopDefault(require('chalk'));
@@ -12,20 +14,30 @@ var path = require('path');
 var webpack = _interopDefault(require('webpack'));
 var fsExtra = require('fs-extra');
 var fs = require('fs');
-var ExtractCssChunks = _interopDefault(require('extract-css-chunks-webpack-plugin'));
+var ExtractCssChunks = _interopDefault(
+  require('extract-css-chunks-webpack-plugin'),
+);
 var builtinModules = _interopDefault(require('builtin-modules'));
 var loaderUtils = require('loader-utils');
-var CaseSensitivePathsPlugin = _interopDefault(require('case-sensitive-paths-webpack-plugin'));
+var CaseSensitivePathsPlugin = _interopDefault(
+  require('case-sensitive-paths-webpack-plugin'),
+);
 var StatsPlugin = _interopDefault(require('stats-webpack-plugin'));
 var webpackBundleAnalyzer = require('webpack-bundle-analyzer');
-var ServiceWorkerPlugin = _interopDefault(require('serviceworker-webpack-plugin'));
-var BabiliMinifyPlugin = _interopDefault(require('babel-minify-webpack-plugin'));
+var ServiceWorkerPlugin = _interopDefault(
+  require('serviceworker-webpack-plugin'),
+);
+var BabiliMinifyPlugin = _interopDefault(
+  require('babel-minify-webpack-plugin'),
+);
 var UglifyPlugin = _interopDefault(require('uglifyjs-webpack-plugin'));
 var SriPlugin = _interopDefault(require('webpack-subresource-integrity'));
 var ora = _interopDefault(require('ora'));
 var webpackDevMiddleware = _interopDefault(require('webpack-dev-middleware'));
 var webpackHotMiddleware = _interopDefault(require('webpack-hot-middleware'));
-var webpackHotServerMiddleware = _interopDefault(require('webpack-hot-server-middleware'));
+var webpackHotServerMiddleware = _interopDefault(
+  require('webpack-hot-server-middleware'),
+);
 var express = _interopDefault(require('express'));
 
 var defaults = {
@@ -95,7 +107,7 @@ var defaults = {
   },
   babel: {
     presets: [],
-    plugins: []
+    plugins: [],
   },
   prettier: {},
   eslint: {},
@@ -309,9 +321,9 @@ const root = 'node_modules';
 const BuiltIns = new Set(builtinModules);
 const Modules = new Set();
 const Binaries = new Set();
-const nodePackages = fs.readdirSync(root).filter(
-  dirname => dirname.charAt(0) !== '.',
-);
+const nodePackages = fs
+  .readdirSync(root)
+  .filter(dirname => dirname.charAt(0) !== '.');
 nodePackages.forEach(pkg => {
   let json;
   try {
@@ -403,7 +415,12 @@ const digestType = 'base62';
 const digestLength = 4;
 
 const generateHash = pkg => {
-  return loaderUtils.getHashDigest(JSON.stringify(pkg), hashType, digestType, digestLength);
+  return loaderUtils.getHashDigest(
+    JSON.stringify(pkg),
+    hashType,
+    digestType,
+    digestLength,
+  );
 };
 
 var cacheHash = (type, pkg, target, env) => {
@@ -465,7 +482,12 @@ class ChunkHash {
           .sort(compareModules)
           .map(getSource)
           .reduce(concatenateSource, '');
-        const hash = loaderUtils.getHashDigest(source, hashType$1, digestType$1, digestLength$1);
+        const hash = loaderUtils.getHashDigest(
+          source,
+          hashType$1,
+          digestType$1,
+          digestLength$1,
+        );
 
         chunkHash.digest = function() {
           return hash;
@@ -713,7 +735,7 @@ const serverPlugins = (isDev, isProd, { compression }) => {
         })
       : null,
     isProd ? new BabiliMinifyPlugin(compression.babiliServerOptions) : null,
-  ].filter(Boolean)
+  ].filter(Boolean);
 };
 
 var PluginManager = (
@@ -770,7 +792,10 @@ var compiler = (target, env = 'development', config = {}) => {
 
   const prefix = chalk.bold(target.toUpperCase());
   const devtool = config.sourceMaps ? 'source-map' : false;
-  const loaderCache = path.resolve(Root$1, cacheHash('loader', pkg$1, target, env));
+  const loaderCache = path.resolve(
+    Root$1,
+    cacheHash('loader', pkg$1, target, env),
+  );
   const cacheLoader = config.cacheLoader
     ? {
         loader: 'cache-loader',
@@ -804,7 +829,7 @@ var compiler = (target, env = 'development', config = {}) => {
     isServer,
     hasVendor,
     hasHmr,
-    config
+    config,
   );
 
   console.log(Logger.info(chalk.underline(`${prefix} Configuration`)));
@@ -839,7 +864,7 @@ var compiler = (target, env = 'development', config = {}) => {
       filename: isDev || isServer ? '[name].js' : '[name]-[chunkhash].js',
       chunkFilename: isDev || isServer ? '[name].js' : '[name]-[chunkhash].js',
       path: isServer ? serverOutput : clientOutput,
-      crossOriginLoading: 'anonymous'
+      crossOriginLoading: 'anonymous',
     },
 
     module: {
@@ -955,10 +980,9 @@ const formatWebpack = json => {
 const isMultiStats = stats => stats.stats;
 const getCompileTime = stats => {
   if (isMultiStats(stats)) {
-    return stats.stats
-      .reduce((time, stats) => {
-        return Math.max(time, getCompileTime(stats))
-      }, 0);
+    return stats.stats.reduce((time, stats) => {
+      return Math.max(time, getCompileTime(stats));
+    }, 0);
   }
   return stats.endTime - stats.startTime;
 };

@@ -65,7 +65,7 @@ export default {
   },
   babel: {
     presets: [],
-    plugins: []
+    plugins: [],
   },
   prettier: {},
   eslint: {},

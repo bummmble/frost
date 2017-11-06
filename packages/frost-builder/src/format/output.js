@@ -4,10 +4,9 @@ import { formatWebpack } from './webpack';
 const isMultiStats = stats => stats.stats;
 const getCompileTime = stats => {
   if (isMultiStats(stats)) {
-    return stats.stats
-      .reduce((time, stats) => {
-        return Math.max(time, getCompileTime(stats))
-      }, 0);
+    return stats.stats.reduce((time, stats) => {
+      return Math.max(time, getCompileTime(stats));
+    }, 0);
   }
   return stats.endTime - stats.startTime;
 };

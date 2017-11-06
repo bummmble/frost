@@ -129,7 +129,7 @@ const serverPlugins = (isDev, isProd, { compression }) => {
         })
       : null,
     isProd ? new BabiliMinifyPlugin(compression.babiliServerOptions) : null,
-  ].filter(Boolean)
+  ].filter(Boolean);
 };
 
 export default (
