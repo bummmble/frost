@@ -7,5 +7,6 @@
 - [Frost Builder](https://github.com/Bashkir15/frost/tree/master/packages/frost-builder)
 - [Frost Server](https://github.com/Bashkir15/frost/tree/master/packages/frost-server)
 - [Frost Utils](https://github.com/Bashkir15/frost/tree/master/packages/frost-utils)
+- [Frost Backup](https://github.com/Bashkir15/frost/tree/master/packages/frost-backup)
 - [Frost Eslint](https://github.com/Bashkir15/frost/tree/master/packages/frost-eslint)
 
