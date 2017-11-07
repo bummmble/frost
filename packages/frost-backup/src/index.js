@@ -74,8 +74,8 @@ class Backup {
 						reject(err);
 					}
 				});
-			});
-		)
+			})
+		);
 	}
 
 	upload(dir, filePath) {
