@@ -36,17 +36,6 @@ export default (target, env = 'development', config = {}) => {
     hmrMiddleware,
   } = buildEntryAndOutput(config, isServer, isDev);
 
-  /* const DefaultLocale = config.locale.default;
-  const SupportedLocales = config.locale.supported;
-
-  const SupportedLanguages = (() => {
-    const languages = new Set();
-    for (const lang of SupportedLocales) {
-      languages.add(lang.split('-')[0]);
-    }
-    return Array.from(languages.keys());
-  })(); */
-
   const prefix = chalk.bold(target.toUpperCase());
   const devtool = config.sourceMaps ? 'source-map' : false;
   const loaderCache = resolve(Root, cacheHash('loader', pkg, target, env));
