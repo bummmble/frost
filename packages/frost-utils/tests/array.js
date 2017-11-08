@@ -1,5 +1,5 @@
 import test from 'ava';
-import { compactArray, concatAllArray, flatMapArray, groupArray } from '../src/array';
+import { compactArray, concatAllArray, flatMapArray, groupArray, partitionArray } from '../src/array';
 
 test('Compact array filters null and undefined', t => {
   const original = [1, 2, 3, null, 4, undefined, 5];
@@ -42,3 +42,23 @@ test('should handle every item in one group', t => {
 	t.is(Object.keys(result).length, 0);
 	t.is(result.meow, items);
 });
+
+test('should partition and array from function', t => {
+	t.is(
+		partitionArray(
+			[1, 2, 3, 4, 5, 6, 7, 8, 9],
+			x => x > 5
+		),
+		[[6, 7, 8, 9], [1, 2, 3, 4, 5]]
+	);
+});
+
+test('partition should preserve item order', t => {
+	t.is(
+		partitionArray(
+			[3, 1, 6, 7, 8, 3, 4, 5, 9],
+			x => x < 5
+		),
+		[[3, 1, 4, 5], [6, 7, 8, 9]]
+	)
+})
