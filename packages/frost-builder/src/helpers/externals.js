@@ -9,7 +9,7 @@ const BuiltIns = new Set(builtinModules);
 const WebpackRequired = new Set([
   'react-universal-component',
   'webpack-flush-chunks',
-  'babel-plugin-universal-import'
+  'babel-plugin-universal-import',
 ]);
 
 const Problematic = new Set([
@@ -21,7 +21,7 @@ const Problematic = new Set([
   'ajv',
   'colors',
   'express',
-  'jsdom'
+  'jsdom',
 ]);
 
 export const isLoaderSpecific = req => {
@@ -30,8 +30,10 @@ export const isLoaderSpecific = req => {
   }
 
   return Boolean(
-     /\.(eot|woff|woff2|ttf|otf|svg|png|jpg|jpeg|gif|webp|webm|ico|mp4|mp3|ogg|html|pdf|css|scss|sass|sss|less|zip)$/.exec(req)
-  )
+    /\.(eot|woff|woff2|ttf|otf|svg|png|jpg|jpeg|gif|webp|webm|ico|mp4|mp3|ogg|html|pdf|css|scss|sass|sss|less|zip)$/.exec(
+      req,
+    ),
+  );
 };
 
 const cache = {};
@@ -59,9 +61,7 @@ export const shouldBeBundled = name => {
     let json;
     try {
       json = readJsonSync(resolve(resolved, 'package.json'));
-    } catch (error) {
-
-    }
+    } catch (error) {}
 
     if (json) {
       if (json.module || json.style || json['jsnext:main']) {
@@ -78,7 +78,7 @@ export const shouldBeBundled = name => {
   return result;
 };
 
-export const isExternalReq => (req) => {
+export const isExternalReq = req => {
   // Inline all files that depend on loaders
   if (isLoaderSpecific(req)) {
     return false;
@@ -110,7 +110,7 @@ export const isExternalReq => (req) => {
 
   const bundle = shouldBeBundled(basename);
   if (bundle != null) {
-    return !bundle
+    return !bundle;
   }
 
   return false;
@@ -132,5 +132,5 @@ export const getExternals = entries => {
     }
 
     return isExternal ? cb(null, `commonjs ${req}`) : cb();
-  }
+  };
 };

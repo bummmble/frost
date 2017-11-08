@@ -90,7 +90,7 @@ export default (target, env = 'development', config = {}) => {
     target: webpackTarget,
     context: Root,
     performance: config.performance || {},
-    externals: isServer ? getExternals([ vendorEntry, mainEntry ]) : undefined,
+    externals: isServer ? getExternals([vendorEntry, mainEntry]) : undefined,
     entry: removeEmptyKeys({
       vendors: hasVendor
         ? [hasVendor && hasHmr ? hmrMiddleware : null, vendorEntry].filter(
