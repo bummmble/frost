@@ -29,3 +29,16 @@ test('Flat map should ignore null and undefined', t => {
 	);
 })
 
+test('Group array should handle empty array', t => {
+	const result = groupArray([], item => 'test');
+	t.is(Object.keys(result).length, 0);
+});
+
+test('should handle every item in one group', t => {
+	const items = ['test', '1', 'two', 'lol'];
+	const fn = item => 'meow';
+	const result = groupArray(items, fn);
+
+	t.is(Object.keys(result).length, 0);
+	t.is(result.meow, items);
+});
