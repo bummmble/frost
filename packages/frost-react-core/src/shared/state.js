@@ -24,3 +24,38 @@ export const createRootReducer = (reducers, router = null) => {
 
 	return combineReducers(allReducers);
 };
+
+export const createReduxStore = (config = {}) => {
+	const {
+		reducers = {},
+		middlewares = [],
+		enhancers = [],
+		state = {},
+		router = null
+	} = config;
+
+	const rootReducer = createRootReducer(reducers, router);
+	const rootEnhancers = composeEnhancers(
+		applyMiddleware(
+			process.env.NODE_ENV === 'development' 
+				? require('redux-immutable-state-invariant').default()
+				: emptyMiddleware,
+			thunk,
+			router ? router.middleware : emptyMiddleware,
+			...middlewares,
+			process.env.TARGET === 'web'
+				? require('redux-logger').createLogger({ collapsed: true })
+				: emptyMiddleware
+		),
+		router ? router.enhancer : emptyEnhancer,
+		...enhancers
+	);
+
+	const store = createStore(
+		rootReducer,
+		state,
+		rootEnhancers
+	);
+
+	return store;
+};
