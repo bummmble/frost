@@ -1,5 +1,11 @@
 import test from 'ava';
-import { compactArray, concatAllArray, flatMapArray, groupArray, partitionArray } from '../src/array';
+import {
+  compactArray,
+  concatAllArray,
+  flatMapArray,
+  groupArray,
+  partitionArray,
+} from '../src/array';
 
 test('Compact array filters null and undefined', t => {
   const original = [1, 2, 3, null, 4, undefined, 5];
@@ -16,49 +22,37 @@ test('ConcatAll ignores null and undefined', t => {
 });
 
 test('Flat map should flatten a deep array', t => {
-	t.is(
-		flatMapArray([1, 2, 3], x => [x, x + 1]),
-		[1, 2, 2, 3, 3, 4]
-	);
+  t.is(flatMapArray([1, 2, 3], x => [x, x + 1]), [1, 2, 2, 3, 3, 4]);
 });
 
 test('Flat map should ignore null and undefined', t => {
-	t.is(
-		flatMapArray([null, undefined, [1], [2]], x => x),
-		[1, 2]
-	);
-})
+  t.is(flatMapArray([null, undefined, [1], [2]], x => x), [1, 2]);
+});
 
 test('Group array should handle empty array', t => {
-	const result = groupArray([], item => 'test');
-	t.is(Object.keys(result).length, 0);
+  const result = groupArray([], item => 'test');
+  t.is(Object.keys(result).length, 0);
 });
 
 test('should handle every item in one group', t => {
-	const items = ['test', '1', 'two', 'lol'];
-	const fn = item => 'meow';
-	const result = groupArray(items, fn);
+  const items = ['test', '1', 'two', 'lol'];
+  const fn = item => 'meow';
+  const result = groupArray(items, fn);
 
-	t.is(Object.keys(result).length, 0);
-	t.is(result.meow, items);
+  t.is(Object.keys(result).length, 0);
+  t.is(result.meow, items);
 });
 
 test('should partition and array from function', t => {
-	t.is(
-		partitionArray(
-			[1, 2, 3, 4, 5, 6, 7, 8, 9],
-			x => x > 5
-		),
-		[[6, 7, 8, 9], [1, 2, 3, 4, 5]]
-	);
+  t.is(partitionArray([1, 2, 3, 4, 5, 6, 7, 8, 9], x => x > 5), [
+    [6, 7, 8, 9],
+    [1, 2, 3, 4, 5],
+  ]);
 });
 
 test('partition should preserve item order', t => {
-	t.is(
-		partitionArray(
-			[3, 1, 6, 7, 8, 3, 4, 5, 9],
-			x => x < 5
-		),
-		[[3, 1, 4, 5], [6, 7, 8, 9]]
-	)
-})
+  t.is(partitionArray([3, 1, 6, 7, 8, 3, 4, 5, 9], x => x < 5), [
+    [3, 1, 4, 5],
+    [6, 7, 8, 9],
+  ]);
+});
