@@ -21,3 +21,36 @@ A collection of centralized http server starters. These are the default servers 
 ```
 createExpressServer(staticConfig, afterSecurity, beforeFallback, enableNonce)
 ```
+- staticConfig: takes an object as an argument that defines where you want to serve your static files from
+  ```
+  const staticConfig = {
+    public: 'build/client',
+    path: '/static/'
+  };
+  ``` 
+- afterSecurity: an array of middlewares (can be an array of arrays of middleware) to be added after the security policies have
+  been added.
+  
+- beforeFallback: an array of middlewares (can be an array of arrays of middleware) to be added before the fallback functionality is added. This is where you want to manage Hot Reloading.
+  
+- enableNonce: a Boolean that determines whether an nonce should be added to the response object
+
+### createKoaServer
+```
+createKoaServer(staticConfig, afterSecurity, beforeFallback)
+```
+
+  - staticConfig: takes an object as an argument that defines where you want to serve your static files from
+    ```
+    const staticConfig = {
+        public: 'build/client',
+        path: '/static/'
+    };
+    ```
+  
+  
+  - afterSecurity: an array of middlewares (can be an array of arrays of middleware) to be added after the security policies have
+  been added.
+  
+  - beforeFallback: an array of middlewares (can be an array of arrays of middleware) to be added before the fallback functionality is added. This is where you want to manage Hot Reloading.
+  
