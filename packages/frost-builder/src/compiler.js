@@ -89,7 +89,11 @@ export default (target, env = 'development', config = {}) => {
     devtool,
     target: webpackTarget,
     context: Root,
-    performance: config.performance || {},
+    performance: config.performance ? {
+      maxEntrypointSize: 1000000,
+      maxAssetSize: 300000,
+      hints: isDev ? false : 'warning'
+    } : {},
     externals: isServer ? getExternals([vendorEntry, mainEntry]) : undefined,
     entry: removeEmptyKeys({
       vendors: hasVendor

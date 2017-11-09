@@ -69,7 +69,7 @@ export default {
   },
   prettier: {},
   eslint: {},
-  performance: {},
+  performance: true,
   pwa: {},
   verbose: true,
 };
