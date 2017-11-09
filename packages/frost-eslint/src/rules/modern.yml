@@ -1,0 +1,18 @@
+rules:
+  # Suggests using arrow functions as callbacks
+  prefer-arrow-callback:
+    - warn
+
+  # Prefers using ...args over arguments
+  prefer-rest-params:
+    - error
+
+  # Prefers using spread instead of .apply()
+  prefer-spread:
+    - error
+
+  # Prefer template literals. Warn only because there
+  # Are still some issues with older Webpack versions
+  # and is kind of unecessary for simple modifications
+  prefer-template:
+    -warn
