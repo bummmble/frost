@@ -58,6 +58,12 @@ const clientPlugins = (
   { compression, pwa, sourceMaps, mode, templates },
 ) => {
   return [
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'manifest',
+      minChunks: Infinity,
+      filename: 'manifest.js'
+    }),
+    
     hasVendor
       ? new webpack.optimize.CommonsChunkPlugin({
           name: 'vendor',
