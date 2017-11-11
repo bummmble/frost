@@ -1,13 +1,13 @@
 import webpack from 'webpack';
 import { resolve } from 'path';
 import { get as getRoot } from 'app-root-dir';
+import { Logger } from 'frost-shared';
 import chalk from 'chalk';
 import ExtractCssChunks from 'extract-css-chunks-webpack-plugin';
 
 import { configureCompiler, buildEntryAndOutput } from './helpers/compiler';
 import { removeEmptyKeys } from './helpers/utils';
 import { getExternals } from './helpers/externals';
-import Logger from './helpers/console';
 import cacheHash from './helpers/hash';
 import PluginManager from './plugins/Manager';
 

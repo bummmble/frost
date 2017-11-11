@@ -1,5 +1,5 @@
 import notifier from 'node-notifier';
-import Logger from './helpers/console';
+import { Logger } from 'frost-shared';
 
 export default options => {
   const title = `${options.title}`;

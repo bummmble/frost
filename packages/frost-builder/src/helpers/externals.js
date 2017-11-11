@@ -2,7 +2,7 @@ import { readdirSync, readJsonSync } from 'fs-extra';
 import { resolve } from 'path';
 import builtinModules from 'builtin-modules';
 import resolvePkg from 'resolve-pkg';
-import Logger from './console';
+import Logger from 'frost-shared';
 
 const BuiltIns = new Set(builtinModules);
 const WebpackRequired = new Set([
