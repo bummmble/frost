@@ -9,13 +9,14 @@
 	"bin": {
 		"frost": "bin/frost"
 	},
+	"main": "dist/index.cjs.js",
+	"module": "dist/index.es.js",
 	"scripts": {
 		"build:es": "node build.js --node --es",
 		"build:node": "node build.js --node --cjs",
 		"build:cli": "node build.js --cli --cjs",
 		"prepare": "npm run build:node && npm run build:cli"
 	},
-	"main": "dist/index.js",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/Bashkir15/frost/tree/master/packages/frost-builder"
