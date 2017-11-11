@@ -11,6 +11,7 @@ import SriPlugin from 'webpack-subresource-integrity';
 import MissingModules from './MissingModules';
 import ChunkHashPlugin from './ChunkHash';
 import Progress from './Progress';
+import Templates from './Templates';
 
 const basePlugins = (env, webpackTarget, isDev, isProd) => {
   return [
@@ -54,7 +55,7 @@ const clientPlugins = (
   isProd,
   hasVendor,
   hasHmr,
-  { compression, pwa, sourceMaps },
+  { compression, pwa, sourceMaps, mode, templates },
 ) => {
   return [
     hasVendor
@@ -107,6 +108,7 @@ const clientPlugins = (
         })
       : null,
 
+    mode === 'static' ? ...Templates(templates) : null,
     pwa.hasServiceWorker
       ? new ServiceWorkerPlugin({
           entry: pwa.serviceWorkerEntry,

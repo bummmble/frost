@@ -91,8 +91,8 @@ export default (target, env = 'development', config = {}) => {
     context: Root,
     performance: config.performance ? {
       maxEntrypointSize: 1000000,
-      maxAssetSize: 300000,
-      hints: isDev ? false : 'warning'
+      maxAssetSize: isClient ? 300000 : Infinity,
+      hints: isDev || isServer ? false : 'warning'
     } : {},
     externals: isServer ? getExternals([vendorEntry, mainEntry]) : undefined,
     entry: removeEmptyKeys({
