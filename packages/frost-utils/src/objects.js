@@ -109,4 +109,15 @@ export const partitionObjectByKeys = (source, whitelist) => {
   return partitionObject(source, (_, key) => whitelist.has(key));
 };
 
+export const objectRemoveEmpty = obj => {
+  const res = {};
+  for (const key in obj) {
+    if (!(obj[key] === null || obj[key].length === 0)) {
+      res[key] = obj[key];
+    }
+  }
+  return res;
+};
+
+
 export const emptyObject = {};

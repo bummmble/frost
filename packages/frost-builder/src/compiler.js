@@ -2,11 +2,11 @@ import webpack from 'webpack';
 import { resolve } from 'path';
 import { get as getRoot } from 'app-root-dir';
 import { Logger } from 'frost-shared';
+import { objectRemoveEmpty } from 'frost-utils';
 import chalk from 'chalk';
 import ExtractCssChunks from 'extract-css-chunks-webpack-plugin';
 
 import { configureCompiler, buildEntryAndOutput } from './helpers/compiler';
-import { removeEmptyKeys } from './helpers/utils';
 import { getExternals } from './helpers/externals';
 import cacheHash from './helpers/hash';
 import PluginManager from './plugins/Manager';
@@ -94,7 +94,7 @@ export default (target, env = 'development', config = {}) => {
       hints: isDev || isServer ? false : 'warning'
     } : {},
     externals: isServer ? getExternals([vendorEntry, mainEntry]) : undefined,
-    entry: removeEmptyKeys({
+    entry: objectRemoveEmpty({
       vendors: hasVendor
         ? [hasVendor && hasHmr ? hmrMiddleware : null, vendorEntry].filter(
             Boolean,

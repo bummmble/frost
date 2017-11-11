@@ -13,6 +13,7 @@ export {
   objectForEach,
   objectMap,
   objectSome,
+  objectRemoveEmpty,
   partitionObject,
   partitionObjectByKeys,
 } from './objects';
