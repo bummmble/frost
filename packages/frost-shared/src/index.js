@@ -1,0 +1,1 @@
+export { Root, Schema, loadConfig } from './config';
