@@ -63,6 +63,7 @@ export default {
       speed: 4,
     },
   },
+  mode: 'ssr',
   babel: {
     presets: [],
     plugins: [],

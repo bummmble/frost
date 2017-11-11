@@ -10,8 +10,9 @@
 		"frost": "bin/frost"
 	},
 	"scripts": {
-		"build:node": "node build.js --node",
-		"build:cli": "node build.js --cli",
+		"build:es": "node build.js --node --es",
+		"build:node": "node build.js --node --cjs",
+		"build:cli": "node build.js --cli --cjs",
 		"prepare": "npm run build:node && npm run build:cli"
 	},
 	"main": "dist/index.js",
@@ -56,6 +57,7 @@
 		"webpack-subresource-integrity": "^1.0.1"
 	},
 	"devDependencies": {
-		"express": "^4.16.2"
+		"express": "^4.16.2",
+		"rollup-plugin-alias": "^1.4.0"
 	}
 }

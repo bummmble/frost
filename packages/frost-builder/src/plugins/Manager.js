@@ -63,7 +63,7 @@ const clientPlugins = (
       minChunks: Infinity,
       filename: 'manifest.js'
     }),
-    
+
     hasVendor
       ? new webpack.optimize.CommonsChunkPlugin({
           name: 'vendor',
@@ -114,7 +114,7 @@ const clientPlugins = (
         })
       : null,
 
-    mode === 'static' ? ...Templates(templates) : null,
+   // mode === 'static' ? ...Templates(templates) : null,
     pwa.hasServiceWorker
       ? new ServiceWorkerPlugin({
           entry: pwa.serviceWorkerEntry,
