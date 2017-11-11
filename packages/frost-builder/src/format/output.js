@@ -1,6 +1,6 @@
 import chalk from 'chalk';
+import { Logger } from 'frost-shared';
 import { formatWebpack } from './webpack';
-import Logger from '../helpers/console';
 
 const isMultiStats = stats => stats.stats;
 const getCompileTime = stats => {
