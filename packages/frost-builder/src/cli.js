@@ -1,6 +1,7 @@
 import meow from 'meow';
 import chalk from 'chalk';
 import updateNotifier from 'update-notifier';
+import { each } from 'frost-shared';
 
 import { Root, getConfig } from './config';
 import {
@@ -10,7 +11,6 @@ import {
   cleanServer,
 } from './commands/build';
 import { start as startDevServer } from './commands/dev';
-import { each } from './helpers/utils';
 import Logger from './helpers/console';
 
 const pkg = require('../package.json');
