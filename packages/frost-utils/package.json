@@ -6,14 +6,12 @@
 		"email": "Forrdev@gmail.com",
 		"url": "forrdev.com"
 	},
+	"main": "dist/index.cjs.js",
+	"module": "dist/index.es.js",
 	"scripts": {
 		"build:node": "node ./build.js --cjs",
 		"build:es": "node ./build.js --es"
 	},
-	"bin": {
-		"frost": "bin/frost"
-	},
-	"main": "dist/index.js",
 	"license": "MIT",
 	"repository": {
 		"type": "git",
