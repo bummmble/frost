@@ -45,4 +45,3 @@ export {
 
 export { promisify, each } from './promise';
 export { Environment } from './environment';
-export { default as Logger } from './logger';
