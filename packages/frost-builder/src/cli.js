@@ -1,9 +1,7 @@
 import meow from 'meow';
 import chalk from 'chalk';
 import updateNotifier from 'update-notifier';
-import { each, Logger } from 'frost-shared';
-
-import { Root, getConfig } from './config';
+import { each, Logger, Root, loadConfig } from 'frost-shared';
 import {
   buildClient,
   buildServer,
@@ -74,7 +72,7 @@ function execute(commands, config) {
 }
 
 async function executeTasks() {
-  const config = await getConfig(flags);
+  const { config } = await loadConfig('frost', flags);
   for (const name of input) {
     for (const task of tasks) {
       if (task.task === name) {
