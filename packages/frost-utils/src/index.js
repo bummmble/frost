@@ -43,7 +43,6 @@ export {
   getElementPosition,
 } from './dom';
 
-export { encodeBufferToBase, getHash, getHashedName } from './hash';
 export { promisify, each } from './promise';
 export { Environment } from './environment';
-export { Logger } from './logger';
+export { default as Logger } from './logger';
