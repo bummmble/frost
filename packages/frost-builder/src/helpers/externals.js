@@ -1,6 +1,5 @@
-import { readdirSync } from 'fs';
+import { readdirSync, readJsonSync } from 'fs-extra';
 import { resolve } from 'path';
-import { readJsonSync } from 'fs-extra';
 import builtinModules from 'builtin-modules';
 import resolvePkg from 'resolve-pkg';
 import Logger from './console';

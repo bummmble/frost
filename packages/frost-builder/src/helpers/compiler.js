@@ -1,4 +1,4 @@
-import { existsSync } from 'fs';
+import { existsSync } from 'fs-extra';
 
 const configureCompiler = (target, env) => {
   const isClient = target === 'client';

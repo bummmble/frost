@@ -1,6 +1,5 @@
 import webpack from 'webpack';
 import { resolve } from 'path';
-import { existsSync } from 'fs';
 import { get as getRoot } from 'app-root-dir';
 import chalk from 'chalk';
 import ExtractCssChunks from 'extract-css-chunks-webpack-plugin';
