@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`deadcode 1`] = `
+"'use strict';
+
+const TEST = false;"
+`;
+
+exports[`es2015: classes 1`] = `
+"\\"use strict\\";
+
+Object.defineProperty(exports, \\"__esModule\\", {
+    value: true
+});
+class Component {
+    main() {}
+}
+exports.Component = Component;"
+`;
+
+exports[`es2015: generator 1`] = `
+"\\"use strict\\";
+
+function* tester() {
+    let index = 0;
+    while (true) yield index++;
+}"
+`;
+
+exports[`es2015: set 1`] = `
+"\\"use strict\\";
+
+new Set([1, 2, 3]);"
+`;
+
+exports[`es2016: exponentiation 1`] = `
+"\\"use strict\\";
+
+var test = Math.pow(2, 2);"
+`;
+
+exports[`esnext: async 1`] = `
+"\\"use strict\\";
+
+var _nodentRuntime = require(\\"nodent-runtime\\");
+
+var _nodentRuntime2 = _interopRequireDefault(_nodentRuntime);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function wait() {
+    return new Promise(function ($return, $error) {
+        return test().then(function ($await_1) {
+            return $return();
+        }.$asyncbind(this, $error), $error);
+    }.$asyncbind(this));
+}"
+`;
+
+exports[`esnext: class properties 1`] = `
+"\\"use strict\\";
+
+Object.defineProperty(exports, \\"__esModule\\", {
+    value: true
+});
+class Comp {
+    constructor() {
+        this.onClick = () => {};
+    }
+
+}
+exports.Comp = Comp;"
+`;

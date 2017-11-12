@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`deadcode 1`] = `"var TEST = false;"`;
+
+exports[`es2015: classes 1`] = `
+"export class Component {
+    main() {}
+}"
+`;
+
+exports[`es2015: generator 1`] = `
+"function* tester() {
+    var index = 0;
+    while (true) {
+        yield index++;
+    }
+}"
+`;
+
+exports[`es2015: set 1`] = `"new Set([1, 2, 3]);"`;
+
+exports[`es2016: exponentiation 1`] = `"var test = Math.pow(2, 2);"`;
+
+exports[`esnext: async 1`] = `
+"import _default from \\"nodent-runtime\\";
+function wait() {
+    return new Promise(function ($return, $error) {
+        return test().then(function ($await_1) {
+            return $return();
+        }.$asyncbind(this, $error), $error);
+    }.$asyncbind(this));
+}"
+`;
+
+exports[`esnext: class properties 1`] = `
+"export class Comp {
+    constructor() {
+        this.onClick = function () {};
+    }
+
+}"
+`;
