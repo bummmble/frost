@@ -1,5 +1,5 @@
 {
-  "name": "frost-babel",
+  "name": "babel-preset-frost",
   "version": "0.1.0",
   "main": "dist/index.js",
   "jest": {
