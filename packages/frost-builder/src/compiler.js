@@ -118,7 +118,7 @@ export default (target, env = 'development', config = {}) => {
 
     module: {
       rules: [
-        config.eslint
+        config.eslint === true
           ? {
               test: config.files.babel,
               include: [config.entry.client, config.entry.server],
@@ -127,7 +127,7 @@ export default (target, env = 'development', config = {}) => {
                 loader: 'eslint-loader',
               },
             }
-          : {},
+          : null,
         {
           test: config.files.babel,
           loader: 'source-map-loader',
