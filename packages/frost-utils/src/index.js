@@ -45,4 +45,4 @@ export {
 } from './dom';
 
 export { promisify, each } from './promise';
-export { Environment } from './environment';
+//export { Environment } from './environment';
