@@ -49,6 +49,21 @@ const mongoose = new createMongoose({
     // agenda with the default mongoose instance
     agenda: new Agenda(),
 
+    // This is an optional field and is only used when 'agenda'
+    // is defined above. It is the collection name used by Agenda
+    // for storing jobs
+    agendaCollectionName: 'agendaTasks',
+
+    //Optional field that should be used if agenda is in use.
+    // It will call agenda.every(interval, name) upon connection
+    // to the database (and reconnection and disconnect when it
+    // it cancels these)
+    agendaRecurringTasks: [
+        // The below would be invoked as
+        // agenda.every('5 minutes', 'locales')
+        ['5 minutes', 'locales']
+    ],
+    
     // how often we should check to reconnect to mongo
     reconnectTime: 3000,
 
