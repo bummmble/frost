@@ -121,7 +121,7 @@ export async function loadConfig(prefix = 'frost', flags = {}) {
     set(config, key, flags[key]);
   }
 
-  await processConfig(config, SCHEMA);
+  await processConfig(config, Schema);
 
   const configRoot = relative(Root, configResult.filepath);
 
