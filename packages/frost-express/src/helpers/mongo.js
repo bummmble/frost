@@ -5,6 +5,8 @@ export class Mongoose {
     constructor(config = {}) {
         this.config = Object.assign({
             agenda: false,
+            agendaCollectionName: 'agendaTasks',
+            agendaRecurringTasks: [],
             reconnectTime: 3000,
             Promise: global.Promise,
             logger: console,
@@ -30,7 +32,18 @@ export class Mongoose {
         mongoose.connection.on('error', this.logger.error);
         mongoose.connection.on('disconnected', this.disconnected.bind(this));
 
-        // TODO: Handle job scheduling
+        // If we have an agenda instance, make sure it is valid
+        if (this.agenda) {
+            if (typeof this.config.agendaCollectionName !== 'string') {
+                throw new Error('Agenda collection name should be a string');
+            }
+
+            if (!Array.isArray(this.config.agendaRecurringTasks)) {
+                throw new Error('Agenda recurring tasks should be an array');
+            }
+
+            this.agendaMaxConcurrency = this.agenda._maxConcurrency;
+        }
 
         this.reconnect().then();
         this.mongoose = mongoose;
