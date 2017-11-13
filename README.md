@@ -1,3 +1,4 @@
+[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
 [![Maintainability](https://api.codeclimate.com/v1/badges/66fa63123c49691fa50e/maintainability)](https://codeclimate.com/github/Bashkir15/frost/maintainability)
 
 <img src="./assets/logo.png" alt="Frost Logo" width="250">
