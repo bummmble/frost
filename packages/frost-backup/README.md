@@ -60,3 +60,33 @@ myBackup
     .then(console.log)
     .catch(console.error);
 ```
+
+#### new FrostBackup(bucket, options)
+
+> You can technically create a new backup instance with just 'new FrostBackup(options) but make sure you specify 'options.aws.params.Bucket' if you do
+
+If no bucket name is provided it will throw an error
+
+#### FrostBackup.backup(tasks)
+
+Returns a Promise that resolves with the S3 upload response or rejects with an Error.
+
+The tasks argument is an optional array that defaults to ['mongo', 'redis'];
+
+By defaults, this method runs `FrostBackup.mongo()`, `FrostBackup.redis()`, and for each one it then runs `FrostBackup.tar()` and `FrostBackup.upload()`
+
+#### FrostBackup.mongo()
+
+Return a Promise that resolves with the file path to the MongoDB backup, or it rejects with an Error
+
+#### FrostBackup.redis()
+
+Returns a Promise that resolves with the file path to the Redis backup or rejects with an Error object
+
+#### FrostBackup.upload(directory, filePath)
+
+Returns a Promise that resolves with an s3 upload response or rejects with an Error
+
+This method is used by `FrostBackup.backup()` It will automatically remove the 'directory' arguments from the file-system
+
+... more soon!
