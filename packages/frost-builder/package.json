@@ -34,7 +34,7 @@
     "eslint-loader": "^1.9.0",
     "extract-css-chunks-webpack-plugin": "^2.0.17",
     "file-loader": "^1.1.5",
-    "frost-shared": "^0.2.3",
+    "frost-shared": "^0.2.4",
     "frost-utils": "^0.2.1",
     "fs-extra": "^4.0.2",
     "html-webpack-plugin": "^2.30.1",
