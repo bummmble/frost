@@ -9,5 +9,7 @@
 - [Frost React Core](https://github.com/Bashkir15/frost/tree/master/packages/frost-react-core)
 - [Frost Utils](https://github.com/Bashkir15/frost/tree/master/packages/frost-utils)
 - [Frost Backup](https://github.com/Bashkir15/frost/tree/master/packages/frost-backup)
+- [Frost Babel Preset](https://github.com/Bashkir15/frost/tree/master/packages/frost-babel-preset)
 - [Frost Eslint](https://github.com/Bashkir15/frost/tree/master/packages/frost-eslint)
+- [Frost Shared](https://github.com/Bashkir15/frost/tree/master/packages/frost-shared)
 
