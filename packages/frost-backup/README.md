@@ -48,3 +48,15 @@ myBackup
     .then(console.log)
     .catch(console.error)
 ```
+
+* If you only need a specific database
+
+```js
+const Backup = require('frost-backup');
+const myBackup = new Backup('your-s3-bucket-name', { mongo: '--db=your_database' });
+
+myBackup
+    .backup()
+    .then(console.log)
+    .catch(console.error);
+```
