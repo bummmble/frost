@@ -1,7 +1,8 @@
 import meow from 'meow';
 import chalk from 'chalk';
 import updateNotifier from 'update-notifier';
-import { each, Logger, Root, loadConfig } from 'frost-shared';
+import { Logger, Root, loadConfig } from 'frost-shared';
+import { each } from 'frost-utils'
 import {
   buildClient,
   buildServer,

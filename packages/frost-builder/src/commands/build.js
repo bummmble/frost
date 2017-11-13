@@ -1,7 +1,7 @@
 import webpack from 'webpack';
 import chalk from 'chalk';
 import { remove } from 'fs-extra';
-import { promisify } from 'frost-shared';
+import { promisify } from 'frost-shared/dist/index.es';
 
 import compiler from '../compiler';
 import formatOutput from '../format/output';

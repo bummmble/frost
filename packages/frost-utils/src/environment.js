@@ -1,6 +1,6 @@
 import { isUndefined } from './types';
 
-const canUseDOM = !!(
+const canUseDOM = isUndefined(process.env.NODE_ENV) || !!(
   !isUndefined(window) &&
   window.document &&
   window.createElement
