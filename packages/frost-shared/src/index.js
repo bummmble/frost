@@ -4,5 +4,6 @@ import Logger from './logger';
 export {
     Root,
     Schema,
-    loadConfig
+    loadConfig,
+    Logger
 }
