@@ -39,6 +39,7 @@ const server = createExpressServer({
     // A boolean that determines whether a unique nonce should be // added to the response object
     enableNonce: false
 })
+```
 
 ### createMongoose
 ```js
