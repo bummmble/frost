@@ -8,7 +8,7 @@ const dotindex = c => {
   return m ? m.index + 1 : c.length;
 };
 
-const Logger = {
+export const Logger = {
   success: msg => successColor(msg),
   info: msg => infoColor(msg),
   warning: msg => warningColor(msg),
@@ -78,5 +78,3 @@ const Logger = {
       .join('\n');
   },
 };
-
-export default Logger;

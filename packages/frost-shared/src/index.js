@@ -1,5 +1,5 @@
 import { Root, Schema, loadConfig } from './config';
-import Logger from './logger';
+import { Logger } from './logger';
 
 export {
     Root,
