@@ -64,6 +64,45 @@ export class Mongoose {
 
     connected() {
         this.logger.log(`mongoose connection open to ${this.config.mongo.url}`);
+        // We need to override the default connection event, because
+        // agenda requires us to in order to connect to the same mongoose
+        // connection
+        if (!this.agenda) {
+            return;
+        }
+
+        this.agenda.mongo(
+            mongoose.connection.collection(this.config.agendaCollectionName).conn.db,
+            this.config.agendaCollectionName,
+            err => {
+                if (err) {
+                    return this.logger.error(err);
+                }
+
+                // Redefine recurring jobs here to be
+                // inside of agenda.mongo otherwise
+                // this._collection is not defined yet
+                if (this.config.agendaRecurringTasks.length > 0) {
+                    this.config.agendaRecurringTasks.forEach(task => {
+                        if (!Array.isArray(task)) {
+                            throw new Error('Recurring task was not an array');
+                        }
+                        if (typeof task[0] !== 'string') {
+                            throw new Error('Recurring task interval must be a string')
+                        }
+                        if (typeof task[1] !== 'string') {
+                            throw new Error('Recurring task name must be a string');
+                        }
+
+                        this.agenda.every.apply(this.agenda, task);
+                    });
+                }
+
+                // start accepting jobs
+                this.agenda.maxConcurrency(this.agendaMaxConcurrency);
+                logger.log('agenda opened using existing mongoose connection');
+            }
+        )
     }
 
     disconnected() {
