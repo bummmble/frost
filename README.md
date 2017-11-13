@@ -1,3 +1,5 @@
+[![Maintainability](https://api.codeclimate.com/v1/badges/66fa63123c49691fa50e/maintainability)](https://codeclimate.com/github/Bashkir15/frost/maintainability)
+
 <img src="./assets/logo.png" alt="Frost Logo" width="250">
 
 > Frost is a collection of packages and utilities to make creating modern web applications simpler so instead of focusing on large amounts of configuration you can focus on your business logic. 
