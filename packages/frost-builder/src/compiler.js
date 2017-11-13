@@ -14,16 +14,6 @@ import PluginManager from './plugins/Manager';
 const Root = getRoot();
 const pkg = require(resolve(Root, 'package.json'));
 
-const removeEmptyKeys = obj => {
-    const copy = {};
-    for (const key in obj) {
-        if (!(obj[key] == null || obj[key].length === 0)) {
-            copy[key] = obj[key];
-        }
-    }
-    return copy;
-};
-
 export default (target, env = 'development', config = {}) => {
     console.log(config);
   const {
@@ -107,7 +97,7 @@ export default (target, env = 'development', config = {}) => {
         }
       : {},
     externals: isServer ? getExternals([vendorEntry, mainEntry]) : undefined,
-    entry: removeEmptyKeys({
+    entry: objectRemoveEmpty({
       vendor: hasVendor
         ? [hasVendor && hasHmr ? hmrMiddleware : null, vendorEntry].filter(
             Boolean
