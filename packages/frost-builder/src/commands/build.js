@@ -10,6 +10,7 @@ const removePromise = promisify(remove);
 
 const buildClient = (config = {}) => {
   const webpackConfig = compiler('client', 'production', config);
+  console.log(webpackConfig);
   return new Promise((resolve, reject) => {
     webpack(webpackConfig, (error, stats) => {
       return resolve(formatOutput(error, stats, 'client'));
