@@ -119,5 +119,4 @@ export const objectRemoveEmpty = obj => {
   return res;
 };
 
-
 export const emptyObject = {};

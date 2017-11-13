@@ -55,13 +55,13 @@ const clientPlugins = (
   isProd,
   hasVendor,
   hasHmr,
-  { compression, pwa, sourceMaps, mode, templates },
+  { compression, pwa, sourceMaps, mode, templates }
 ) => {
   return [
     new webpack.optimize.CommonsChunkPlugin({
       name: 'manifest',
       minChunks: Infinity,
-      filename: 'manifest.js'
+      filename: 'manifest.js',
     }),
 
     hasVendor
@@ -114,7 +114,7 @@ const clientPlugins = (
         })
       : null,
 
-   // mode === 'static' ? ...Templates(templates) : null,
+    // mode === 'static' ? ...Templates(templates) : null,
     pwa.hasServiceWorker
       ? new ServiceWorkerPlugin({
           entry: pwa.serviceWorkerEntry,
@@ -148,7 +148,7 @@ export default (
   isServer,
   hasVendor,
   hasHmr,
-  config,
+  config
 ) => {
   const base = basePlugins(env, webpackTarget, isDev, isProd);
   const plugins = isServer

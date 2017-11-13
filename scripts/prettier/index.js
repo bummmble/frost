@@ -12,13 +12,13 @@ const isWindows = process.platform === 'win32';
 const prettierName = isWindows ? 'prettier.cmd' : 'prettier';
 const prettierCmd = resolve(
   __dirname,
-  `../../node_modules/.bin/${prettierName}`,
+  `../../node_modules/.bin/${prettierName}`
 );
 const defaultOptions = {
   'bracket-spacing': 'true',
   'single-quote': 'true',
   'jsx-bracket-same-line': 'true',
-  'trailing-comma': 'all',
+  'trailing-comma': 'es5',
   'print-width': 80,
 };
 
@@ -57,7 +57,7 @@ Object.keys(config).forEach(key => {
   }
 
   const args = Object.keys(defaultOptions).map(
-    k => `--${k}=${(options && options[k]) || defaultOptions[k]}`,
+    k => `--${k}=${(options && options[k]) || defaultOptions[k]}`
   );
   args.push(`--${shouldWrite ? 'write' : 'l'}`);
 

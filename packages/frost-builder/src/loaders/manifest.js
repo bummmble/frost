@@ -64,6 +64,6 @@ export default source => {
       }
 
       cb(null, JSON.stringify(manifest, null, 2));
-    },
+    }
   );
 };

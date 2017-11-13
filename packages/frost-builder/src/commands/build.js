@@ -6,7 +6,6 @@ import { promisify } from 'frost-shared';
 import compiler from '../compiler';
 import formatOutput from '../format/output';
 
-
 const removePromise = promisify(remove);
 
 const buildClient = (config = {}) => {

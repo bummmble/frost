@@ -46,10 +46,10 @@ export const createReduxStore = (config = {}) => {
       ...middlewares,
       process.env.TARGET === 'web'
         ? require('redux-logger').createLogger({ collapsed: true })
-        : emptyMiddleware,
+        : emptyMiddleware
     ),
     router ? router.enhancer : emptyEnhancer,
-    ...enhancers,
+    ...enhancers
   );
 
   const store = createStore(rootReducer, state, rootEnhancers);

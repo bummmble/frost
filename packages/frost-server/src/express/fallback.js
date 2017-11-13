@@ -1,10 +1,10 @@
 export default server => {
   /** Handle 404 erros
-	 *  Note: If doing isomorphic rendering with something like
-	 *  Universal Component it will handle 404 paths, but it is good
-	 *  to have this backup for paths that are not handled by the universal
-	 *  middleware. 
-	 */
+   *  Note: If doing isomorphic rendering with something like
+   *  Universal Component it will handle 404 paths, but it is good
+   *  to have this backup for paths that are not handled by the universal
+   *  middleware.
+   */
 
   server.use((req, res, next) => {
     res.status(404).send('Sorry, that resource was not found');

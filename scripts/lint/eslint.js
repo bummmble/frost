@@ -9,7 +9,7 @@ spawn(
   ['.', '--max-warnings=0', '--fix=true'],
   {
     stdio: 'inherit',
-  },
+  }
 ).on('close', code => {
   if (code !== 0) {
     console.error('lint failed');

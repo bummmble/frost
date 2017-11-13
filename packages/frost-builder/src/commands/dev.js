@@ -44,7 +44,7 @@ export const connect = (server, multiCompiler) => {
       serverIsStarted = true;
       server.listen(process.env.SERVER_PORT, () => {
         console.log(
-          `Frost dev server started at port ${process.env.SERVER_PORT}`,
+          `Frost dev server started at port ${process.env.SERVER_PORT}`
         );
       });
     }

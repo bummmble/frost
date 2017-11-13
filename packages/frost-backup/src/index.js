@@ -29,7 +29,7 @@ class Backup {
           secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
         },
       },
-      config,
+      config
     );
 
     if (
@@ -75,14 +75,14 @@ class Backup {
             const filePath = await this[prop]();
             const result = await this.upload(
               this.config[`${prop}Directory`],
-              filePath,
+              filePath
             );
             resolve(result);
           } catch (err) {
             reject(err);
           }
         });
-      }),
+      })
     );
   }
 
@@ -95,21 +95,21 @@ class Backup {
 
         if (typeof this.config.aws !== 'object') {
           throw new Error(
-            `AWS config must be an object. Recevied: ${typeof this.config.aws}`,
+            `AWS config must be an object. Recevied: ${typeof this.config.aws}`
           );
         }
 
         if (typeof this.config.aws.accessKeyId !== 'string') {
           throw new Error(
             `Aws access key ID was invalid. It shoudl be a string. Received: ${typeof this
-              .config.aws.accessKeyId}`,
+              .config.aws.accessKeyId}`
           );
         }
 
         if (typeof this.config.aws.secretAccessKey !== 'string') {
           throw new Error(
             `Aws secret key is invalid. Expected string, Received: ${typeof this
-              .config.aws.secretAccessKey}`,
+              .config.aws.secretAccessKey}`
           );
         }
 
@@ -136,11 +136,11 @@ class Backup {
       try {
         const archive = path.join(
           __dirname,
-          new Date().toISOString() + '.archive.gz',
+          new Date().toISOString() + '.archive.gz'
         );
 
         await exec(
-          `mongodump ${this.config.mongo} --archive=${archive} --gzip`,
+          `mongodump ${this.config.mongo} --archive=${archive} --gzip`
         );
 
         resolve(archive);
@@ -155,7 +155,7 @@ class Backup {
       try {
         await delay(this.config.redisBgSaveCheckInterval);
         const { stdout } = await exec(
-          `echo lastsave | redis-cli ${this.config.redis}`,
+          `echo lastsave | redis-cli ${this.config.redis}`
         );
         const unixTime = parseInt(stdout.replace(/\D/g, ''), 10);
 
@@ -164,7 +164,7 @@ class Backup {
         }
 
         resolve(
-          `${os.tempdir()}/${new Date(unixTime * 1000).toISOString()}.dump.rdb`,
+          `${os.tempdir()}/${new Date(unixTime * 1000).toISOString()}.dump.rdb`
         );
       } catch (err) {
         reject(err);
@@ -187,7 +187,7 @@ class Backup {
         const rdbFilePath = path.join(rdbDirectory, rdbFileName);
 
         let lastSave = await exec(
-          `echo lastsave | redis-cli ${this.config.redis}`,
+          `echo lastsave | redis-cli ${this.config.redis}`
         );
         lastSave = parseInt(lastSave.stdout.replace(/\D/g, ''), 10);
 

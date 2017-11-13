@@ -27,7 +27,7 @@ export default ({ prettier }, mode) => {
     }
 
     const args = Object.keys(options).map(
-      k => `--${k}=${(_options && _options[k]) || options[k]}`,
+      k => `--${k}=${(_options && _options[k]) || options[k]}`
     );
     args.push(`--${shouldWrite ? 'write' : 'l'}`);
 

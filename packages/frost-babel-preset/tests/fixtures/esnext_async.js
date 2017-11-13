@@ -1,3 +1,3 @@
 async function wait() {
-    await test();
+  await test();
 }

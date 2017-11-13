@@ -1,3 +1,3 @@
 export class Comp {
-    onClick = () => {}
+  onClick = () => {};
 }

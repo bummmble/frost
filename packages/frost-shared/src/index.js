@@ -1,2 +1,8 @@
-export { Root, Schema, loadConfig } from './config';
-export { default as Logger } from './logger';
+import { Root, Schema, loadConfig } from './config';
+import Logger from './logger';
+
+export {
+    Root,
+    Schema,
+    loadConfig
+}

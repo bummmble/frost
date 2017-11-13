@@ -71,7 +71,7 @@ export default (target, env = 'development', config = {}) => {
     isServer,
     hasVendor,
     hasHmr,
-    config,
+    config
   );
 
   console.log(Logger.info(chalk.underline(`${prefix} Configuration`)));
@@ -88,16 +88,18 @@ export default (target, env = 'development', config = {}) => {
     devtool,
     target: webpackTarget,
     context: Root,
-    performance: config.performance ? {
-      maxEntrypointSize: 1000000,
-      maxAssetSize: isClient ? 300000 : Infinity,
-      hints: isDev || isServer ? false : 'warning'
-    } : {},
+    performance: config.performance
+      ? {
+          maxEntrypointSize: 1000000,
+          maxAssetSize: isClient ? 300000 : Infinity,
+          hints: isDev || isServer ? false : 'warning',
+        }
+      : {},
     externals: isServer ? getExternals([vendorEntry, mainEntry]) : undefined,
     entry: objectRemoveEmpty({
       vendors: hasVendor
         ? [hasVendor && hasHmr ? hmrMiddleware : null, vendorEntry].filter(
-            Boolean,
+            Boolean
           )
         : null,
       main: hasMain

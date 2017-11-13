@@ -1,7 +1,7 @@
 export const promisify = fn => {
   if (typeof fn !== 'function') {
     throw new Error(
-      `Expected argument to be a function. Receved: ${typeof fn}`,
+      `Expected argument to be a function. Receved: ${typeof fn}`
     );
   }
 

@@ -30,8 +30,8 @@ export const isLoaderSpecific = req => {
 
   return Boolean(
     /\.(eot|woff|woff2|ttf|otf|svg|png|jpg|jpeg|gif|webp|webm|ico|mp4|mp3|ogg|html|pdf|css|scss|sass|sss|less|zip)$/.exec(
-      req,
-    ),
+      req
+    )
   );
 };
 

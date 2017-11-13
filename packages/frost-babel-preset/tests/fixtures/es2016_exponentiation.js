@@ -1,1 +1,1 @@
-var test = 2 ** 2
+var test = 2 ** 2;
