@@ -127,7 +127,7 @@ export default (target, env = 'development', config = {}) => {
                 loader: 'eslint-loader',
               },
             }
-          : null,
+          : {},
         {
           test: config.files.babel,
           loader: 'source-map-loader',
