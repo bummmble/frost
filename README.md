@@ -5,7 +5,7 @@
 ## Packages
 
 - [Frost Builder](https://github.com/Bashkir15/frost/tree/master/packages/frost-builder)
-- [Frost Server](https://github.com/Bashkir15/frost/tree/master/packages/frost-server)
+- [Frost Express](https://github.com/Bashkir15/frost/tree/master/packages/frost-express)
 - [Frost React Core](https://github.com/Bashkir15/frost/tree/master/packages/frost-react-core)
 - [Frost Utils](https://github.com/Bashkir15/frost/tree/master/packages/frost-utils)
 - [Frost Backup](https://github.com/Bashkir15/frost/tree/master/packages/frost-backup)
