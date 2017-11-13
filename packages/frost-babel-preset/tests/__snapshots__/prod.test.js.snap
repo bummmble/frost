@@ -7,13 +7,13 @@ TEST, !1;"
 
 exports[`es2015: classes 1`] = `
 "export class Component {
-    main() {}
+  main() {}
 }"
 `;
 
 exports[`es2015: generator 1`] = `
 "function* tester() {
-    for (let a = 0;;) yield a++;
+  for (let a = 0;;) yield a++;
 }"
 `;
 
@@ -24,19 +24,19 @@ exports[`es2016: exponentiation 1`] = `"var test = 4;"`;
 exports[`esnext: async 1`] = `
 "import _default from \\"nodent-runtime\\";
 function wait() {
-    return new Promise(function (a, b) {
-        return test().then(function () {
-            return a();
-        }.$asyncbind(this, b), b);
-    }.$asyncbind(this));
+  return new Promise(function (a, b) {
+    return test().then(function () {
+      return a();
+    }.$asyncbind(this, b), b);
+  }.$asyncbind(this));
 }"
 `;
 
 exports[`esnext: class properties 1`] = `
 "export class Comp {
-    constructor() {
-        this.onClick = () => {};
-    }
+  constructor() {
+    this.onClick = () => {};
+  }
 
 }"
 `;

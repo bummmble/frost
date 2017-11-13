@@ -10,10 +10,10 @@ exports[`es2015: classes 1`] = `
 "\\"use strict\\";
 
 Object.defineProperty(exports, \\"__esModule\\", {
-    value: true
+  value: true
 });
 class Component {
-    main() {}
+  main() {}
 }
 exports.Component = Component;"
 `;
@@ -22,8 +22,8 @@ exports[`es2015: generator 1`] = `
 "\\"use strict\\";
 
 function* tester() {
-    let index = 0;
-    while (true) yield index++;
+  let index = 0;
+  while (true) yield index++;
 }"
 `;
 
@@ -49,11 +49,11 @@ var _nodentRuntime2 = _interopRequireDefault(_nodentRuntime);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function wait() {
-    return new Promise(function ($return, $error) {
-        return test().then(function ($await_1) {
-            return $return();
-        }.$asyncbind(this, $error), $error);
-    }.$asyncbind(this));
+  return new Promise(function ($return, $error) {
+    return test().then(function ($await_1) {
+      return $return();
+    }.$asyncbind(this, $error), $error);
+  }.$asyncbind(this));
 }"
 `;
 
@@ -61,12 +61,12 @@ exports[`esnext: class properties 1`] = `
 "\\"use strict\\";
 
 Object.defineProperty(exports, \\"__esModule\\", {
-    value: true
+  value: true
 });
 class Comp {
-    constructor() {
-        this.onClick = () => {};
-    }
+  constructor() {
+    this.onClick = () => {};
+  }
 
 }
 exports.Comp = Comp;"

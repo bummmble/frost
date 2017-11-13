@@ -4,14 +4,14 @@ exports[`deadcode 1`] = `"const TEST = false;"`;
 
 exports[`es2015: classes 1`] = `
 "export class Component {
-    main() {}
+  main() {}
 }"
 `;
 
 exports[`es2015: generator 1`] = `
 "function* tester() {
-    let index = 0;
-    while (true) yield index++;
+  let index = 0;
+  while (true) yield index++;
 }"
 `;
 
@@ -22,19 +22,19 @@ exports[`es2016: exponentiation 1`] = `"var test = 4;"`;
 exports[`esnext: async 1`] = `
 "import _default from \\"nodent-runtime\\";
 function wait() {
-    return new Promise(function ($return, $error) {
-        return test().then(function () {
-            return $return();
-        }.$asyncbind(this, $error), $error);
-    }.$asyncbind(this));
+  return new Promise(function ($return, $error) {
+    return test().then(function () {
+      return $return();
+    }.$asyncbind(this, $error), $error);
+  }.$asyncbind(this));
 }"
 `;
 
 exports[`esnext: class properties 1`] = `
 "export class Comp {
-    constructor() {
-        this.onClick = () => {};
-    }
+  constructor() {
+    this.onClick = () => {};
+  }
 
 }"
 `;

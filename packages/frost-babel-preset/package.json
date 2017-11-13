@@ -10,7 +10,8 @@
   },
   "scripts": {
     "build": "node ./build.js",
-    "test": "jest"
+    "test": "jest",
+    "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
   },
   "dependencies": {
     "app-root-dir": "^1.0.2",
@@ -41,10 +42,12 @@
   },
   "devDependencies": {
     "async": "^2.6.0",
+    "coveralls": "^3.0.0",
     "jest-cli": "^21.2.1",
     "lodash": "^4.17.4",
     "lodash-compat": "^3.10.2",
     "lodash-es": "^4.17.4",
+    "nyc": "^11.3.0",
     "prop-types": "^15.6.0",
     "rambda": "^1.0.4",
     "react": "^16.1.0",
