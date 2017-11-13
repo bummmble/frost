@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import delay from 'delay';
 
-export default class Mongoose {
+export class Mongoose {
     constructor(config = {}) {
         this.config = Object.assign({
             agenda: false,
