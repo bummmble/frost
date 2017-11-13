@@ -20,22 +20,25 @@ A centralized, Express http-server to be used with the Frost platform
 ### createExpressServer
 
 ```js
-createExpressServer(staticConfig, afterSecurity, beforeFallback, enableNonce)
-```
-- staticConfig: takes an object as an argument that defines where you want to serve your static files from
-  ```js
-  const staticConfig = {
-    public: 'build/client',
-    path: '/static/'
-  };
-  ``` 
-- afterSecurity: an array of middlewares (can be an array of arrays of middleware) to be added after the security policies have
-  been added.
-  
-- beforeFallback: an array of middlewares (can be an array of arrays of middleware) to be added before the fallback functionality is added. This is where you want to manage Hot Reloading.
-  
-- enableNonce: a Boolean that determines whether an nonce should be added to the response object
+const server = createExpressServer({
+    // Static config defines where you want to server your
+    // static files from.
+    staticConfig: {
+        public: 'build/client',
+        path: '/static/'
+    },
 
+    // After security takes an array of middleware to be 
+    // added after the security middleware is added
+    afterSecurity: [],
+
+    // Before fallback functions the same as afterSecurity,
+    // but later, before the fallback middleware has been added
+    afterFallback: [],
+
+    // A boolean that determines whether a unique nonce should be // added to the response object
+    enableNonce: false
+})
 
 ### createMongoose
 ```js
