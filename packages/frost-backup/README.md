@@ -21,3 +21,30 @@ sudo chown -R redis:redis /var/lib/redis
 sudo chmod g+wr /etc/redis/redis.conf
 sudo chmod g+wr /var/lib/redis/dump.rdb
 ```
+
+### API
+
+* If you want to backup all databases:
+
+```js
+const Backup = require('frost-backup');
+const myBackup = new Backup('your-s3-bucket-name');
+
+// backup mongo and redis, then upload the results to Amazon s3
+myBackup
+    .backup()
+    .then(console.log)
+    .catch(console.error);
+
+// Run mongorestore to create a mongo backup file
+myBackup
+    .mongo()
+    .then(console.log)
+    .catch(console.error)
+
+// Run bgsave to create a Redis backup file
+myBackup
+    .redis()
+    .then(console.log)
+    .catch(console.error)
+```
