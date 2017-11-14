@@ -1,24 +1,25 @@
 const { join } = require('path');
 
+const packageDir = join(__dirname, '../../packages/');
+
 const bundles = [
-  {
-    name: 'frost-builder',
-    entry: join(__dirname, '..', 'packages/frost-builder'),
-    builds: ['cli', 'es', 'cjs'],
-    alias: ['frost-shared', 'frost-utils'],
-  },
+    {
+        name: 'frost-builder',
+        path: join(packageDir, 'frost-builder'),
+        builds: ['cli', 'cjs', 'es']
+    },
 
-  {
-    name: 'frost-shared',
-    entry: join(__dirname, '..', 'packages/frost-shared'),
-    builds: ['es', 'cjs'],
-  },
+    {
+        name: 'frost-express',
+        path: join(packageDir, 'frost-express'),
+        builds: ['cjs', 'es']
+    },
 
-  {
-    name: 'frost-utils',
-    entry: join(__dirname, '..', 'packages/frost-utils'),
-    builds: ['es', 'cjs'],
-  },
+    {
+        name: 'frost-utils',
+        path: join(packageDir, 'frost-utils'),
+        builds: ['cjs', 'es']
+    }
 ];
 
 module.exports = bundles;
