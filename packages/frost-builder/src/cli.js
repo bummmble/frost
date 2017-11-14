@@ -1,3 +1,5 @@
+#!/usr/bin/env noDeprecation
+
 import meow from 'meow';
 import chalk from 'chalk';
 import updateNotifier from 'update-notifier';

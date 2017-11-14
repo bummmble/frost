@@ -1,10 +1,13 @@
 {
   "name": "eslint-config-frost",
-  "version": "0.2.2",
+  "version": "0.2.7",
   "author": {
     "name": "Forrest Collins",
     "email": "Forrdev@gmail.com",
     "url": "forrdev.com"
+  },
+  "scripts": {
+    "test": "ava"
   },
   "main": "src/index.js",
   "license": "MIT",
@@ -19,8 +22,13 @@
     "eslint-import-resolver-babel-module": "^4.0.0-beta.3",
     "eslint-plugin-babel": "^4.1.2",
     "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-react": "^7.4.0",
     "eslint-plugin-security": "^1.4.0"
+  },
+  "devDependencies": {
+    "ava": "^0.23.0",
+    "temp-write": "^3.3.0"
   }
 }

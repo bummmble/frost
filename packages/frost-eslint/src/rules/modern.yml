@@ -15,4 +15,4 @@ rules:
   # Are still some issues with older Webpack versions
   # and is kind of unecessary for simple modifications
   prefer-template:
-    -warn
+    - warn

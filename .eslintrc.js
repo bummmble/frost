@@ -1,3 +1,4 @@
+
 module.exports = {
-    extends: ['frost']
+    "extends": ["frost"]
 }
