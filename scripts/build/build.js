@@ -7,66 +7,67 @@ const bundles = require('./bundles');
 const execute = require('./execute');
 
 function getExternals(bundle) {
-    const pkg = require(`${bundle.path}/package.json`);
-    const externals = Object.keys(pkg.dependencies).concat(builtinModules);
-    return externals
-};
+  const pkg = require(`${bundle.path}/package.json`);
+  const externals = Object.keys(pkg.dependencies).concat(builtinModules);
+  return externals;
+}
 
 function getOutputFile(bundle, build) {
-    let output;
-    if (bundle.name === 'frost-builder' && build === 'cli') {
-        output = bundle.path + '/bin/frost'
-        return output;
-    }
-    if (build === 'cjs') {
-        output = bundle.path + '/dist/index.cjs.js';
-    }
-    if (build === 'es') {
-        output = bundle.path + '/dist/index.es.js';
-    }
-
+  let output;
+  if (bundle.name === 'frost-builder' && build === 'cli') {
+    output = bundle.path + '/bin/frost';
     return output;
+  }
+  if (build === 'cjs') {
+    output = bundle.path + '/dist/index.cjs.js';
+  }
+  if (build === 'es') {
+    output = bundle.path + '/dist/index.es.js';
+  }
+
+  return output;
 }
 
 function getInput(bundle, build) {
-    if (build === 'cli') {
-        return `${bundle.path}/src/cli.js`;
-    }
-    return `${bundle.path}/src/index.js`;
+  if (build === 'cli') {
+    return `${bundle.path}/src/cli.js`;
+  }
+  return `${bundle.path}/src/index.js`;
 }
 
 function getFormat(build) {
-    let format;
-    if (build === 'cli' || build === 'cjs') {
-        format = 'cjs';
-    }
-    if (build === 'es') {
-        format = 'es';
-    }
-    return format;
+  let format;
+  if (build === 'cli' || build === 'cjs') {
+    format = 'cjs';
+  }
+  if (build === 'es') {
+    format = 'es';
+  }
+  return format;
 }
 
-
 function createBundle(bundle, build) {
-    const outputFile = getOutputFile(bundle, build);
-    const input = getInput(bundle, build);
-    const format = getFormat(build);
-    const external = getExternals(bundle);
+  const outputFile = getOutputFile(bundle, build);
+  const input = getInput(bundle, build);
+  const format = getFormat(build);
+  const external = getExternals(bundle);
 
-    return rollup({
-        input,
-        banner: build === 'cli' ? '#!/usr/bin/env node\n' :  '',
-        external,
-        plugins: build === 'cli' ? [execute(), babel()] : [babel()]
-    })
-    .then(({ write }) => write({
+  return rollup({
+    input,
+    banner: build === 'cli' ? '#!/usr/bin/env node\n' : '',
+    external,
+    plugins: build === 'cli' ? [execute(), babel()] : [babel()],
+  })
+    .then(({ write }) =>
+      write({
         dest: outputFile,
-        format
-    }))
+        format,
+      })
+    )
     .then(() => console.log(`${bundle.name} built in ${format} format`))
     .catch(err => {
-        console.error(err);
-    })
+      console.error(err);
+    });
 }
 
 (() => {

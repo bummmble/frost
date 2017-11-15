@@ -15,7 +15,7 @@ const Root = getRoot();
 const pkg = require(resolve(Root, 'package.json'));
 
 export default (target, env = 'development', config = {}) => {
-    console.log(config);
+  console.log(config);
   const {
     isClient,
     isServer,

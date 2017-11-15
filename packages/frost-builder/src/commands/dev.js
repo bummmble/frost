@@ -7,7 +7,6 @@ import { createExpressServer } from 'frost-express';
 import compiler from '../compiler';
 import formatOutput from '../format/output';
 
-
 export const create = (config = {}) => {
   const clientConfig = compiler('client', 'development', config);
   const serverConfig = compiler('server', 'development', config);
@@ -56,7 +55,7 @@ export const start = (config = {}) => {
   const server = createExpressServer({
     afterSecurity: [],
     beforeFallback: [...middleware],
-    enableNonce: false
+    enableNonce: false,
   });
 
   connect(server, multiCompiler);
