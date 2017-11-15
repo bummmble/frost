@@ -86,7 +86,7 @@ async function BuildClient() {
 
 Start takes a configuration object and creates an hot-reloaded development Express server.
 
-```
+```js
 import { start as startDev } from 'frost-builder';
 
 const config = {};
@@ -105,7 +105,7 @@ The compiler export is the core of the Frost Builder. The compiler accepts a tar
 
 > This is a non-essential part of the API that exists only for specific use cases
 
-Connect takes a server configuration and a Webpack multiCompiler object and starts a development server running on process.env.SERVER_PORT. This is useful for when you want to use a custom server in development rather than use the default [Frost Express server](https://github.com/Bashkir15/tree/master/packages/frost-express).
+Connect takes a server configuration and a Webpack multiCompiler object and starts a development server running on process.env.SERVER_PORT. This is useful for when you want to use a custom server in development rather than use the default [Frost Express server](https://github.com/Bashkir15/frost/tree/master/packages/frost-express).
 
 ```js
 import { connect, compiler } from 'frost-builder';
@@ -140,3 +140,28 @@ server.use(...middleware);
 connect(server, multiCompiler);
 ```
 
+#### Notify
+
+Notify is a simple, programmable notifier that takes an options object with a title, a message, and a level corresponding to severity (error, warn, info). A small example using it as part of the builder follows
+
+```js
+import { notify, buildClient } from 'frost-builder';
+
+async function build() {
+    const config = {};
+    try {
+        await buildClient(config);
+        notify({
+            title: 'Success!',
+            message: 'The Client was built successfully',
+            level: 'success'
+        });
+    } catch (err) {
+        notify({
+            title: 'Error!',
+            message: `The Client build ran into an error and could not proceed \n\n ${err}`,
+            level: 'error'
+        });
+    }
+}
+```
