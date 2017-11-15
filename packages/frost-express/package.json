@@ -1,6 +1,6 @@
 {
   "name": "frost-express",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "author": {
     "name": "Forrest Collins",
     "email": "forrdev@gmail.com",
@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "cookie-parser": "^1.4.3",
+    "delay": "^2.0.0",
     "dotenv": "^4.0.0",
     "express": "^4.16.2",
     "koa-404-handler": "0.0.1",
@@ -28,6 +29,7 @@
     "koa-methodoverride": "^2.0.0",
     "koa-response-time": "^2.0.0",
     "koa-serve-static": "^1.0.0",
+    "mongoose": "^4.13.2",
     "pretty-error": "^2.1.1"
   }
 }

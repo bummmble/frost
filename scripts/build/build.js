@@ -1,8 +1,15 @@
 const { rollup } = require('rollup');
+const { join } = require('path');
 const commonJS = require('rollup-plugin-commonjs');
-
+const builtinModules = require('builtin-modules');
 const bundles = require('./bundles');
 const execute = require('./execute');
+
+function getExternals(bundle) {
+    const pkg = require(`${bundle.path}/package.json`);
+    const externals = Object.keys(pkg.dependencies).concat(builtinModules);
+    return externals
+};
 
 function getOutputFile(bundle, build) {
     let output;
@@ -43,15 +50,12 @@ function createBundle(bundle, build) {
     const outputFile = getOutputFile(bundle, build);
     const input = getInput(bundle, build);
     const format = getFormat(build);
-    console.log(build);
+    const external = getExternals(bundle);
+
     return rollup({
         input,
         banner: build === 'cli' ? '#!/usr/bin/env node\n' :  '',
-        external(dependency) {
-            if (dependency === input) {
-                return false;
-            }
-        },
+        external,
         plugins: build === 'cli' ? [execute()] : []
     })
     .then(({ write }) => write({
