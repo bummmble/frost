@@ -1,6 +1,7 @@
 const { rollup } = require('rollup');
 const { join } = require('path');
 const commonJS = require('rollup-plugin-commonjs');
+const babel = require('rollup-plugin-babel');
 const builtinModules = require('builtin-modules');
 const bundles = require('./bundles');
 const execute = require('./execute');
@@ -56,7 +57,7 @@ function createBundle(bundle, build) {
         input,
         banner: build === 'cli' ? '#!/usr/bin/env node\n' :  '',
         external,
-        plugins: build === 'cli' ? [execute()] : []
+        plugins: build === 'cli' ? [execute(), babel()] : [babel()]
     })
     .then(({ write }) => write({
         dest: outputFile,

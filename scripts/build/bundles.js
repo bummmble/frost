@@ -16,6 +16,12 @@ const bundles = [
     },
 
     {
+        name: 'frost-react-core',
+        path: join(packageDir, 'frost-react-core'),
+        builds: ['cjs', 'es']
+    },
+
+    {
         name: 'frost-utils',
         path: join(packageDir, 'frost-utils'),
         builds: ['cjs', 'es']
