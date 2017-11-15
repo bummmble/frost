@@ -57,4 +57,7 @@ export const start = (config = {}) => {
   server.use(...middleware);
 
   connect(server, multiCompiler);
+
+  // for testing only really
+  return true;
 };
