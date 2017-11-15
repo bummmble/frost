@@ -33,5 +33,13 @@
     "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-commonjs": "^8.2.6",
     "rollup-plugin-node-resolve": "^3.0.0"
+  },
+  "dependencies": {
+    "query-string": "^5.0.1",
+    "react": "^16.1.1",
+    "react-dom": "^16.1.1",
+    "react-redux": "^5.0.6",
+    "redux": "^3.7.2",
+    "redux-first-router": "0.0.16-next"
   }
 }
