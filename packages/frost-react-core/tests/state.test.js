@@ -1,3 +1,4 @@
+import test from 'ava';
 import { createReduxStore, createRootReducer } from '../src/shared/state';
 import { createReduxRouter } from '../src/shared/router';
 

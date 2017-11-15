@@ -1,33 +1,33 @@
 {
-	"name": "frost-server",
-	"version": "0.2.0",
-	"author": {
-		"name": "Forrest Collins",
-		"email": "forrdev@gmail.com",
-		"url": "forrdev.com"
-	},
-	"scripts": {
-		"build": "node ./build.js"
-	},
-	"main": "dist/index.js",
-	"license": "MIT",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/Bashkir15/frost/tree/master/packages/frost-server"
-	},
-	"dependencies": {
-		"cookie-parser": "^1.4.3",
-		"dotenv": "^4.0.0",
-		"express": "^4.16.2",
-		"koa-404-handler": "0.0.1",
-		"koa-better-error-handler": "^1.3.0",
-		"koa-bodyparser": "^4.2.0",
-		"koa-compress": "^2.0.0",
-		"koa-helmet": "^3.2.0",
-		"koa-json": "^2.0.2",
-		"koa-methodoverride": "^2.0.0",
-		"koa-response-time": "^2.0.0",
-		"koa-serve-static": "^1.0.0",
-		"pretty-error": "^2.1.1"
-	}
+  "name": "frost-express",
+  "version": "0.2.2",
+  "author": {
+    "name": "Forrest Collins",
+    "email": "forrdev@gmail.com",
+    "url": "forrdev.com"
+  },
+  "scripts": {
+    "build": "node ./build.js"
+  },
+  "main": "dist/index.cjs.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Bashkir15/frost/tree/master/packages/frost-server"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.3",
+    "dotenv": "^4.0.0",
+    "express": "^4.16.2",
+    "koa-404-handler": "0.0.1",
+    "koa-better-error-handler": "^1.3.0",
+    "koa-bodyparser": "^4.2.0",
+    "koa-compress": "^2.0.0",
+    "koa-helmet": "^3.2.0",
+    "koa-json": "^2.0.2",
+    "koa-methodoverride": "^2.0.0",
+    "koa-response-time": "^2.0.0",
+    "koa-serve-static": "^1.0.0",
+    "pretty-error": "^2.1.1"
+  }
 }
