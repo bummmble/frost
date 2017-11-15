@@ -45,10 +45,98 @@ Commands:
     clean               Cleans up the client and server build directories
 ```
 
-## Customizing
+### API
 
-To use this builder you can supply a frost.config.js file in your root directory. You can peer into the source to see the large list of customizable options you can pass in through this config.
+#### buildClient && buildServer
 
-Don't care about that and really just want the plugins but don't want a lot of other stuff? You can include a hook in the config file with your own webpack config that will be used in place of the compiler.
+> These build functions are the same, unique only in their target. For this reason the usage is the same, even if only the client is presented below
 
-> More on this coming soon
+```js
+import { buildClient, buildServer } from 'frost-builder';
+
+async function BuildClient() {
+    // This can be a frost.config.js file that is loaded in
+    // or any other object to be used in the build function
+    const config = {};
+    await buildClient(config);
+}
+
+async function BuildServer() {
+    const config = {};
+    await buildServer(config);
+}
+```
+
+#### cleanClient && cleanServer
+
+These functions clean the respective build folders. These are normally not used as a standalone, but as part of a process like below
+
+```js
+import { buildClient, cleanClient } from 'frost-builder'
+
+async function BuildClient() {
+    // config must have a an output.client defined (output.server for buildServer)
+    const config = {};
+    await cleanClient(config);
+    await buildClient(config);
+}
+```
+
+#### start
+
+Start takes a configuration object and creates an hot-reloaded development Express server.
+
+```
+import { start as startDev } from 'frost-builder';
+
+const config = {};
+startDev(config);
+```
+
+#### compiler
+
+> This is a non-essential part of the API that exists only for specific use cases
+
+The compiler export is the core of the Frost Builder. The compiler accepts a target, an environment variable representing process.env.NODE_ENV, and a configuration object and generates the proper Webpack configuration. This is not a means for modifying the compiler itself. If you would like to customize the Webpack configuration to a larger extent, you should write a hook (see config.hooks). This exists for direct usage and makes integration with more complex build chains easier.
+
+** example coming **
+
+#### connect
+
+> This is a non-essential part of the API that exists only for specific use cases
+
+Connect takes a server configuration and a Webpack multiCompiler object and starts a development server running on process.env.SERVER_PORT. This is useful for when you want to use a custom server in development rather than use the default [Frost Express server](https://github.com/Bashkir15/tree/master/packages/frost-express).
+
+```js
+import { connect, compiler } from 'frost-builder';
+import express from 'express';
+import webpack from 'webpack';
+
+const server = express();
+const config = {};
+
+const clientConfig = compiler('client', 'development', config);
+const serverConfig = compiler('server', 'development', config);
+const multiCompiler = webpack([clientConfig, serverConfig]);
+
+connect(server, multiCompiler);
+```
+
+#### create
+
+> This is a non-essential part of the API that exists only for specific use cases
+
+Create is a bear bones utility to create a Webpack Multi-Compiler and the appropriate middleware needed for Hot-Module Reloading. This is great for when you want to use connect with your own custom server, but don't want to have to use the compiler directly to create your Multi Compiler. Create takes a configuration object that will be used create the Webpack bundles.
+
+```js
+import { create, connect } from 'frost-builder';
+import express from 'express';
+
+const config = {};
+const { middleware, multiCompiler } = create(config);
+
+const server = express();
+server.use(...middleware);
+connect(server, multiCompiler);
+```
+

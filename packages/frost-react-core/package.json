@@ -1,18 +1,24 @@
 {
-	"name": "frost-react-core",
-	"version": "0.1.0",
-	"dependencies": {
-		"prop-types": "^15.6.0",
-		"query-string": "^5.0.1",
-		"react": "^16.1.0",
-		"react-dom": "^16.1.0",
-		"react-helmet": "^5.2.0",
-		"react-redux": "^5.0.6",
-		"react-universal-component": "^2.5.5",
-		"redux": "^3.7.2",
-		"redux-first-router": "0.0.16-next",
-		"redux-thunk": "^2.2.0",
-		"serialize-javascript": "^1.4.0",
-		"webpack-flush-chunks": "^1.2.1"
-	}
+  "name": "frost-react-core",
+  "version": "0.1.0",
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "prop-types": "^15.6.0",
+    "query-string": "^5.0.1",
+    "react": "^16.1.1",
+    "react-dom": "^16.1.1",
+    "react-helmet": "^5.2.0",
+    "react-redux": "^5.0.6",
+    "react-universal-component": "^2.6.0",
+    "redux": "^3.7.2",
+    "redux-first-router": "0.0.16-next",
+    "redux-thunk": "^2.2.0",
+    "serialize-javascript": "^1.4.0",
+    "webpack-flush-chunks": "^1.2.1"
+  },
+  "devDependencies": {
+    "jest-cli": "^21.2.1"
+  }
 }

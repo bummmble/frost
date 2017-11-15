@@ -1,21 +1,20 @@
 {
   "name": "frost-builder",
-  "version": "0.3.0",
+  "version": "0.3.6",
   "author": {
     "name": "Forrest Collins",
     "email": "Forrdev@gmail.com",
     "url": "Forrdev.com"
   },
   "bin": {
-    "frost": "bin/frost.js"
+    "frost": "bin/frost"
   },
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
   "scripts": {
     "build:es": "node build.js --node --es",
     "build:node": "node build.js --node --cjs",
-    "build:cli": "node build.js --cli --cjs",
-    "prepare": "npm run build:node && npm run build:cli"
+    "build:cli": "node build.js --cli --cjs"
   },
   "repository": {
     "type": "git",

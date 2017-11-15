@@ -2,11 +2,12 @@ const { rollup } = require('rollup');
 const commonJS = require('rollup-plugin-commonjs');
 
 const bundles = require('./bundles');
+const execute = require('./execute');
 
 function getOutputFile(bundle, build) {
     let output;
     if (bundle.name === 'frost-builder' && build === 'cli') {
-        output = bundle.path + '/bin/frost.js'
+        output = bundle.path + '/bin/frost'
         return output;
     }
     if (build === 'cjs') {
@@ -42,14 +43,16 @@ function createBundle(bundle, build) {
     const outputFile = getOutputFile(bundle, build);
     const input = getInput(bundle, build);
     const format = getFormat(build);
-
+    console.log(build);
     return rollup({
         input,
+        banner: build === 'cli' ? '#!/usr/bin/env node\n' :  '',
         external(dependency) {
             if (dependency === input) {
                 return false;
             }
         },
+        plugins: build === 'cli' ? [execute()] : []
     })
     .then(({ write }) => write({
         dest: outputFile,
