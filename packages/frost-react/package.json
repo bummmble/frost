@@ -2,10 +2,16 @@
   "name": "frost-react",
   "version": "0.1.0",
   "dependencies": {
+    "dotenv": "^4.0.0",
+    "frost-builder": "^0.3.7",
+    "frost-express": "^0.2.4",
+    "frost-shared": "^0.2.5",
     "query-string": "^5.0.1",
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
+    "react-helmet": "^5.2.0",
     "react-redux": "^5.0.6",
+    "react-universal-component": "^2.6.0",
     "redux": "^3.7.2",
     "redux-first-router": "0.0.16-next"
   }

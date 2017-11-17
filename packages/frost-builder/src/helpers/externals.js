@@ -15,11 +15,8 @@ const Problematic = new Set([
   'intl',
   'mime-db',
   'encoding',
-  'node-gyp',
-  'node-pre-gyp',
   'ajv',
   'colors',
-  'express',
   'jsdom',
 ]);
 
@@ -63,7 +60,7 @@ export const shouldBeBundled = name => {
     } catch (error) {}
 
     if (json) {
-      if (json.module || json.style || json['jsnext:main']) {
+      if (json.module || json.style || json.browser || json['jsnext:main']) {
         result = true;
       }
 
