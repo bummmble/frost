@@ -1,7 +1,7 @@
 import cosmiconfig from 'cosmiconfig';
 import { get as getRoot } from 'app-root-dir';
 import { relative, resolve, join } from 'path';
-import { get, set, defaultsDeep } from 'lodash';
+import { get, set, merge} from 'lodash';
 import jsome from 'jsome';
 import defaults from './defaults';
 
@@ -32,7 +32,7 @@ const configPromise = configLoader
       throw new Error('Invalid config options');
     }
 
-    const merged = defaultsDeep(result.config, defaults);
+    const merged = merge(defaults, results.config);
     return resolvePathsInConfig(merged, Root);
   })
   .catch(err => {

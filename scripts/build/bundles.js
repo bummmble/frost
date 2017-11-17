@@ -15,10 +15,16 @@ const bundles = [
     builds: ['cjs', 'es'],
   },
 
-  {
+  /* {
     name: 'frost-react-core',
     path: join(packageDir, 'frost-react-core'),
     builds: ['cjs', 'es'],
+  }, */
+
+  {
+    name: 'frost-shared',
+    path: join(packageDir, 'frost-shared'),
+    builds: ['cjs', 'es']
   },
 
   {
