@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "dependencies": {
     "dotenv": "^4.0.0",
-    "frost-builder": "^0.3.7",
+    "frost-builder": "^0.3.8",
     "frost-express": "^0.2.4",
     "frost-shared": "^0.2.7",
     "query-string": "^5.0.1",
