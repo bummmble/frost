@@ -1,7 +1,7 @@
 const config = {
     entry: {
-        server: 'src/server/index',
-        client: 'src/client/index',
+        server: 'src/server/index.js',
+        client: 'src/client/index.js',
     },
 
     output: {
@@ -12,3 +12,5 @@ const config = {
 
     hook: {}
 };
+
+module.exports = config;
