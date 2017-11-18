@@ -1,7 +1,7 @@
 import React from 'react';
 import universal from 'react-universal-component';
-import { NOT_FOUND } from 'react-first-router';
-import { wrapRoute } from './internals/common';
+import { NOT_FOUND } from 'redux-first-router';
+import { wrapRoute } from './internals/shared';
 
 const HomeRoute = wrapRoute(
     universal(() => import('./components/Home/Home')),

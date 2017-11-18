@@ -72,5 +72,6 @@ export default {
   eslint: {},
   performance: true,
   pwa: {},
-  verbose: true,
+  verbose: false,
+  quiet: false
 };

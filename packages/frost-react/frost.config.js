@@ -10,6 +10,7 @@ const config = {
         public: '/static/'
     },
 
+    postcss: false,
     hook: {}
 };
 

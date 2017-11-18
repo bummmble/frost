@@ -1,3 +1,11 @@
 {
-    "presets": ["react"]
+    "presets": ["react"],
+    "plugins": [
+        ["universal-import", {
+            "babelServer": true
+        }],
+        "syntax-dynamic-import",
+        "transform-class-properties",
+        "transform-object-rest-spread"
+    ]
 }

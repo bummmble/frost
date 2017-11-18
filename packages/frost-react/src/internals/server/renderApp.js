@@ -7,7 +7,7 @@ import renderHTML from './renderHTML';
 export default function renderApp({ App, clientStats, internals, request, response }) {
     const state = internals.store.getState();
     const location = state.location;
-    let state = 200;
+    let status = 200;
 
     if (location.type === NOT_FOUND) {
         status = 404;

@@ -4,7 +4,7 @@ import { renderApp } from '../internals/server';
 import App from '../App';
 import State from '../state';
 
-export default ({ clientStats }) => async (req, res) => {
+export default ({ clientStats }) => async (request, response) => {
     const state = {};
     const frost = {};
     const internals = createInternals(State, { state, frost, request });
