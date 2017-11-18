@@ -7,6 +7,7 @@ import ServiceWorkerPlugin from 'serviceworker-webpack-plugin';
 import BabiliMinifyPlugin from 'babel-minify-webpack-plugin';
 import UglifyPlugin from 'uglifyjs-webpack-plugin';
 import SriPlugin from 'webpack-subresource-integrity';
+import HardSourcePlugin from 'hard-source-webpack-plugin';
 
 import MissingModules from './MissingModules';
 import ChunkHashPlugin from './ChunkHash';
@@ -33,6 +34,7 @@ const basePlugins = (env, webpackTarget, isDev, isProd) => {
         })
       : null,
 
+    isDev ? new HardSourcePlugin() : null,
     isDev ? new webpack.NamedModulesPlugin() : null,
     isDev ? new webpack.NoEmitOnErrorsPlugin() : null,
 
