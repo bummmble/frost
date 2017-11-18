@@ -14,7 +14,7 @@ import ChunkHashPlugin from './ChunkHash';
 import Progress from './Progress';
 import Templates from './Templates';
 
-const basePlugins = (env, webpackTarget, isDev, isProd) => {
+const basePlugins = (env, webpackTarget, isDev, isProd, { verbose }) => {
   return [
     new webpack.DefinePlugin({
       // These need to be kept separate to allow for usage with
@@ -28,13 +28,17 @@ const basePlugins = (env, webpackTarget, isDev, isProd) => {
     new CaseSensitivePathsPlugin(),
     new MissingModules(),
 
-    process.stdout.isTTY
+    process.stdout.isTTY && verbose
       ? new Progress({
           prefix: 'frost',
         })
       : null,
 
+    // Provides an intermediate caching step for webpack modules. This
+    // makes the second+ build significantly faster
+    // See: https://github.com/mzgoddard/hard-source-webpack-plugin
     isDev ? new HardSourcePlugin() : null,
+
     isDev ? new webpack.NamedModulesPlugin() : null,
     isDev ? new webpack.NoEmitOnErrorsPlugin() : null,
 
@@ -152,7 +156,7 @@ export default (
   hasHmr,
   config
 ) => {
-  const base = basePlugins(env, webpackTarget, isDev, isProd);
+  const base = basePlugins(env, webpackTarget, isDev, isProd, config);
   const plugins = isServer
     ? base.concat(...serverPlugins(isDev, isProd, config))
     : base.concat(...clientPlugins(isDev, isProd, hasVendor, hasHmr, config));
