@@ -96,7 +96,7 @@ export default (target, env = 'development', config = {}) => {
           hints: isDev || isServer ? false : 'warning',
         }
       : {},
-    externals: isServer ? getExternals([vendorEntry, mainEntry]) : undefined,
+    externals: isServer ? getExternals(false, [vendorEntry, mainEntry]) : undefined,
     entry: objectRemoveEmpty({
       vendor: hasVendor
         ? [hasVendor && hasHmr ? hmrMiddleware : null, vendorEntry].filter(
