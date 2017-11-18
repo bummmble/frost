@@ -54,7 +54,6 @@ function createBundle(bundle, build) {
 
   return rollup({
     input,
-    banner: build === 'cli' ? '#!/usr/bin/env node\n' : '',
     external,
     plugins: build === 'cli' ? [execute(), babel()] : [babel()],
   })
@@ -62,6 +61,7 @@ function createBundle(bundle, build) {
       write({
         dest: outputFile,
         format,
+        banner: build === 'cli' ? '#!/usr/bin/env node\n' : '',
       })
     )
     .then(() => console.log(`${bundle.name} built in ${format} format`))
