@@ -1,6 +1,7 @@
-The Frost Builder is meant to be a hands-off, easy way to get started with Modern Web Applications.
+# Frost Builder
 
-> While the Builder was created with the intent on creating isomorphic, progressive web-applications, it is actually completely framework agnostic and lets you build your applications how you want by exposing ways to configure every detail of the build.
+>The Frost Builder is meant to be a hands-off, easy way to get started with Modern Web Applications.
+
 
 ## Features
 
@@ -11,7 +12,6 @@ The Frost Builder is meant to be a hands-off, easy way to get started with Moder
 - Hot Loading for both the Client and theServer
 - Supports postcss and progressive image-loading out of the box
 - Supports source-maps and compile-time linting
-- Comes packaged with prettier for lovely code
 - Serviceworker support out of the box as well as manifest loading through the pwa config option
 - Easy to use cli interface, but is easily usable in external build scripts
 
