@@ -47,22 +47,34 @@ Commands:
 
 ### API
 
+#### getConfig
+
+Get config is normally called internally when using the cli interface, but when integrating with the builder programatically you can use it to load from your configuration file
+
+```js
+import { getConfig } from 'frost-builder';
+
+async function build() {
+    // Config accepts an 'flags' object corresponding
+    // to the cli-flags you would normally pass in
+    const config = await getConfig({});
+}
+```
+
 #### buildClient && buildServer
 
 > These build functions are the same, unique only in their target. For this reason the usage is the same, even if only the client is presented below
 
 ```js
-import { buildClient, buildServer } from 'frost-builder';
+import { getConfig, buildClient, buildServer } from 'frost-builder';
 
 async function BuildClient() {
-    // This can be a frost.config.js file that is loaded in
-    // or any other object to be used in the build function
-    const config = {};
+    const config = await getConfig({ verbose: true });
     await buildClient(config);
 }
 
 async function BuildServer() {
-    const config = {};
+    const config = await getConfig({ verbose: true });
     await buildServer(config);
 }
 ```
@@ -72,11 +84,10 @@ async function BuildServer() {
 These functions clean the respective build folders. These are normally not used as a standalone, but as part of a process like below
 
 ```js
-import { buildClient, cleanClient } from 'frost-builder'
+import { getConfig, buildClient, cleanClient } from 'frost-builder'
 
 async function BuildClient() {
-    // config must have a an output.client defined (output.server for buildServer)
-    const config = {};
+    const config = await getConfig({});
     await cleanClient(config);
     await buildClient(config);
 }
@@ -87,10 +98,14 @@ async function BuildClient() {
 Start takes a configuration object and creates an hot-reloaded development Express server.
 
 ```js
-import { start as startDev } from 'frost-builder';
+import { getConfig, start as startDev } from 'frost-builder';
 
-const config = {};
-startDev(config);
+async function start() {
+    const config = await getConfig({});
+    startDev(config);
+}
+
+process.nextTick(start);
 ```
 
 #### compiler
@@ -111,9 +126,9 @@ Connect takes a server configuration and a Webpack multiCompiler object and star
 import { connect, compiler } from 'frost-builder';
 import express from 'express';
 import webpack from 'webpack';
+import config from './frost.config.js' // or whatever location if not using the frost config loader
 
 const server = express();
-const config = {};
 
 const clientConfig = compiler('client', 'development', config);
 const serverConfig = compiler('server', 'development', config);
@@ -131,8 +146,8 @@ Create is a bear bones utility to create a Webpack Multi-Compiler and the approp
 ```js
 import { create, connect } from 'frost-builder';
 import express from 'express';
+import config from './frost.config.js';
 
-const config = {};
 const { middleware, multiCompiler } = create(config);
 
 const server = express();
@@ -145,10 +160,10 @@ connect(server, multiCompiler);
 Notify is a simple, programmable notifier that takes an options object with a title, a message, and a level corresponding to severity (error, warn, info). A small example using it as part of the builder follows
 
 ```js
-import { notify, buildClient } from 'frost-builder';
+import { getConfig, notify, buildClient } from 'frost-builder';
 
 async function build() {
-    const config = {};
+    const config = await getConfig({});
     try {
         await buildClient(config);
         notify({
