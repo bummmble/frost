@@ -1,3 +1,0 @@
-{
-    "plugins": ["universal-import", "dynamic-import-node"]
-}

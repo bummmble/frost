@@ -94,7 +94,7 @@ const clientPlugins = (
         context: Root,
         filename: isDev ? '[name].js' : '[name].[chunkhash].js',
         entry: autoDll.entries
-    }) : null
+    }) : null,
 
 
     // Let the server side renderer know about our client assets

@@ -30,6 +30,7 @@
   "license": "MIT",
   "dependencies": {
     "app-root-dir": "^1.0.2",
+    "autodll-webpack-plugin": "^0.3.5",
     "babel-loader": "^7.1.2",
     "babel-minify-webpack-plugin": "^0.2.0",
     "cache-loader": "^1.1.0",

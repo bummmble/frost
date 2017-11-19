@@ -1,7 +1,7 @@
 import webpack from 'webpack';
 import { resolve } from 'path';
 import { get as getRoot } from 'app-root-dir';
-import { Logger } from 'frost-shared';
+import { Logger } from './logger';
 import { objectRemoveEmpty } from 'frost-utils';
 import chalk from 'chalk';
 import ExtractCssChunks from 'extract-css-chunks-webpack-plugin';

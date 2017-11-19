@@ -1,12 +1,12 @@
 import test from 'ava';
 import express from 'express';
 import webpack from 'webpack';
-import { getConfig, Logger } from 'frost-shared';
 import {
   buildServer,
   buildClient,
   start as startDev,
   connect,
+  getConfig,
   create,
   compiler,
 } from '../src/index';
