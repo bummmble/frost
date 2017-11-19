@@ -4,13 +4,12 @@ import { remove } from 'fs-extra';
 import { promisify } from 'frost-utils';
 
 import compiler from '../compiler';
-import formatOutput from '../format/output';
+import formatOutput from '../helpers/format';
 
 const removePromise = promisify(remove);
 
 const buildClient = (config = {}) => {
   const webpackConfig = compiler('client', 'production', config);
-  console.log(webpackConfig);
   return new Promise((resolve, reject) => {
     webpack(webpackConfig, (error, stats) => {
       return resolve(formatOutput(error, stats, 'client'));

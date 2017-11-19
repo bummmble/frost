@@ -5,7 +5,7 @@ import webpackHotMiddleware from 'webpack-hot-middleware';
 import webpackHotServerMiddleware from 'webpack-hot-server-middleware';
 import { createExpressServer } from 'frost-express';
 import compiler from '../compiler';
-import formatOutput from '../format/output';
+import formatOutput from '../helpers/format';
 
 export const create = (config = {}) => {
   const clientConfig = compiler('client', 'development', config);

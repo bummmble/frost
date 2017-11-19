@@ -10,7 +10,6 @@
   "dependencies": {
     "dotenv": "^4.0.0",
     "frost-express": "^0.2.4",
-    "frost-shared": "^0.2.7",
     "history": "^4.7.2",
     "query-string": "^5.0.1",
     "raf": "^3.4.0",
