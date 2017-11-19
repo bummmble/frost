@@ -197,6 +197,19 @@ export default (target, env = 'development', config = {}) => {
             },
           },
         },
+
+        {
+            test: /manifest.json$/,
+            use: [
+                {
+                    loader: 'file-loader'
+                },
+
+                {
+                    loader: require.resolve('./loaders/manifest')
+                }
+            ]
+        }
       ],
     },
     plugins: [...plugins],
