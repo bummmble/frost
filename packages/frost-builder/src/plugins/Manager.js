@@ -1,3 +1,9 @@
+/**
+  * The manager exists as a way to manage the various webpack plugins
+  * between the various different build environments
+  *
+ */
+
 import webpack from 'webpack';
 import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
 import StatsPlugin from 'stats-webpack-plugin';
