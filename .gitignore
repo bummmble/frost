@@ -7,6 +7,7 @@ packages/*/node_modules
 packages/*/build.js
 packages/*/.cache
 packages/*/bin
+packages/*/build
 
 packages/frost-packager
 packages/frost-builder/client
