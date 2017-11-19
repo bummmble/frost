@@ -1,9 +1,7 @@
 {
     "presets": ["react"],
     "plugins": [
-        ["universal-import", {
-            "babelServer": true
-        }],
+        ["universal-import"],
         "syntax-dynamic-import",
         "transform-class-properties",
         "transform-object-rest-spread"

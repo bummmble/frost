@@ -15,7 +15,6 @@ const Root = getRoot();
 const pkg = require(resolve(Root, 'package.json'));
 
 export default (target, env = 'development', config = {}) => {
-  console.log(config);
   const {
     isClient,
     isServer,
@@ -37,6 +36,7 @@ export default (target, env = 'development', config = {}) => {
   } = buildEntryAndOutput(config, isServer, isDev);
 
   const prefix = chalk.bold(target.toUpperCase());
+  const babelEnv = `frost-${env}-${target}`;
   const devtool = config.sourceMaps ? 'source-map' : false;
   const loaderCache = resolve(Root, cacheHash('loader', pkg, target, env));
   const cacheLoader = config.cacheLoader
@@ -72,8 +72,10 @@ export default (target, env = 'development', config = {}) => {
     isServer,
     hasVendor,
     hasHmr,
+    babelEnv,
     config
   );
+
 
   console.log(Logger.info(chalk.underline(`${prefix} Configuration`)));
   console.log(`→ Environment: ${Logger.info(env)}`);

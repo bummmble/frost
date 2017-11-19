@@ -1,6 +1,6 @@
 const config = {
     entry: {
-        server: 'src/server/index.js',
+        server: 'src/server/render.js',
         client: 'src/client/index.js',
     },
 

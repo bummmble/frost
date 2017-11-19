@@ -14,13 +14,14 @@ import ChunkHashPlugin from './ChunkHash';
 import Progress from './Progress';
 import Templates from './Templates';
 
-const basePlugins = (env, webpackTarget, isDev, isProd, { verbose }) => {
+const basePlugins = (env, webpackTarget, isDev, isProd, babelEnv, { verbose }) => {
   return [
     new webpack.DefinePlugin({
       // These need to be kept separate to allow for usage with
       // libraries like dotenv
       'process.env.NODE_ENV': JSON.stringify(env),
       'process.env.TARGET': JSON.stringify(webpackTarget),
+      'process.env.BABEL_ENV': JSON.stringify(babelEnv)
     }),
 
     // Improves OS Compat
@@ -154,9 +155,10 @@ export default (
   isServer,
   hasVendor,
   hasHmr,
+  babelEnv,
   config
 ) => {
-  const base = basePlugins(env, webpackTarget, isDev, isProd, config);
+  const base = basePlugins(env, webpackTarget, isDev, isProd, babelEnv, config);
   const plugins = isServer
     ? base.concat(...serverPlugins(isDev, isProd, config))
     : base.concat(...clientPlugins(isDev, isProd, hasVendor, hasHmr, config));

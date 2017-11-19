@@ -1,26 +1,31 @@
-import { createInternals } from '../internals/shared';
-import { updateState, renderApp } from '../internals/client';
-import State from '../state';
-import App from '../App';
+import React from 'react';
+import { hydrate } from 'react-dom';
+import { Provider } from 'react-redux';
+import createHistory from 'history/createBrowserHistory';
+import AppContainer from 'react-hot-loader/lib/AppContainer';
+import App from './components/App.js';
+import configureStore from './store';
 
-const internals = createInternals(State);
+const history = createHistory();
+const { store } = configureStore(history, window.APP_STATE);
 
-try {
-    renderApp(App, internals)
-} catch (err) {
-    throw new Error(`Unable to rehydrate client app: ${err}`);
+function render(App) {
+    const root = document.getElementById('root');
+    hydrate(
+        <AppContainer>
+            <Provider store={store}>
+                <App />
+            </Provider>
+        </AppContainer>,
+        root
+    );
 }
 
+render(App);
 
-
-if (process.env.NODE_ENV === 'development' && module.hot) {
-    module.hot.accept('../App', () => {
-        const next = require('../App').default;
-        renderApp(next, internals);
-    });
-
-    module.hot.accept('../state', () => {
-        const next = require('../state').default;
-        updateState(next, internals);
+if (module.hot && process.env.NODE_ENV === 'development') {
+    module.hot.accept('./components/App', () => {
+        const App = require('./components/App').default;
+        render(App);
     });
 }
