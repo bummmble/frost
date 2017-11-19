@@ -26,7 +26,8 @@
 - Easily extensible middleware system
 - Exported, extensible Mongoose configuration for MongoDB
 
-### [Frost React Core](https://github.com/Bashkir15/frost/tree/master/packages/frost-react-core)
+### [Frost React](https://github.com/Bashkir15/frost/tree/master/packages/frost-react-core)
+- A boilerplate for creating Universal React Apps using the Frost Builder
 
 ### [Frost Utils](https://github.com/Bashkir15/frost/tree/master/packages/frost-utils)
 
@@ -45,6 +46,3 @@
 - Transpilation ignores Generators. Transpiling these results in super slow code
 
 ### [Frost Eslint](https://github.com/Bashkir15/frost/tree/master/packages/frost-eslint)
-
-### [Frost Shared](https://github.com/Bashkir15/frost/tree/master/packages/frost-shared)
-
