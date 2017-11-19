@@ -39,7 +39,7 @@ export default (target, env = 'development', config = {}) => {
   const babelEnv = `frost-${env}-${target}`;
   const devtool = config.sourceMaps ? 'source-map' : false;
   const loaderCache = resolve(Root, cacheHash('loader', pkg, target, env));
-  const cacheLoader = config.cacheLoader
+  const cacheLoader = config.cacheLoader === 'cache-loader'
     ? {
         loader: 'cache-loader',
         options: {

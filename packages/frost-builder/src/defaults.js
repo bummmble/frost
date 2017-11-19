@@ -18,7 +18,7 @@ export default {
     video: /\.(mp4|webm)$/,
   },
 
-  cacheLoader: {},
+  cacheLoader: 'cache-loader',
   hmr: true,
   postcss: true,
   sourceMaps: false,

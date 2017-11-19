@@ -15,7 +15,7 @@ import ChunkHashPlugin from './ChunkHash';
 import Progress from './Progress';
 import Templates from './Templates';
 
-const basePlugins = (env, webpackTarget, isDev, isProd, babelEnv, { verbose }) => {
+const basePlugins = (env, webpackTarget, isDev, isProd, babelEnv, { verbose, cacheLoader }) => {
   return [
     new webpack.DefinePlugin({
       // These need to be kept separate to allow for usage with
@@ -28,18 +28,26 @@ const basePlugins = (env, webpackTarget, isDev, isProd, babelEnv, { verbose }) =
     // Improves OS Compat
     // See: https://github.com/Urthen/case-sensitive-paths-webpack-plugin
     new CaseSensitivePathsPlugin(),
+
+    // Performs rebuild automatically when new dependencies are installed
+    // Not sure why this is not the default behavior.
     new MissingModules(),
 
+    // Enables our custom progress plugin for a better Developer Experience
     process.stdout.isTTY && verbose
       ? new Progress({
           prefix: 'frost',
         })
       : null,
 
+
     // Provides an intermediate caching step for webpack modules. This
-    // makes the second+ build significantly faster
+    // makes the second+ build significantly faster. We use either this or
+    // cache loader depending on the cacheLoader config string. While it is
+    // possible to use both in conjunction, it occurs too much start up
+    // build time.
     // See: https://github.com/mzgoddard/hard-source-webpack-plugin
-    isDev ? new HardSourcePlugin() : null,
+    isDev && cacheLoader === 'hard-source' ? new HardSourcePlugin() : null,
 
     isDev ? new webpack.NamedModulesPlugin() : null,
     isDev ? new webpack.NoEmitOnErrorsPlugin() : null,
@@ -54,6 +62,8 @@ const basePlugins = (env, webpackTarget, isDev, isProd, babelEnv, { verbose }) =
     // where browsers end up having to download all of the chunks again even though
     // only one or two may have changed
     isProd ? new ChunkHashPlugin() : null,
+
+
     isProd ? new webpack.optimize.ModuleConcatenationPlugin() : null,
   ].filter(Boolean);
 };
