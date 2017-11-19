@@ -8,6 +8,7 @@ import BabiliMinifyPlugin from 'babel-minify-webpack-plugin';
 import UglifyPlugin from 'uglifyjs-webpack-plugin';
 import SriPlugin from 'webpack-subresource-integrity';
 import HardSourcePlugin from 'hard-source-webpack-plugin';
+import AutoDllPlugin from 'autodll-webpack-plugin';
 
 import MissingModules from './MissingModules';
 import ChunkHashPlugin from './ChunkHash';
@@ -62,7 +63,8 @@ const clientPlugins = (
   isProd,
   hasVendor,
   hasHmr,
-  { compression, pwa, sourceMaps, mode, templates }
+  Root,
+  { compression, pwa, sourceMaps, mode, templates, autoDll }
 ) => {
   return [
     new webpack.optimize.CommonsChunkPlugin({
@@ -84,6 +86,16 @@ const clientPlugins = (
     }),
 
     hasHmr ? new webpack.HotModuleReplacementPlugin() : null,
+
+    // AutoDLL plugin to help optimize code that changes less frequently
+    // in builds by extracting them to a separate bundle in advance
+    // See: http://github.com/asfktz/autodll-webpack-plugin
+    autoDll.use ? new AutoDllPlugin({
+        context: Root,
+        filename: isDev ? '[name].js' : '[name].[chunkhash].js',
+        entry: autoDll.entries
+    }) : null
+
 
     // Let the server side renderer know about our client assets
     // https://github.com/FormidableLabs/webpack-stats-plugin
@@ -156,11 +168,12 @@ export default (
   hasVendor,
   hasHmr,
   babelEnv,
+  Root,
   config
 ) => {
   const base = basePlugins(env, webpackTarget, isDev, isProd, babelEnv, config);
   const plugins = isServer
     ? base.concat(...serverPlugins(isDev, isProd, config))
-    : base.concat(...clientPlugins(isDev, isProd, hasVendor, hasHmr, config));
+    : base.concat(...clientPlugins(isDev, isProd, hasVendor, hasHmr, Root, config));
   return plugins;
 };

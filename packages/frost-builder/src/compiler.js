@@ -73,6 +73,7 @@ export default (target, env = 'development', config = {}) => {
     hasVendor,
     hasHmr,
     babelEnv,
+    Root,
     config
   );
 

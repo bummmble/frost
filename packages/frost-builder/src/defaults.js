@@ -73,5 +73,9 @@ export default {
   performance: true,
   pwa: {},
   verbose: false,
-  quiet: false
+  quiet: false,
+  autoDll: {
+    use: true,
+    entries: {}
+  }
 };
