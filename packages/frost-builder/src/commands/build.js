@@ -18,11 +18,11 @@ function buildWebpack(target, env, config) {
 }
 
 export async function buildClient(config) {
-    await buildWebpack('client', 'production', config);
+    return buildWebpack('client', 'production', config);
 }
 
 export async function buildServer(config) {
-    await buildWebpack('server', 'production', config);
+    return buildWebpack('server', 'production', config);
 }
 
 export async function cleanClient(config) {

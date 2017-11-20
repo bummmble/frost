@@ -1,5 +1,6 @@
 const test = require('ava');
 const express = require('express');
+const { existsSync } = require('fs-extra');
 const webpack = require('webpack');
 const { buildServer, buildClient, start, connect, getConfig, create, compiler } = require('../dist/index.cjs');
 
@@ -47,3 +48,25 @@ test('Should throw error when not supplied with a config', async t => {
     t.is(err.message, 'Frost Webpack Compiler needs a configuration object');
   }
 });
+
+test('Should throw error in static mode when not supplied with templates', async t => {
+  const config = await getConfig({});
+  config.mode = 'static';
+  config.templates = [];
+  try {
+    await buildClient(config);
+  } catch (err) {
+    t.is(
+      err.message,
+      'If running in \'static\' mode the templates array must be populated by htmlWebpackPlugin config options'
+    );
+  }
+})
+
+test('Should generate templates in static mode', async t => {
+  const config = await getConfig({});
+  config.mode = 'static';
+  config.templates = [{ filename: 'index.html', template: 'client/index.html' }];
+  await buildClient(config);
+  t.true(existsSync(`${config.output.client}/${config.templates[0].filename}`));
+})

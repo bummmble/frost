@@ -82,6 +82,8 @@ const clientPlugins = (
   Root,
   { compression, pwa, sourceMaps, mode, templates, autoDll }
 ) => {
+  const temps = isProd && mode === 'static' ? Templates(templates) : null;
+
   return [
     new webpack.optimize.CommonsChunkPlugin({
       name: 'manifest',
@@ -149,14 +151,16 @@ const clientPlugins = (
         })
       : null,
 
-    // mode === 'static' ? ...Templates(templates) : null,
     pwa.hasServiceWorker
       ? new ServiceWorkerPlugin({
           entry: pwa.serviceWorkerEntry,
           exclude: ['*hot-update', '**/*.map', '**/stats.json'],
         })
       : null,
-  ].filter(Boolean);
+
+  ]
+  .concat(temps)
+  .filter(Boolean)
 };
 
 const serverPlugins = (isDev, isProd, { compression }) => {
