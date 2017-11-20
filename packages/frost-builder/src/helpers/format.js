@@ -19,7 +19,7 @@ function formatRaw(message, err) {
     return message.trim();
 }
 
-function formatWebpack(json) {
+export function formatWebpack(json) {
     const errors = json.errors.map(error => formatRaw(error, true));
     const warnings = json.warnings.map(warning => formatRaw(warning, false));
     return { errors, warnings };
@@ -37,9 +37,6 @@ const getCompileTime = stats => {
 };
 
 export default function formatOutput(error, stats, target, resolve, reject) {
-    resolve = resolve || Promise.resolve();
-    reject = reject || Promise.reject();
-
     if (error) {
         const msg = `Fatal error while compiling ${taget}: ${error}`;
         console.error(Logger.err(msg));

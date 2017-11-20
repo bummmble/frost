@@ -5,7 +5,7 @@ import webpackHotMiddleware from 'webpack-hot-middleware';
 import webpackHotServerMiddleware from 'webpack-hot-server-middleware';
 import { createExpressServer } from 'frost-express';
 import compiler from '../compiler';
-import formatOutput from '../helpers/format';
+import { formatWebpack } from '../helpers/format';
 
 export const create = (config = {}) => {
   const clientConfig = compiler('client', 'development', config);
@@ -38,8 +38,19 @@ export const connect = (server, multiCompiler) => {
   });
 
   multiCompiler.plugin('done', stats => {
-    formatOutput(false, stats, 'devServer');
-    if (!stats.hasErrors() && !serverIsStarted) {
+    const { errors, warnings } = formatWebpack(stats.toJson({}));
+    if (errors.length) {
+      console.error(`Frost ran into an error connecting to dev server`);
+      console.log(errors.join('\n\n'));
+      process.exit(1);
+    }
+
+    if (warnings.length && !errors.length) {
+      console.warn('Frost noticed some warnings while connecting to the dev server');
+      console.log(warnings.join('\n\n'));
+    }
+
+    if (!errors.length && !serverIsStarted) {
       serverIsStarted = true;
       server.listen(process.env.SERVER_PORT, () => {
         console.log(
