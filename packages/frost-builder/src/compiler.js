@@ -1,5 +1,5 @@
 import webpack from 'webpack';
-import { resolve } from 'path';
+import { resolve, join } from 'path';
 import { get as getRoot } from 'app-root-dir';
 import { Logger } from './logger';
 import { objectRemoveEmpty } from 'frost-utils';
@@ -207,12 +207,19 @@ export default (target, env = 'development', config = {}) => {
                 },
 
                 {
-                    loader: require.resolve('./loaders/manifest')
+                    loader: 'manifest-loader'
                 }
             ]
         }
       ],
     },
+
+    resolveLoader: {
+        alias: {
+            'manifest-loader': join(__dirname, './loaders/manifest')
+        }
+    },
+
     plugins: [...plugins],
   };
 };

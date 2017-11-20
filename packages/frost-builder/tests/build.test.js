@@ -1,15 +1,7 @@
-import test from 'ava';
-import express from 'express';
-import webpack from 'webpack';
-import {
-  buildServer,
-  buildClient,
-  start as startDev,
-  connect,
-  getConfig,
-  create,
-  compiler,
-} from '../src/index';
+const test = require('ava');
+const express = require('express');
+const webpack = require('webpack');
+const { buildServer, buildClient, start, connect, getConfig, create, compiler } = require('../dist/index.cjs');
 
 test('Should build client successfully', async t => {
   const config = await getConfig({ verbose: false });
@@ -23,7 +15,7 @@ test('Should build client successfully', async t => {
 
 test('Should start a development server', async t => {
   const config = await getConfig({ verbose: false });
-  const started = startDev(config);
+  const started = start(config);
   t.is(started, true);
 });
 

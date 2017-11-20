@@ -1,3 +1,5 @@
+import { Logger } from '../logger';
+
 function formatRaw(message, err) {
     let lines = message.split('\n');
 
@@ -35,9 +37,8 @@ const getCompileTime = stats => {
 };
 
 export default function formatOutput(error, stats, target, resolve, reject) {
-    // Hacky work around for when using dev-mode so the message
-    // will say something of meaning.
-    target = typeof target === 'undefined' ? 'universal' : target;
+    resolve = resolve || Promise.resolve();
+    reject = reject || Promise.reject();
 
     if (error) {
         const msg = `Fatal error while compiling ${taget}: ${error}`;
