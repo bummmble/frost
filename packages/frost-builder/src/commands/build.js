@@ -8,30 +8,27 @@ import formatOutput from '../helpers/format';
 
 const removePromise = promisify(remove);
 
-const buildClient = (config = {}) => {
-  const webpackConfig = compiler('client', 'production', config);
-  return new Promise((resolve, reject) => {
-    webpack(webpackConfig, (error, stats) => {
-      return formatOutput(error, stats, 'client', resolve, reject);
+function buildWebpack(target, env, config) {
+    const webpackConfig = compiler(target, env, config);
+    return new Promise((resolve, reject) => {
+        webpack(webpackConfig, (error, stats) => {
+            return formatOutput(error, stats, target, resolve, reject);
+        });
     });
-  });
-};
+}
 
-const buildServer = (config = {}) => {
-  const webpackConfig = compiler('server', 'production', config);
-  return new Promise((resolve, reject) => {
-    webpack(webpackConfig, (error, stats) => {
-      return formatOutput(error, stats, 'server', resolve, reject);
-    });
-  });
-};
+export async function buildClient(config) {
+    await buildWebpack('client', 'production', config);
+}
 
-const cleanClient = (config = {}) => {
-  return removePromise(config.output.client);
-};
+export async function buildServer(config) {
+    await buildWebpack('server', 'production', config);
+}
 
-const cleanServer = (config = {}) => {
-  return removePromise(config.output.server);
-};
+export async function cleanClient(config) {
+    await removePromise(config.output.client);
+}
 
-export { buildClient, buildServer, cleanClient, cleanServer };
+export async function cleanServer(config) {
+    await removePromise(config.output.server);
+}

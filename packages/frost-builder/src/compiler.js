@@ -14,7 +14,11 @@ import PluginManager from './plugins/Manager';
 const Root = getRoot();
 const pkg = require(resolve(Root, 'package.json'));
 
-export default (target, env = 'development', config = {}) => {
+export default (target, env = 'development', config) => {
+  if (!config) {
+    throw new Error(`Frost Webpack Compiler needs a configuration object`);
+  }
+
   const {
     isClient,
     isServer,

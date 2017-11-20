@@ -38,3 +38,12 @@ test('Should work directly with compiler', async t => {
     t.is(results.errors.length, 0);
   });
 });
+
+test('Should throw error when not supplied with a config', async t => {
+  try {
+    const build = compiler('client', 'development');
+  } catch (err) {
+    console.log(err);
+    t.is(err.message, 'Frost Webpack Compiler needs a configuration object');
+  }
+});
