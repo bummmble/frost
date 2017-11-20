@@ -1,4 +1,4 @@
-export class Deferred {
+export default class Deferred {
   constructor() {
     this._settled = false;
     this._promise = new Promise((resolve, reject) => {

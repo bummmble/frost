@@ -8,7 +8,10 @@ const execute = require('./execute');
 
 function getExternals(bundle) {
   const pkg = require(`${bundle.path}/package.json`);
-  const externals = Object.keys(pkg.dependencies).concat(builtinModules);
+  let externals;
+  if (pkg.dependencies) {
+      externals = Object.keys(pkg.dependencies).concat(builtinModules);
+  }
   return externals;
 }
 

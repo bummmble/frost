@@ -1,6 +1,6 @@
 import { objectForEach } from './objectForEach';
 
-export function partitonObject(obj, cb, ctx) {
+export function partitionObject(obj, cb, ctx) {
   const first = {};
   const second = {};
   objectForEach(obj, (value, key) => {

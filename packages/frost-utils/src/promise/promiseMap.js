@@ -1,4 +1,4 @@
-import { Deferred } from './promiseDeferred';
+import Deferred from './promiseDeferred';
 
 class PromiseMap {
   constructor() {
@@ -26,3 +26,5 @@ function getDeferred(entries, key) {
   }
   return entries[key];
 }
+
+export default PromiseMap;

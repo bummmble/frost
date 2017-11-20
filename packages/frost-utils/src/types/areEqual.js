@@ -1,7 +1,7 @@
 const aPool = [];
 const bPool = [];
 
-function areEqual(a, b) {
+export default function areEqual(a, b) {
   const aStack = aPool.length ? aPool.pop() : [];
   const bStack = bPool.length ? bPool.pop() : [];
   const result = equal(a, b, aStack, bStack);

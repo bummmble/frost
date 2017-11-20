@@ -22,12 +22,6 @@ const bundles = [
   }, */
 
   {
-    name: 'frost-shared',
-    path: join(packageDir, 'frost-shared'),
-    builds: ['cjs', 'es']
-  },
-
-  {
     name: 'frost-utils',
     path: join(packageDir, 'frost-utils'),
     builds: ['cjs', 'es'],
