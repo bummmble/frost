@@ -1,3 +1,10 @@
+/**
+  * This is a revised and updated version of the web-app-manifest-loader
+  * Original source code can be found here:
+  * https://github.com/markdalgleish/web-app-manifest-loader
+  *
+ */
+
 import path from 'path';
 import steed from 'steed';
 
@@ -42,7 +49,7 @@ const resolveImages = (ctx, manifest, key, cb) => {
   });
 };
 
-export default source => {
+export default function manifestLoader(source) {
   const ctx = this;
   const cb = ctx.async();
   let manifest;

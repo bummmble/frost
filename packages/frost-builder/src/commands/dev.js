@@ -7,7 +7,7 @@ import { createExpressServer } from 'frost-express';
 import compiler from '../compiler';
 import { formatWebpack } from '../helpers/format';
 
-export const create = (config = {}) => {
+export function create(config) {
   const clientConfig = compiler('client', 'development', config);
   const serverConfig = compiler('server', 'development', config);
   const multiCompiler = webpack([clientConfig, serverConfig]);
@@ -31,7 +31,7 @@ export const create = (config = {}) => {
   };
 };
 
-export const connect = (server, multiCompiler) => {
+export function connect(server, multiCompiler) {
   let serverIsStarted = false;
   multiCompiler.plugin('invalid', () => {
     console.log('Frost dev server compiling');
@@ -61,7 +61,7 @@ export const connect = (server, multiCompiler) => {
   });
 };
 
-export const start = (config = {}) => {
+export function start(config) {
   const { middleware, multiCompiler } = create(config);
   const server = createExpressServer({
     afterSecurity: [],
