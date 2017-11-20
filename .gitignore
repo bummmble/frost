@@ -9,6 +9,7 @@ packages/*/.cache
 packages/*/bin
 packages/*/build
 packages/*/*.nyc_output
+packages/*/coverage
 
 packages/frost-packager
 packages/frost-builder/client
