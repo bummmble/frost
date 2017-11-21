@@ -64,10 +64,6 @@ export default {
     },
   },
   mode: 'ssr',
-  babel: {
-    presets: [],
-    plugins: [],
-  },
   prettier: {},
   eslint: {},
   performance: true,

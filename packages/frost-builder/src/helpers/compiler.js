@@ -1,6 +1,6 @@
 import { existsSync } from 'fs-extra';
 
-const configureCompiler = (target, env) => {
+export function configureCompiler(target, env) {
   const isClient = target === 'client';
   const isServer = target === 'server';
   const isDev = env === 'development';
@@ -18,7 +18,7 @@ const configureCompiler = (target, env) => {
   };
 };
 
-const buildEntryAndOutput = ({ entry, output, hmr }, isServer, isDev) => {
+export function buildEntryAndOutput({ entry, output, hmr }, isServer, isDev) {
   const mainEntry = isServer ? entry.server : entry.client;
   const vendorEntry = isServer ? entry.serverVendor : entry.clientVendor;
   const hasMain = existsSync(mainEntry);
@@ -40,5 +40,3 @@ const buildEntryAndOutput = ({ entry, output, hmr }, isServer, isDev) => {
     hasHmr,
   };
 };
-
-export { configureCompiler, buildEntryAndOutput };

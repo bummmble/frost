@@ -1,7 +1,7 @@
 import notifier from 'node-notifier';
 import { Logger } from 'frost-shared';
 
-export default options => {
+export default function notify(options) {
   const title = `${options.title}`;
   if (options.notify) {
     notifier.notify({

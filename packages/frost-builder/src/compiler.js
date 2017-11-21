@@ -149,7 +149,10 @@ export default (target, env = 'development', config) => {
             cacheLoader,
             {
               loader: 'babel-loader',
-              options: config.babel,
+              exclude: /node_modules/,
+              options: {
+                forceEnv: babelEnv
+              }
             },
           ].filter(Boolean),
         },
