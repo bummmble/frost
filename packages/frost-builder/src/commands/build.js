@@ -5,6 +5,7 @@ import { promisify } from 'frost-utils';
 
 import compiler from '../compiler';
 import formatOutput from '../helpers/format';
+import { measureBeforeBuild, printSizes } from '../helpers/filesize';
 
 const removePromise = promisify(remove);
 
@@ -18,7 +19,15 @@ function buildWebpack(target, env, config) {
 }
 
 export async function buildClient(config) {
-    return await buildWebpack('client', 'production', config);
+    const sizes = await measureBeforeBuild(config.output.client);
+    const { stats } = await buildWebpack('client', 'production', config);
+    printSizes(
+        stats,
+        sizes,
+        config.output.client,
+        512 * 1024,
+        1024 * 1024
+    );
 }
 
 export async function buildServer(config) {

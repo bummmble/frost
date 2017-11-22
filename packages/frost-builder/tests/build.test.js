@@ -6,12 +6,12 @@ const { buildServer, buildClient, start, connect, getConfig, create, compiler } 
 
 test('Should build client successfully', async t => {
   const config = await getConfig({ verbose: false });
-  await buildClient(config).then(result => t.is(result, true));
+  await buildClient(config).then(result => t.is(result.success, true));
 });
 
 test('Should build server successfully', async t => {
   const config = await getConfig({ verbose: false });
-  await buildServer(config).then(result => t.is(result, true));
+  await buildServer(config).then(result => t.is(result.success, true));
 });
 
 test('Should start a development server', async t => {

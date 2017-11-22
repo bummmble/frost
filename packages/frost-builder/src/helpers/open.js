@@ -1,7 +1,7 @@
 import { execSync } from 'child_process';
 import spawn from 'cross-spawn';
 import opn from 'opn';
-import Logger from '../logger';
+import { Logger } from '../logger';
 
 const PossibleActions = Object.freeze({
     None: 0,

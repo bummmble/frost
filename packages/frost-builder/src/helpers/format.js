@@ -64,5 +64,8 @@ export default function formatOutput(error, stats, target, resolve, reject) {
 
     const compileTime = getCompileTime(stats);
     console.log(Logger.info(`${target} compiled in: ${compileTime}ms`));
-    return resolve(true);
+    return resolve({
+        stats,
+        success: true
+    });
 }

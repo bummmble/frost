@@ -82,5 +82,7 @@ export function printSizes(stats, previousSizes, build, maxBundleSize, maxChunkS
             const rightPadding = ' '.repeat(longestLabel - sizeLength);
             sizeLabel += rightPadding
         }
+
+        console.log(`${sizeLabel} ${asset.folder} ${asset.name}`);
     })
 }
