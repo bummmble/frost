@@ -20,7 +20,7 @@ function buildWebpack(target, env, config) {
 
 export async function buildClient(config) {
     const sizes = await measureBeforeBuild(config.output.client);
-    const { stats } = await buildWebpack('client', 'production', config);
+    const { stats, success } = await buildWebpack('client', 'production', config);
     printSizes(
         stats,
         sizes,
@@ -28,10 +28,20 @@ export async function buildClient(config) {
         512 * 1024,
         1024 * 1024
     );
+    return success;
 }
 
 export async function buildServer(config) {
-    return await buildWebpack('server', 'production', config);
+    const sizes = await measureBeforeBuild(config.output.server);
+    const { stats, success } = await buildWebpack('server', 'production', config);
+    printSizes(
+        stats,
+        sizes,
+        config.output.server,
+        512 * 1024,
+        1024 * 1024
+    );
+    return success;
 }
 
 export async function cleanClient(config) {

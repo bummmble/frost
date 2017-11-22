@@ -1,21 +1,56 @@
 import { Logger } from '../logger';
 
+const exportError = /\s*(.+?)\s*(")?export '(.+?)' was not found in '(.+?)'/;
+
 function formatRaw(message, err) {
     let lines = message.split('\n');
 
     if (lines.lengh > 2 && lines[1] === '') {
-        lines.splice(1);
+        lines.splice(1, 1);
     }
+
+    // Removes Webpack-specific loader notation
     if (lines[0].lastIndexOf('!') !== -1) {
         lines[0] = lines[0].substr(lines[0].lastIndexOf('!') + 1);
     }
 
+    // cleans up entry point additions
     lines = lines.filter(line => lines.indexOf(' @ ') !== 0);
+
+    // lines[0] is the filename
+    // lines[1] is the main error message
     if (!lines[0] || !lines[1]) {
         return lines.join('\n');
     }
 
+    if (lines[1].indexOf('Module not found: ') === 0) {
+        lines = [
+            lines[0],
+            lines[1]
+                .replace("Cannot resolve 'file' or 'directory' ", '')
+                .replace('Cannot resolve module ', '')
+                .replace('Error: ', '')
+        ];
+    }
+
+    // Cleans export errors
+    if (lines[1].match(exportError)) {
+        lines[1] = lines[1].replace(
+            exportError,
+            "$1 '$4' does not contain an export named '$3'."
+        );
+    }
+
+
+
     message = lines.join('\n');
+
+    // strip internal stacks except for the ones containing 'webpack:'
+    message = message.replace(
+        /^\s*at\s((?!webpack:).)*:\d+:\d+[\s)]*(\n|$)/gm,
+        ''
+    );
+
     return message.trim();
 }
 
