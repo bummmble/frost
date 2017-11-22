@@ -5,6 +5,7 @@ import webpackHotMiddleware from 'webpack-hot-middleware';
 import webpackHotServerMiddleware from 'webpack-hot-server-middleware';
 import { createExpressServer } from 'frost-express';
 import compiler from '../compiler';
+import openBrowser from '../helpers/open';
 import { formatWebpack } from '../helpers/format';
 
 export function create(config) {
@@ -56,6 +57,7 @@ export function connect(server, multiCompiler) {
         console.log(
           `Frost dev server started at port ${process.env.SERVER_PORT || 8000}`
         );
+        openBrowser(`localhost:${process.env.SERVER_PORT}`);
       });
     }
   });
