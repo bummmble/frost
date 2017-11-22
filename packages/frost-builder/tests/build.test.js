@@ -9,7 +9,7 @@ test('Should build client successfully', async t => {
   await buildClient(config).then(result => t.is(result, true));
 });
 
-test('Should build client successfully', async t => {
+test('Should build server successfully', async t => {
   const config = await getConfig({ verbose: false });
   await buildServer(config).then(result => t.is(result, true));
 });

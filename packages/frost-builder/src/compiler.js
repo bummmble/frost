@@ -145,16 +145,14 @@ export default (target, env = 'development', config) => {
         },
         {
           test: config.files.babel,
-          use: [
-            cacheLoader,
+          exclude: /node_modules/,
+          use:
             {
               loader: 'babel-loader',
-              exclude: /node_modules/,
               options: {
                 forceEnv: babelEnv
               }
             },
-          ].filter(Boolean),
         },
         {
           test: config.files.styles,
