@@ -28,21 +28,16 @@ export { promisify } from './promise/promisify';
 export { each } from './promise/promiseEach';
 
 export { default as areEqual } from './types/areEqual';
-
-export {
-  isString,
-  isNumber,
-  isObject,
-  isFunction,
-  isUndefined,
-  isBoolean,
-  isNull,
-  isNullOrUndefined,
-  isStringOrNumber,
-  isArray,
-  isEmpty,
-  isIterable,
-  isNode,
-  isTextNode,
-} from './types';
-
+export { isArray } from './types/isArray';
+export { isBoolean } from './types/isBoolean';
+export { isEmpty } from './types/isEmpty';
+export { isFunction } from './types/isFunction';
+export { isIterable } from './types/isIterable';
+export { isNode } from './types/isNode';
+export { isNull } from './types/isNull';
+export { isNullOrUndefined } from './types/isNullOrUndefined';
+export { isNumber } from './types/isNumber';
+export { isObject } from './types/isObject';
+export { isString } from './types/isString';
+export { isTextNode } from './types/isTextNode';
+export { isUndefined } from './types/isUndefined';

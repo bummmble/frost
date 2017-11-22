@@ -1,9 +1,9 @@
 export function objectRemoveEmpty(obj) {
-  const result = {};
-  for (const name in obj) {
-    if (!(obj[name] === null || obj[name].length === 0)) {
-      result[name] = obj[name];
+    const copy = {};
+    for (const key in obj) {
+        if (!(obj[key] == null || obj[key].length === 0)) {
+            copy[key] = obj[key];
+        }
     }
-  }
-  return result;
+    return copy;
 }
