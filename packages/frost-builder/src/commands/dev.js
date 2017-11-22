@@ -4,6 +4,9 @@ import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import webpackHotServerMiddleware from 'webpack-hot-server-middleware';
 import { createExpressServer } from 'frost-express';
+import { readFileSync } from 'fs-extra';
+import https from 'https';
+import http from 'http';
 import compiler from '../compiler';
 import openBrowser from '../helpers/open';
 import { formatWebpack } from '../helpers/format';
@@ -26,9 +29,11 @@ export function create(config) {
     },
   });
 
+  const protocol = config.serverOptions.useHttps === true ? 'https' : 'http';
   return {
     middleware: [devMiddleware, hotMiddleware, hotServerMiddleware],
     multiCompiler,
+    protocol
   };
 };
 
@@ -64,12 +69,24 @@ export function connect(server, multiCompiler) {
 };
 
 export function start(config) {
-  const { middleware, multiCompiler } = create(config);
-  const server = createExpressServer({
+  const { middleware, multiCompiler, protocol } = create(config);
+  let server;
+  const baseServer = createExpressServer({
     afterSecurity: [],
     beforeFallback: [...middleware],
     enableNonce: false,
   });
+
+  if (protocol === 'https') {
+    const options = {
+      key: readFileSync(config.serverOptions.keyPath),
+      cert: readFileSync(config.serverOptions.certPath)
+    };
+
+    server = https.createServer(options, baseServer);
+  } else {
+    server = http.createServer(baseServer);
+  }
 
   connect(server, multiCompiler);
 

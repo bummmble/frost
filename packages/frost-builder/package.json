@@ -50,6 +50,8 @@
     "gzip-size": "^4.0.0",
     "hard-source-webpack-plugin": "^0.4.11",
     "html-webpack-plugin": "^2.30.1",
+    "http": "0.0.0",
+    "https": "^1.0.0",
     "jsome": "^2.3.26",
     "loader-utils": "^1.1.0",
     "lodash": "^4.17.4",

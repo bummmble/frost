@@ -64,6 +64,11 @@ export default {
     },
   },
   mode: 'ssr',
+  serverOptions: {
+    useHttps: true,
+    keyPath: './localhost.key',
+    certPay: './localhost.cert'
+  },
   prettier: {},
   eslint: {},
   performance: true,
