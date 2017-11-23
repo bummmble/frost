@@ -9,6 +9,7 @@ import https from 'https';
 import http from 'http';
 import compiler from '../compiler';
 import openBrowser from '../helpers/open';
+import getCerts from '../helpers/getCerts';
 import { formatWebpack } from '../helpers/format';
 
 export function create(config) {
@@ -78,11 +79,7 @@ export function start(config) {
   });
 
   if (protocol === 'https') {
-    const options = {
-      key: readFileSync(config.serverOptions.keyPath),
-      cert: readFileSync(config.serverOptions.certPath)
-    };
-
+    const options = { key, cert } = getCerts(config.serverOptions);
     server = https.createServer(options, baseServer);
   } else {
     server = http.createServer(baseServer);
