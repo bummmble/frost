@@ -15,6 +15,7 @@ import UglifyPlugin from 'uglifyjs-webpack-plugin';
 import SriPlugin from 'webpack-subresource-integrity';
 import HardSourcePlugin from 'hard-source-webpack-plugin';
 import AutoDllPlugin from 'autodll-webpack-plugin';
+import { Plugin as ShakePlugin } from 'webpack-common-shake';
 
 import MissingModules from './MissingModules';
 import ChunkHashPlugin from './ChunkHash';
@@ -39,6 +40,10 @@ const basePlugins = (env, webpackTarget, isDev, isProd, babelEnv, { verbose, cac
     // Not sure why this is not the default behavior.
     new MissingModules(),
 
+    // Since the majority of projects are still based on CommonJS Modules
+    // Tree shaking is incredibly important.
+    // See https://github.com/indutny/webpack-common-shake
+    new ShakePlugin(),
     // Enables our custom progress plugin for a better Developer Experience
     process.stdout.isTTY && verbose
       ? new Progress({
