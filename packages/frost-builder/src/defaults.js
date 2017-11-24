@@ -70,8 +70,6 @@ export default {
     keyPath: './localhost.key',
     certPay: './localhost.cert'
   },
-  prettier: {},
-  eslint: {},
   performance: true,
   pwa: {},
   verbose: false,
