@@ -52,6 +52,14 @@ export default (target, env = 'development', config) => {
       }
     : null;
 
+  const threadLoader = config.threadLoader ? {
+    loader: 'thread-loader',
+    options: {
+        poolTimeout: 10000,
+        name: 'frost-pool'
+    }
+  } : null;
+
   const cssLoaderOptions = {
     modules: true,
     localIdentName: '[local]-[hash:base62:8]',
@@ -146,19 +154,22 @@ export default (target, env = 'development', config) => {
         {
           test: config.files.babel,
           exclude: /node_modules/,
-          use:
+          use: [
+            threadLoader,
             {
-              loader: 'babel-loader',
-              options: {
-                forceEnv: babelEnv
-              }
-            },
+                loader: 'babel-loader',
+                options: {
+                    forceEnv: babelEnv
+                }
+            }
+          ].fillter(Boolean)
         },
         {
           test: config.files.styles,
           use: isClient
             ? ExtractCssChunks.extract({
                 use: [
+                  threadLoader,
                   cacheLoader,
                   {
                     loader: 'css-loader',
@@ -168,6 +179,7 @@ export default (target, env = 'development', config) => {
                 ].filter(Boolean),
               })
             : [
+                threadLoader,
                 cacheLoader,
                 {
                   loader: 'css-loader/locals',

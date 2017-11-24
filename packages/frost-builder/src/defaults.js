@@ -19,6 +19,7 @@ export default {
   },
 
   cacheLoader: 'cache-loader',
+  threadLoader: false,
   hmr: true,
   postcss: true,
   sourceMaps: false,
