@@ -65,7 +65,7 @@ export default {
   },
   mode: 'ssr',
   serverOptions: {
-    useHttps: true,
+    useHttps: false,
     keyPath: './localhost.key',
     certPay: './localhost.cert'
   },

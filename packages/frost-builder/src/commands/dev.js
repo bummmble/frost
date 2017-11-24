@@ -79,7 +79,7 @@ export function start(config) {
   });
 
   if (protocol === 'https') {
-    const options = { key, cert } = getCerts(config.serverOptions);
+    const options = { key, cert } = getCerts(config);
     server = https.createServer(options, baseServer);
   } else {
     server = http.createServer(baseServer);

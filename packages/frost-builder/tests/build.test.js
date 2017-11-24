@@ -49,7 +49,7 @@ test('Should throw error when not supplied with a config', async t => {
   }
 });
 
-test('Should throw error in static mode when not supplied with templates', async t => {
+ test('Should throw error in static mode when not supplied with templates', async t => {
   const config = await getConfig({});
   config.mode = 'static';
   config.templates = [];
@@ -70,3 +70,13 @@ test('Should generate templates in static mode', async t => {
   await buildClient(config);
   t.true(existsSync(`${config.output.client}/${config.templates[0].filename}`));
 })
+
+test('Should throw and error when using https without certs', async t => {
+  try {
+    const config = await getConfig({});
+    config.serverOptions.useHttps = true;
+    start(config);
+  } catch (err) {
+    t.is(err.message, 'No SSL certs found');
+  }
+});
