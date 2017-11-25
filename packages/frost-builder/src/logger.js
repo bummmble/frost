@@ -10,6 +10,7 @@ export const Logger = {
     warning: msg => warningColor(msg),
     error: msg => chalk.red(msg),
     underline: msg => chalk.underline(msg),
+    bold: msg => chalk.bold(msg),
     clearConsole: () => {
         process.stdout.write(
             process.platform === 'win32'

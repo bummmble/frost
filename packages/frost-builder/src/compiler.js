@@ -38,7 +38,7 @@ export default (target, env = 'development', config) => {
     hmrMiddleware,
   } = buildEntryAndOutput(config, isServer, isDev);
 
-  const prefix = chalk.bold(target.toUpperCase());
+  const prefix = Logger.bold(target.toUpperCase());
   const babelEnv = `frost-${env}-${target}`;
   const devtool = config.sourceMaps ? 'source-map' : false;
   const loaderCache = resolve(Root, cacheHash('loader', pkg, target, env));
