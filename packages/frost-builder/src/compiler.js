@@ -167,6 +167,11 @@ export default (target, env = 'development', config) => {
           options: {
             quiet: true,
           },
+          exclude: [
+            // These packages point to sources that do not exists
+            /intl-/,
+            /zen-observable-ts/
+          ]
         },
         {
           test: config.files.babel,
