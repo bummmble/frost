@@ -238,6 +238,11 @@ export default (target, env = 'development', config) => {
         },
 
         {
+            test: config.files.graphql,
+            loader: 'graphql-tag/loader'
+        },
+
+        {
             test: /manifest.json$/,
             use: [
                 {
