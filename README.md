@@ -10,6 +10,8 @@
 ### [Frost Builder](https://github.com/Bashkir15/frost/tree/master/packages/frost-builder)
 - Doesn't plan for or care what framework you are or are not using
 - Semi-Automatic Code-Splitting for CSS and JS
+- Allows for Tree-Shaking of CommonJS Modules
+- Parallelize expensive loaders
 - Supports CSS Modules for isolated component style
 - Supports bundling both Client and Server for isomorphic rendering
 - Hot Loading for both the Client and theServer
@@ -25,6 +27,7 @@
 - Security is a top priority utilizing [hpp](https://github.com/analog-nico/hpp) and [Helmet](https://github.com/helmetjs/helmet)
 - Easily extensible middleware system
 - Exported, extensible Mongoose configuration for MongoDB
+- Allows for Graceful shutdown of Server-Side Services
 
 ### [Frost React](https://github.com/Bashkir15/frost/tree/master/packages/frost-react-core)
 - A boilerplate for creating Universal React Apps using the Frost Builder
