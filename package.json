@@ -8,7 +8,7 @@
     "prettier-all": "node ./scripts/prettier/index.js write"
   },
   "lint-staged": {
-    "packages/**/*.js": [
+    "*.js": [
         "prettier --single-quote --write",
         "eslint --fix",
         "git add"
@@ -43,5 +43,5 @@
     "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-commonjs": "^8.2.6",
     "rollup-plugin-node-resolve": "^3.0.0"
-  },
+  }
 }
