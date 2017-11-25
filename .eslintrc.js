@@ -1,4 +1,10 @@
 
 module.exports = {
-    extends: ["frost"]
+    extends: ["frost"],
+    rules: {
+        'promise/params-names': 1,
+        'import/no-unresolved': 0,
+        'import/named': 0,
+        'import/namespace': 0
+    }
 }
