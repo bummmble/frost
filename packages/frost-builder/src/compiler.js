@@ -104,7 +104,7 @@ export default (target, env = 'development', config) => {
     config
   );
 
-  console.log(Logger.info(chalk.underline(`${prefix} Configuration`)));
+  console.log(Logger.info(Logger.underline(`${prefix} Configuration`)));
   console.log(`→ Environment: ${Logger.info(env)}`);
   console.log(`→ Webpack Target: ${Logger.info(webpackTarget)}`);
 
