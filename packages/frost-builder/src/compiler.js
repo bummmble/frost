@@ -89,6 +89,16 @@ export default (target, env = 'development', config) => {
     config
   );
 
+  let supportedLanguages;
+  if (config.locale.supported) {
+    supportedLanguages = (() => {
+        const languages = new Set();
+        for (const entry of config.locale.supported) {
+            languages.add(entry.split('-')[0]);
+        }
+        return Array.from(languages.keys());
+    })();
+  }
 
   console.log(Logger.info(chalk.underline(`${prefix} Configuration`)));
   console.log(`→ Environment: ${Logger.info(env)}`);
@@ -127,7 +137,13 @@ export default (target, env = 'development', config) => {
       libraryTarget: isServer ? 'commonjs2' : 'var',
       filename: isDev || isServer ? '[name].js' : '[name]-[chunkhash].js',
       chunkFilename: isDev || isServer ? '[name].js' : '[name]-[chunkhash].js',
+      publicPath: config.output.public,
       path: isServer ? serverOutput : clientOutput,
+      // Tells webpack to include comments in bundles with info about the
+      // contained modules. This can be very helpful during development
+      pathinfo: isDev,
+
+      // Enables cross-origin-loading without credentials, useful for CDNs
       crossOriginLoading: 'anonymous',
     },
 
