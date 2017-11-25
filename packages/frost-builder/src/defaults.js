@@ -16,6 +16,7 @@ export default {
     images: /\.(jpg|png|gif)$/,
     fonts: /\.(eot|svg|otf|ttf|woff|woff2)$/,
     video: /\.(mp4|webm)$/,
+    graphql: /\.(graphql|gql)$/
   },
 
   cacheLoader: 'cache-loader',
