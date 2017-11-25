@@ -86,8 +86,15 @@ export default (target, env = 'development', config) => {
     })();
   }
 
-  const LeanExpression = new RegExp(`\\b${config.locale.supported.join('\\b|\\b')}\\b`);
-  const ReactExpression = new RegExp(`\\b${supportedLanguages.join('\\b|\\b')}\\b`);
+  let LeanExpression;
+  if (config.locale.supported) {
+    LeanExpression = new RegExp(`\\b${config.locale.supported.join('\\b|\\b')}\\b`);
+  }
+
+  let ReactExpression;
+  if (supportedLanguages) {
+    ReactExpression = new RegExp(`\\b${supportedLanguages.join('\\b|\\b')}\\b`);
+  }
 
   const plugins = PluginManager(
     env,
@@ -183,7 +190,7 @@ export default (target, env = 'development', config) => {
                     forceEnv: babelEnv
                 }
             }
-          ].fillter(Boolean)
+          ].filter(Boolean)
         },
         {
           test: config.files.styles,
@@ -191,7 +198,7 @@ export default (target, env = 'development', config) => {
             ? ExtractCssChunks.extract({
                 use: [
                   threadLoader,
-                  cacheLoader,
+                  //cacheLoader,
                   {
                     loader: 'css-loader',
                     options: cssLoaderOptions,
@@ -201,7 +208,7 @@ export default (target, env = 'development', config) => {
               })
             : [
                 threadLoader,
-                cacheLoader,
+                //cacheLoader,
                 {
                   loader: 'css-loader/locals',
                   options: cssLoaderOptions,
