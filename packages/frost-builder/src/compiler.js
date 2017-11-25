@@ -76,19 +76,6 @@ export default (target, env = 'development', config) => {
       }
     : null;
 
-  const plugins = PluginManager(
-    env,
-    webpackTarget,
-    isDev,
-    isProd,
-    isServer,
-    hasVendor,
-    hasHmr,
-    babelEnv,
-    Root,
-    config
-  );
-
   let supportedLanguages;
   if (config.locale.supported) {
     supportedLanguages = (() => {
@@ -99,6 +86,24 @@ export default (target, env = 'development', config) => {
         return Array.from(languages.keys());
     })();
   }
+
+  const LeanExpression = new RegExp(`\\b${config.locale.supported.join('\\b|\\b')}\\b`);
+  const ReactExpression = new RegExp(`\\b${supportedLanguages.join('\\b|\\b')}\\b`);
+
+  const plugins = PluginManager(
+    env,
+    webpackTarget,
+    isDev,
+    isProd,
+    isServer,
+    hasVendor,
+    hasHmr,
+    babelEnv,
+    Root,
+    LeanExpression,
+    ReactExpression,
+    config
+  );
 
   console.log(Logger.info(chalk.underline(`${prefix} Configuration`)));
   console.log(`→ Environment: ${Logger.info(env)}`);

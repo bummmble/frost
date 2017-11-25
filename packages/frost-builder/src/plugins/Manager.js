@@ -22,8 +22,11 @@ import ChunkHashPlugin from './ChunkHash';
 import Progress from './Progress';
 import Templates from './Templates';
 
-const basePlugins = (env, webpackTarget, isDev, isProd, babelEnv, { verbose, cacheLoader }) => {
+const basePlugins = (env, webpackTarget, isDev, isProd, babelEnv, LeanExpression, ReactExpression, { verbose, cacheLoader }) => {
   return [
+    new webpack.ContextReplacementPlugin(/lean-intl\/locale-data/, LeanExpression),
+    new webpack.ContextReplacementPlugin(/react-intl\/locale-data/, ReactExpression),
+
     new webpack.DefinePlugin({
       // These need to be kept separate to allow for usage with
       // libraries like dotenv
@@ -194,9 +197,11 @@ export default (
   hasHmr,
   babelEnv,
   Root,
+  LeanExpression,
+  ReactExpression,
   config
 ) => {
-  const base = basePlugins(env, webpackTarget, isDev, isProd, babelEnv, config);
+  const base = basePlugins(env, webpackTarget, isDev, isProd, babelEnv, LeanExpression, ReactExpression, config);
   const plugins = isServer
     ? base.concat(...serverPlugins(isDev, isProd, config))
     : base.concat(...clientPlugins(isDev, isProd, hasVendor, hasHmr, Root, config));
