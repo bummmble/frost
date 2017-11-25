@@ -105,8 +105,14 @@ export default (target, env = 'development', config) => {
   console.log(`→ Webpack Target: ${Logger.info(webpackTarget)}`);
 
   if (config.verbose) {
+    console.log(`→ Babel Environment: ${Logger.info(babelEnv)}`);
     console.log(`→ Enable Source Maps: ${Logger.info(devtool)}`);
     console.log(`→ Use Cache Loader: ${Logger.info(config.sourceMaps)}`);
+    console.log(`→ Bundle Compression: ${Logger.info(config.compression.type)}`);
+    console.log(`→ Default Locale: ${Logger.info(config.locale.default)}`);
+    console.log(`→ Supported Locales ${Logger.info(config.locale.supported)}`);
+    console.log(`→ Supported Languages: ${Logger.info(supportedLanguages)}`);
+
   }
 
   return {
