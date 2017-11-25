@@ -1,9 +1,0 @@
-plugins:
-  - promise
-
-rules:
-  promise/params-names: error
-  promise/always-return: warn
-  promise/catch-or-return: warn
-  promise/prefer-await-to-then: off
-  promise/no-native: off
