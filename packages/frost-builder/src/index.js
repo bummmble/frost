@@ -8,4 +8,4 @@ export { create, connect, start } from './commands/dev';
 export { default as compiler } from './compiler';
 export { default as notify } from './notify';
 export { Logger } from './logger';
-export { getConfig } from './config';
+export { loadConfig, validateConfig, processEntry } from './core/config';

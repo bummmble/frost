@@ -2,33 +2,33 @@ const test = require('ava');
 const express = require('express');
 const { existsSync } = require('fs-extra');
 const webpack = require('webpack');
-const { buildServer, buildClient, start, connect, getConfig, create, compiler } = require('../dist/index.cjs');
+const { buildServer, buildClient, start, connect, loadConfig, create, compiler } = require('../dist/index.cjs');
 
 test('Should build client successfully', async t => {
-  const config = await getConfig({ verbose: false });
+  const { config } = await loadConfig('frost', { verbose: false });
   await buildClient(config).then(result => t.is(result, true));
 });
 
 test('Should build server successfully', async t => {
-  const config = await getConfig({ verbose: false });
+  const { config } = await loadConfig('frost', { verbose: false });
   await buildServer(config).then(result => t.is(result, true));
 });
 
 test('Should start a development server', async t => {
-  const config = await getConfig({ verbose: false });
+  const { config } = await loadConfig('frost', { verbose: false });
   const started = start(config);
   t.is(started, true);
 });
 
 test('should create a multi compiler and middleware', async t => {
-  const config = await getConfig({ verbose: false });
+  const { config } = await loadConfig('frost', { verbose: false });
   const { middleware, multiCompiler } = await create(config);
   t.is(middleware.length, 3);
   t.is(multiCompiler.compilers.length, 2);
 });
 
 test('Should work directly with compiler', async t => {
-  const config = await getConfig({ verbose: false });
+  const { config } = await loadConfig('frost', { verbose: false });
   const build = compiler('client', 'development', config);
   return new Promise(resolve => {
     webpack(build, (err, stats) => {
@@ -50,7 +50,7 @@ test('Should throw error when not supplied with a config', async t => {
 });
 
  test('Should throw error in static mode when not supplied with templates', async t => {
-  const config = await getConfig({});
+  const { config } = await loadConfig('frost');
   config.mode = 'static';
   config.templates = [];
   try {
@@ -64,7 +64,7 @@ test('Should throw error when not supplied with a config', async t => {
 })
 
 test('Should generate templates in static mode', async t => {
-  const config = await getConfig({});
+  const { config } = await loadConfig('frost');
   config.mode = 'static';
   config.templates = [{ filename: 'index.html', template: 'client/index.html' }];
   await buildClient(config);
@@ -73,7 +73,7 @@ test('Should generate templates in static mode', async t => {
 
 test('Should throw and error when using https without certs', async t => {
   try {
-    const config = await getConfig({});
+    const { config } = await loadConfig('frost');
     config.serverOptions.useHttps = true;
     start(config);
   } catch (err) {

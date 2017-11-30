@@ -22,10 +22,8 @@ import ChunkHashPlugin from './ChunkHash';
 import Progress from './Progress';
 import Templates from './Templates';
 
-const basePlugins = (env, webpackTarget, isDev, isProd, babelEnv, LeanExpression, ReactExpression, { verbose, cacheLoader }) => {
+const basePlugins = (env, webpackTarget, isDev, isProd, babelEnv, { verbose, cacheLoader }) => {
   return [
-    new webpack.ContextReplacementPlugin(/lean-intl\/locale-data/, LeanExpression),
-    new webpack.ContextReplacementPlugin(/react-intl\/locale-data/, ReactExpression),
 
     new webpack.DefinePlugin({
       // These need to be kept separate to allow for usage with
@@ -116,7 +114,7 @@ const clientPlugins = (
     // AutoDLL plugin to help optimize code that changes less frequently
     // in builds by extracting them to a separate bundle in advance
     // See: http://github.com/asfktz/autodll-webpack-plugin
-    autoDll.use ? new AutoDllPlugin({
+    autoDll ? new AutoDllPlugin({
         context: Root,
         filename: isDev ? '[name].js' : '[name].[chunkhash].js',
         entry: autoDll.entries
@@ -146,11 +144,11 @@ const clientPlugins = (
         })
       : null,
 
-    isProd && compression.type === 'babili'
+    isProd && compression.kind === 'babili'
       ? new BabiliMinifyPlugin(compression.babiliClientOptions)
       : null,
 
-    isProd && compression.type === 'uglify'
+    isProd && compression.kind === 'uglify'
       ? new UglifyPlugin({
           sourcemap: sourceMaps,
           parallel: true,
@@ -197,11 +195,9 @@ export default (
   hasHmr,
   babelEnv,
   Root,
-  LeanExpression,
-  ReactExpression,
   config
 ) => {
-  const base = basePlugins(env, webpackTarget, isDev, isProd, babelEnv, LeanExpression, ReactExpression, config);
+  const base = basePlugins(env, webpackTarget, isDev, isProd, babelEnv, config);
   const plugins = isServer
     ? base.concat(...serverPlugins(isDev, isProd, config))
     : base.concat(...clientPlugins(isDev, isProd, hasVendor, hasHmr, Root, config));

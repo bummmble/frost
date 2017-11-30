@@ -75,26 +75,6 @@ export default (target, env = 'development', config) => {
       }
     : null;
 
-  let supportedLanguages;
-  if (config.locale.supported) {
-    supportedLanguages = (() => {
-        const languages = new Set();
-        for (const entry of config.locale.supported) {
-            languages.add(entry.split('-')[0]);
-        }
-        return Array.from(languages.keys());
-    })();
-  }
-
-  let LeanExpression;
-  if (config.locale.supported) {
-    LeanExpression = new RegExp(`\\b${config.locale.supported.join('\\b|\\b')}\\b`);
-  }
-
-  let ReactExpression;
-  if (supportedLanguages) {
-    ReactExpression = new RegExp(`\\b${supportedLanguages.join('\\b|\\b')}\\b`);
-  }
 
   const plugins = PluginManager(
     env,
@@ -106,8 +86,6 @@ export default (target, env = 'development', config) => {
     hasHmr,
     babelEnv,
     Root,
-    LeanExpression,
-    ReactExpression,
     config
   );
 
@@ -120,9 +98,6 @@ export default (target, env = 'development', config) => {
     console.log(`→ Enable Source Maps: ${Logger.info(devtool)}`);
     console.log(`→ Use Cache Loader: ${Logger.info(config.sourceMaps)}`);
     console.log(`→ Bundle Compression: ${Logger.info(config.compression.type)}`);
-    console.log(`→ Default Locale: ${Logger.info(config.locale.default)}`);
-    console.log(`→ Supported Locales ${Logger.info(config.locale.supported)}`);
-    console.log(`→ Supported Languages: ${Logger.info(supportedLanguages)}`);
 
   }
 
@@ -197,8 +172,7 @@ export default (target, env = 'development', config) => {
           use: isClient
             ? ExtractCssChunks.extract({
                 use: [
-                  threadLoader,
-                  //cacheLoader,
+                  cacheLoader,
                   {
                     loader: 'css-loader',
                     options: cssLoaderOptions,
