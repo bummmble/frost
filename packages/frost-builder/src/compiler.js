@@ -1,21 +1,21 @@
-import webpack from 'webpack';
-import { resolve, join } from 'path';
-import { get as getRoot } from 'app-root-dir';
-import { Logger } from './logger';
-import { objectRemoveEmpty } from 'frost-utils';
-import ExtractCssChunks from 'extract-css-chunks-webpack-plugin';
+import webpack from 'webpack'
+import { resolve, join } from 'path'
+import { get as getRoot } from 'app-root-dir'
+import { Logger } from './logger'
+import { objectRemoveEmpty } from 'frost-utils'
+import ExtractCssChunks from 'extract-css-chunks-webpack-plugin'
 
-import { configureCompiler, buildEntryAndOutput } from './helpers/compiler';
-import { getExternals } from './helpers/externals';
-import cacheHash from './helpers/hash';
-import PluginManager from './plugins/Manager';
+import { configureCompiler, buildEntryAndOutput } from './helpers/compiler'
+import { getExternals } from './helpers/externals'
+import cacheHash from './helpers/hash'
+import PluginManager from './plugins/Manager'
 
-const Root = getRoot();
-const pkg = require(resolve(Root, 'package.json'));
+const Root = getRoot()
+const pkg = require(resolve(Root, 'package.json'))
 
 export default (target, env = 'development', config) => {
   if (!config) {
-    throw new Error(`Frost Webpack Compiler needs a configuration object`);
+    throw new Error(`Frost Webpack Compiler needs a configuration object`)
   }
 
   const {
@@ -25,7 +25,7 @@ export default (target, env = 'development', config) => {
     isProd,
     name,
     webpackTarget,
-  } = configureCompiler(target, env);
+  } = configureCompiler(target, env)
 
   const {
     mainEntry,
@@ -36,44 +36,44 @@ export default (target, env = 'development', config) => {
     clientOutput,
     hasHmr,
     hmrMiddleware,
-  } = buildEntryAndOutput(config, isServer, isDev);
+  } = buildEntryAndOutput(config, isServer, isDev)
 
-  const prefix = Logger.bold(target.toUpperCase());
-  const babelEnv = `frost-${env}-${target}`;
-  const devtool = config.sourceMaps ? 'source-map' : false;
-  const loaderCache = resolve(Root, cacheHash('loader', pkg, target, env));
+  const prefix = Logger.bold(target.toUpperCase())
+  const babelEnv = `frost-${env}-${target}`
+  const devtool = config.sourceMaps ? 'source-map' : false
+  const loaderCache = resolve(Root, cacheHash('loader', pkg, target, env))
   const cacheLoader = config.cacheLoader === 'cache-loader'
     ? {
-        loader: 'cache-loader',
-        options: {
-          cacheDirectory: loaderCache,
-        },
-      }
-    : null;
+      loader: 'cache-loader',
+      options: {
+        cacheDirectory: loaderCache,
+      },
+    }
+    : null
 
   const threadLoader = config.threadLoader ? {
     loader: 'thread-loader',
     options: {
-        poolTimeout: 10000,
-        name: 'frost-pool'
+      poolTimeout: 10000,
+      name: 'frost-pool'
     }
-  } : null;
+  } : null
 
   const cssLoaderOptions = {
     modules: true,
     localIdentName: '[local]-[hash:base62:8]',
     minimize: false,
     sourceMap: config.sourceMaps,
-  };
+  }
 
   const postcssLoaderOptions = config.postcss
     ? {
-        loader: 'postcss-loader',
-        query: {
-          sourceMap: config.sourceMaps,
-        },
-      }
-    : null;
+      loader: 'postcss-loader',
+      query: {
+        sourceMap: config.sourceMaps,
+      },
+    }
+    : null
 
 
   const plugins = PluginManager(
@@ -87,17 +87,17 @@ export default (target, env = 'development', config) => {
     babelEnv,
     Root,
     config
-  );
+  )
 
-  console.log(Logger.info(Logger.underline(`${prefix} Configuration`)));
-  console.log(`→ Environment: ${Logger.info(env)}`);
-  console.log(`→ Webpack Target: ${Logger.info(webpackTarget)}`);
+  console.log(Logger.info(Logger.underline(`${prefix} Configuration`)))
+  console.log(`→ Environment: ${Logger.info(env)}`)
+  console.log(`→ Webpack Target: ${Logger.info(webpackTarget)}`)
 
   if (config.verbose) {
-    console.log(`→ Babel Environment: ${Logger.info(babelEnv)}`);
-    console.log(`→ Enable Source Maps: ${Logger.info(devtool)}`);
-    console.log(`→ Use Cache Loader: ${Logger.info(config.sourceMaps)}`);
-    console.log(`→ Bundle Compression: ${Logger.info(config.compression.type)}`);
+    console.log(`→ Babel Environment: ${Logger.info(babelEnv)}`)
+    console.log(`→ Enable Source Maps: ${Logger.info(devtool)}`)
+    console.log(`→ Use Cache Loader: ${Logger.info(config.sourceMaps)}`)
+    console.log(`→ Bundle Compression: ${Logger.info(config.compression.type)}`)
 
   }
 
@@ -108,17 +108,17 @@ export default (target, env = 'development', config) => {
     context: Root,
     performance: config.performance
       ? {
-          maxEntrypointSize: 1000000,
-          maxAssetSize: isClient ? 300000 : Infinity,
-          hints: isDev || isServer ? false : 'warning',
-        }
+        maxEntrypointSize: 1000000,
+        maxAssetSize: isClient ? 300000 : Infinity,
+        hints: isDev || isServer ? false : 'warning',
+      }
       : {},
     externals: isServer ? getExternals(false, [vendorEntry, mainEntry]) : undefined,
     entry: objectRemoveEmpty({
       vendor: hasVendor
         ? [hasVendor && hasHmr ? hmrMiddleware : null, vendorEntry].filter(
-            Boolean
-          )
+          Boolean
+        )
         : null,
       main: hasMain
         ? [hasMain && hasHmr ? hmrMiddleware : null, mainEntry].filter(Boolean)
@@ -160,10 +160,10 @@ export default (target, env = 'development', config) => {
           use: [
             threadLoader,
             {
-                loader: 'babel-loader',
-                options: {
-                    forceEnv: babelEnv
-                }
+              loader: 'babel-loader',
+              options: {
+                forceEnv: babelEnv
+              }
             }
           ].filter(Boolean)
         },
@@ -171,24 +171,24 @@ export default (target, env = 'development', config) => {
           test: config.files.styles,
           use: isClient
             ? ExtractCssChunks.extract({
-                use: [
-                  cacheLoader,
-                  {
-                    loader: 'css-loader',
-                    options: cssLoaderOptions,
-                  },
-                  postcssLoaderOptions,
-                ].filter(Boolean),
-              })
-            : [
-                threadLoader,
-                //cacheLoader,
+              use: [
+                cacheLoader,
                 {
-                  loader: 'css-loader/locals',
+                  loader: 'css-loader',
                   options: cssLoaderOptions,
                 },
                 postcssLoaderOptions,
               ].filter(Boolean),
+            })
+            : [
+              threadLoader,
+              //cacheLoader,
+              {
+                loader: 'css-loader/locals',
+                options: cssLoaderOptions,
+              },
+              postcssLoaderOptions,
+            ].filter(Boolean),
         },
         {
           test: config.files.fonts,
@@ -219,31 +219,31 @@ export default (target, env = 'development', config) => {
         },
 
         {
-            test: config.files.graphql,
-            loader: 'graphql-tag/loader'
+          test: config.files.graphql,
+          loader: 'graphql-tag/loader'
         },
 
         {
-            test: /manifest.json$/,
-            use: [
-                {
-                    loader: 'file-loader'
-                },
+          test: /manifest.json$/,
+          use: [
+            {
+              loader: 'file-loader'
+            },
 
-                {
-                    loader: 'manifest-loader'
-                }
-            ]
+            {
+              loader: 'manifest-loader'
+            }
+          ]
         }
       ],
     },
 
     resolveLoader: {
-        alias: {
-            'manifest-loader': join(__dirname, './loaders/manifest')
-        }
+      alias: {
+        'manifest-loader': join(__dirname, './loaders/manifest')
+      }
     },
 
     plugins: [...plugins],
-  };
-};
+  }
+}

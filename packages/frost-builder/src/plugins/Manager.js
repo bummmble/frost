@@ -4,23 +4,23 @@
   *
  */
 
-import webpack from 'webpack';
-import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
-import StatsPlugin from 'stats-webpack-plugin';
-import ExtractCssChunks from 'extract-css-chunks-webpack-plugin';
-import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
-import ServiceWorkerPlugin from 'serviceworker-webpack-plugin';
-import BabiliMinifyPlugin from 'babel-minify-webpack-plugin';
-import UglifyPlugin from 'uglifyjs-webpack-plugin';
-import SriPlugin from 'webpack-subresource-integrity';
-import HardSourcePlugin from 'hard-source-webpack-plugin';
-import AutoDllPlugin from 'autodll-webpack-plugin';
-import { Plugin as ShakePlugin } from 'webpack-common-shake';
+import webpack from 'webpack'
+import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin'
+import StatsPlugin from 'stats-webpack-plugin'
+import ExtractCssChunks from 'extract-css-chunks-webpack-plugin'
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
+import ServiceWorkerPlugin from 'serviceworker-webpack-plugin'
+import BabiliMinifyPlugin from 'babel-minify-webpack-plugin'
+import UglifyPlugin from 'uglifyjs-webpack-plugin'
+import SriPlugin from 'webpack-subresource-integrity'
+import HardSourcePlugin from 'hard-source-webpack-plugin'
+import AutoDllPlugin from 'autodll-webpack-plugin'
+import { Plugin as ShakePlugin } from 'webpack-common-shake'
 
-import MissingModules from './MissingModules';
-import ChunkHashPlugin from './ChunkHash';
-import Progress from './Progress';
-import Templates from './Templates';
+import MissingModules from './MissingModules'
+import ChunkHashPlugin from './ChunkHash'
+import Progress from './Progress'
+import Templates from './Templates'
 
 const basePlugins = (env, webpackTarget, isDev, isProd, babelEnv, { verbose, cacheLoader }) => {
   return [
@@ -48,8 +48,8 @@ const basePlugins = (env, webpackTarget, isDev, isProd, babelEnv, { verbose, cac
     // Enables our custom progress plugin for a better Developer Experience
     process.stdout.isTTY && verbose
       ? new Progress({
-          prefix: 'frost',
-        })
+        prefix: 'frost',
+      })
       : null,
 
 
@@ -77,8 +77,8 @@ const basePlugins = (env, webpackTarget, isDev, isProd, babelEnv, { verbose, cac
 
 
     isProd ? new webpack.optimize.ModuleConcatenationPlugin() : null,
-  ].filter(Boolean);
-};
+  ].filter(Boolean)
+}
 
 const clientPlugins = (
   isDev,
@@ -88,7 +88,7 @@ const clientPlugins = (
   Root,
   { compression, pwa, sourceMaps, mode, templates, autoDll }
 ) => {
-  const temps = isProd && mode === 'static' ? Templates(templates) : null;
+  const temps = isProd && mode === 'static' ? Templates(templates) : null
 
   return [
     new webpack.optimize.CommonsChunkPlugin({
@@ -99,11 +99,11 @@ const clientPlugins = (
 
     hasVendor
       ? new webpack.optimize.CommonsChunkPlugin({
-          name: 'vendor',
-          children: true,
-          minChunks: 2,
-          async: true,
-        })
+        name: 'vendor',
+        children: true,
+        minChunks: 2,
+        async: true,
+      })
       : null,
     new ExtractCssChunks({
       filename: isDev ? '[name].css' : '[name]-[contenthash:base62:8].css',
@@ -115,9 +115,9 @@ const clientPlugins = (
     // in builds by extracting them to a separate bundle in advance
     // See: http://github.com/asfktz/autodll-webpack-plugin
     autoDll ? new AutoDllPlugin({
-        context: Root,
-        filename: isDev ? '[name].js' : '[name].[chunkhash].js',
-        entry: autoDll.entries
+      context: Root,
+      filename: isDev ? '[name].js' : '[name].[chunkhash].js',
+      entry: autoDll.entries
     }) : null,
 
 
@@ -126,12 +126,12 @@ const clientPlugins = (
     isProd ? new StatsPlugin('stats.json') : null,
     isProd
       ? new BundleAnalyzerPlugin({
-          analyzerMode: 'static',
-          defaultSizes: 'gzip',
-          logLevel: 'silent',
-          openAnalyzer: false,
-          reportFilename: 'report.html',
-        })
+        analyzerMode: 'static',
+        defaultSizes: 'gzip',
+        logLevel: 'silent',
+        openAnalyzer: false,
+        reportFilename: 'report.html',
+      })
       : null,
 
     // Subresource Integrity is a security feature that allows browsers to verify
@@ -139,51 +139,51 @@ const clientPlugins = (
     // https://www.npmjs.com/package/webpack-subresource-integrity
     isProd
       ? new SriPlugin({
-          hashFuncNames: ['sha256', 'sha512'],
-          enabled: true,
-        })
+        hashFuncNames: ['sha256', 'sha512'],
+        enabled: true,
+      })
       : null,
 
-    isProd && compression.kind === 'babili'
+    isProd && compression && compression.kind === 'babili'
       ? new BabiliMinifyPlugin(compression.babiliClientOptions)
       : null,
 
-    isProd && compression.kind === 'uglify'
+    isProd && compression && compression.kind === 'uglify'
       ? new UglifyPlugin({
-          sourcemap: sourceMaps,
-          parallel: true,
-          cache: true,
-          uglifyOptions: compression.uglifyOptions,
-        })
+        sourcemap: sourceMaps,
+        parallel: true,
+        cache: true,
+        uglifyOptions: compression.uglifyOptions,
+      })
       : null,
 
-    pwa.hasServiceWorker
+    pwa && pwa.hasServiceWorker
       ? new ServiceWorkerPlugin({
-          entry: pwa.serviceWorkerEntry,
-          exclude: ['*hot-update', '**/*.map', '**/stats.json'],
-        })
+        entry: pwa.serviceWorkerEntry,
+        exclude: ['*hot-update', '**/*.map', '**/stats.json'],
+      })
       : null,
 
   ]
-  .concat(temps)
-  .filter(Boolean)
-};
+    .concat(temps)
+    .filter(Boolean)
+}
 
 const serverPlugins = (isDev, isProd, { compression }) => {
   return [
     new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
     isProd
       ? new BundleAnalyzerPlugin({
-          analyzerMode: 'static',
-          defaultSizes: 'parsed',
-          logLevel: 'silent',
-          openAnalyzer: false,
-          reportFilename: 'report.html',
-        })
+        analyzerMode: 'static',
+        defaultSizes: 'parsed',
+        logLevel: 'silent',
+        openAnalyzer: false,
+        reportFilename: 'report.html',
+      })
       : null,
     isProd ? new BabiliMinifyPlugin(compression.babiliServerOptions) : null,
-  ].filter(Boolean);
-};
+  ].filter(Boolean)
+}
 
 export default (
   env,
@@ -197,9 +197,9 @@ export default (
   Root,
   config
 ) => {
-  const base = basePlugins(env, webpackTarget, isDev, isProd, babelEnv, config);
+  const base = basePlugins(env, webpackTarget, isDev, isProd, babelEnv, config)
   const plugins = isServer
     ? base.concat(...serverPlugins(isDev, isProd, config))
-    : base.concat(...clientPlugins(isDev, isProd, hasVendor, hasHmr, Root, config));
-  return plugins;
-};
+    : base.concat(...clientPlugins(isDev, isProd, hasVendor, hasHmr, Root, config))
+  return plugins
+}

@@ -1,153 +1,158 @@
 export default {
-    mode: {
-        type: 'string',
-        defaults: 'universal'
+  mode: {
+    type: 'string',
+    defaults: 'universal'
+  },
+
+  entry: {
+    client: {
+      type: 'path',
+      defaults: 'client/index.js'
     },
 
-    entry: {
-        client: {
-            type: 'path',
-            defaults: 'client/index.js'
-        },
-
-        server: {
-            type: 'path',
-            defaults: 'server/index.js'
-        },
-
-        vendor: {
-            type: 'array',
-            defaults: []
-        }
+    server: {
+      type: 'path',
+      defaults: 'server/index.js'
     },
 
-    output: {
-        client: {
-            type: 'path',
-            defaults: 'build/client'
-        },
+    vendor: {
+      type: 'array',
+      defaults: []
+    }
+  },
 
-        server: {
-            type: 'path',
-            defaults: 'build/server'
-        },
-
-        public: {
-            type: 'url',
-            defaults: '/static/'
-        }
+  output: {
+    client: {
+      type: 'path',
+      defaults: 'build/client'
     },
 
-    files: {
-        babel: {
-            type: 'regex',
-            defaults: /\.(js|mjs|jsx)$/,
-        },
-
-        styles: {
-            type: 'regex',
-            defaults: /\.(css|sss|pcss)$/,
-        },
-
-        images: {
-            type: 'regex',
-            defaults: /\.(jpg|png|gif|webp)$/
-        },
-
-        fonts: {
-            type: 'regex',
-            defaults: /\.(eot|svg|otf|ttf|woff|woff2)$/
-        },
-
-        video: {
-            type: 'regex',
-            defaults: /\.(mp4|webm)$/
-        },
-
-        graphql: {
-            type: 'regex',
-            defaults: /\.(graphql|gql)$/
-        }
+    server: {
+      type: 'path',
+      defaults: 'build/server'
     },
 
-    hmr: {
-        type: 'boolean',
-        default: true
+    public: {
+      type: 'url',
+      defaults: '/static/'
+    }
+  },
+
+  files: {
+    babel: {
+      type: 'regex',
+      defaults: /\.(js|mjs|jsx)$/,
     },
 
-    postcss: {
-        type: 'boolean',
-        default: false
-    },
-
-    sourceMaps: {
-        type: 'boolean',
-        default: false
-    },
-
-    compression: {
-        kind: {
-            type: 'string',
-            defaults: 'babili'
-        },
-
-        babiliClientOptions: {
-            type: 'object',
-            defaults: {}
-        },
-
-        babiliServerOptions: {
-            type: 'object',
-            defaults: {}
-        },
-
-        uglifyOptions: {
-            type: 'object',
-            defaults: {}
-        }
+    styles: {
+      type: 'regex',
+      defaults: /\.(css|sss|pcss)$/,
     },
 
     images: {
-        type: 'object',
-        defaults: {}
+      type: 'regex',
+      defaults: /\.(jpg|png|gif|webp)$/
     },
 
-    serverOptions: {
-        useHttps: {
-            type: 'boolean',
-            defaults: false
-        },
-
-        keyPath: {
-            type: 'path',
-            defaults: 'localhost.key'
-        },
-
-        certPath: {
-            type: 'path',
-            defaults: 'localhost.cert'
-        }
+    fonts: {
+      type: 'regex',
+      defaults: /\.(eot|svg|otf|ttf|woff|woff2)$/
     },
 
-    performance: {
-        type: 'boolean',
-        defaults: false
+    video: {
+      type: 'regex',
+      defaults: /\.(mp4|webm)$/
     },
 
-    pwa: {
-        type: 'object',
-        defaults: {}
-    },
-
-    autoDll: {
-        use: {
-            type: 'boolean',
-            defaults: false
-        },
-
-        entries: {
-            type: 'object',
-            defaults: {}
-        }
+    graphql: {
+      type: 'regex',
+      defaults: /\.(graphql|gql)$/
     }
+  },
+
+  hmr: {
+    type: 'boolean',
+    default: true
+  },
+
+  postcss: {
+    type: 'boolean',
+    default: false
+  },
+
+  sourceMaps: {
+    type: 'boolean',
+    default: false
+  },
+
+  compression: {
+    kind: {
+      type: 'string',
+      defaults: 'babili'
+    },
+
+    babiliClientOptions: {
+      type: 'object',
+      defaults: {}
+    },
+
+    babiliServerOptions: {
+      type: 'object',
+      defaults: {}
+    },
+
+    uglifyOptions: {
+      type: 'object',
+      defaults: {}
+    }
+  },
+
+  images: {
+    type: 'object',
+    defaults: {}
+  },
+
+  serverOptions: {
+    useHttps: {
+      type: 'boolean',
+      defaults: false
+    },
+
+    keyPath: {
+      type: 'path',
+      defaults: 'localhost.key'
+    },
+
+    certPath: {
+      type: 'path',
+      defaults: 'localhost.cert'
+    }
+  },
+
+  performance: {
+    type: 'boolean',
+    defaults: false
+  },
+
+  pwa: {
+    type: 'object',
+    defaults: {}
+  },
+
+  autoDll: {
+    use: {
+      type: 'boolean',
+      defaults: false
+    },
+
+    entries: {
+      type: 'object',
+      defaults: {}
+    }
+  },
+
+  verbose: {
+    type: 'boolean',
+    default: false
+  }
 }

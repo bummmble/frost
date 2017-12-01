@@ -3,9 +3,9 @@ export {
   buildServer,
   cleanServer,
   cleanClient,
-} from './commands/build';
-export { create, connect, start } from './commands/dev';
-export { default as compiler } from './compiler';
-export { default as notify } from './notify';
-export { Logger } from './logger';
-export { loadConfig, validateConfig, processEntry } from './core/config';
+} from './commands/build'
+export { create, connect, start } from './commands/dev'
+export { default as compiler } from './compiler'
+export { default as notify } from './notify'
+export { Logger } from './logger'
+export { loadConfig, validateConfig, processEntry } from './core/config'

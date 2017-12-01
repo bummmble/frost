@@ -46,10 +46,12 @@ function formatRaw(message, err) {
     message = lines.join('\n');
 
     // strip internal stacks except for the ones containing 'webpack:'
-    message = message.replace(
-        /^\s*at\s((?!webpack:).)*:\d+:\d+[\s)]*(\n|$)/gm,
-        ''
-    );
+    message = message
+        .replace(
+            /^\s*at\s((?!webpack:).)*:\d+:\d+[\s)]*(\n|$)/gm,
+            ''
+        )
+        .replace('./~/css-loader!./~/postcss-loader!', '')
 
     return message.trim();
 }
