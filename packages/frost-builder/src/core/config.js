@@ -29,6 +29,8 @@ export function validateConfig(config, schema) {
   }, {})
 }
 
+/* eslint-disable no-unused-vars */
+
 export function processEntry(key, value, { type }) {
   const props = { key, value, type }
   let parsed
@@ -74,6 +76,7 @@ export function processEntry(key, value, { type }) {
   }
 }
 
+/* eslint-enable no-unused-vars */
 function setFlags(flags, config) {
   for (const key in flags) {
     config[key] = flags[key]

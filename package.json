@@ -9,9 +9,9 @@
   },
   "lint-staged": {
     "*.js": [
-        "prettier --single-quote --write",
-        "eslint --fix",
-        "git add"
+      "prettier --single-quote --write",
+      "eslint --fix",
+      "git add"
     ]
   },
   "devDependencies": {
@@ -43,5 +43,8 @@
     "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-commonjs": "^8.2.6",
     "rollup-plugin-node-resolve": "^3.0.0"
+  },
+  "dependencies": {
+    "babel-loader": "^7.1.2"
   }
 }
