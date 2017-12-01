@@ -94,5 +94,7 @@ export async function loadConfig(prefix = 'frost', flags = {}) {
   const result = await loader.load(Root)
   const root = relative(Root, result.filepath)
   const config = validateConfig(setFlags(flags, result.config), Schema)
+  config.root = Root;
+
   return { config, root }
 }

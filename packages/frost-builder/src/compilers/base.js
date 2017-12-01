@@ -3,6 +3,7 @@ import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin'
 import BundleAnalyzerPlugin from 'webpack-bundle-analyzer'
 
 import ChunkHash from './plugins/ChunkHash';
+import MissingModules from './plugins/MissingModules';
 
 export default function BaseCompiler(props, config) {
   const { isDev, isProd, isClient, isServer, webpackTarget } = props
@@ -75,6 +76,7 @@ export default function BaseCompiler(props, config) {
       // Improves OS Compat
       // See: https://github.com/Urthen/case-sensitive-paths-webpack-plugin
       new CaseSensitivePathsPlugin(),
+      new MissingModules(`${config.root}/node_modules`),
 
       isDev ? new webpack.NamedModulesPlugin() : null,
       isDev ? new webpack.NoEmitOnErorsPlugin() : null,
