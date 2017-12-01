@@ -2,6 +2,8 @@ import webpack from 'webpack'
 import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin'
 import BundleAnalyzerPlugin from 'webpack-bundle-analyzer'
 
+import ChunkHash from './plugins/ChunkHash';
+
 export default function BaseCompiler(props, config) {
   const { isDev, isProd, isClient, isServer, webpackTarget } = props
 
@@ -83,6 +85,13 @@ export default function BaseCompiler(props, config) {
 
       // Hoists statics
       isProd ? new webpack.optimize.ModuleConcatenationPlugin() : null,
+
+      // This is used to guarentee that our generated [chunkhash]'s are different ONLY
+      // if the content for the respective chunks have changed. This allows for maximization
+      // of a long-term browser caching strategy for the client bundle, avoiding cases
+      // where browsers end up having to download all of the chunks again even though
+      // only one or two may have changed
+      isProd ? new ChunkHash() : null,
 
       isProd ? new BundleAnalyzerPlugin({
         analyzerMode: 'static',
