@@ -12,21 +12,21 @@ export const configError = ({ key, value, type }) =>
 
 export function validateConfig(config, schema) {
   return Object.keys(schema).reduce((acc, curr) => {
-    const structure = schema[curr];
-    const value = config[curr] || {};
+    const structure = schema[curr]
+    const value = config[curr] || {}
 
     if (!structure.type) {
-      acc[curr] = validateConfig(value, structure);
+      acc[curr] = validateConfig(value, structure)
     } else {
       if (config[curr]) {
-        acc[curr] = processEntry(curr, value, structure);
+        acc[curr] = processEntry(curr, value, structure)
       } else {
-        acc[curr] = structure.defaults;
+        acc[curr] = structure.defaults
       }
     }
 
-    return acc;
-  }, {});
+    return acc
+  }, {})
 }
 
 export function processEntry(key, value, { type }) {
@@ -76,10 +76,10 @@ export function processEntry(key, value, { type }) {
 
 function setFlags(flags, config) {
   for (const key in flags) {
-    config[key] = flags[key];
+    config[key] = flags[key]
   }
 
-  return config;
+  return config
 }
 
 export async function loadConfig(prefix = 'frost', flags = {}) {
@@ -89,7 +89,7 @@ export async function loadConfig(prefix = 'frost', flags = {}) {
   })
 
   const result = await loader.load(Root)
-  const root = relative(Root, result.filepath);
-  const config = validateConfig(setFlags(flags, result.config), Schema);
+  const root = relative(Root, result.filepath)
+  const config = validateConfig(setFlags(flags, result.config), Schema)
   return { config, root }
 }

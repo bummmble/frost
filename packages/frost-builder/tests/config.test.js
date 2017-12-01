@@ -1,6 +1,6 @@
-import test from 'ava';
-import { loadConfig, validateConfig, processEntry, configError } from '../src/core/config';
-import Schema from '../src/core/schema';
+import test from 'ava'
+import { loadConfig, validateConfig, processEntry, configError } from '../src/core/config'
+import Schema from '../src/core/schema'
 
 const base = {
   entry: {
@@ -12,98 +12,98 @@ const base = {
     client: 'build/client',
     server: 'build/server'
   }
-};
+}
 
 test('It should return a valid config object', async t => {
-  const results = await loadConfig('frost', {});
-  t.true(typeof results === 'object');
-  t.true(typeof results.config === 'object');
-  t.true(typeof results.root === 'string');
-});
+  const results = await loadConfig('frost', {})
+  t.true(typeof results === 'object')
+  t.true(typeof results.config === 'object')
+  t.true(typeof results.root === 'string')
+})
 
 test('It should successfully apply defaults to a config', t => {
-  const results = validateConfig(base, Schema);
-  t.true(results.output.public === '/static/');
-});
+  const results = validateConfig(base, Schema)
+  t.true(results.output.public === '/static/')
+})
 
 test('It should successfully apply flags to a config', async t => {
-  const { config } = await loadConfig('frost', { verbose: true });
-  t.true(config.verbose === true );
-});
+  const { config } = await loadConfig('frost', { verbose: true })
+  t.true(config.verbose === true )
+})
 
 test('Should throw an error when type string or url receives non-string', t => {
-  const value = false;
-  const type = { type: 'string' };
-  const key = 'test';
-  const msg = configError({ key, value, type: type.type });
+  const value = false
+  const type = { type: 'string' }
+  const key = 'test'
+  const msg = configError({ key, value, type: type.type })
   try {
-    const parsed = processEntry(key, value, type);
+    const parsed = processEntry(key, value, type)
   } catch (err) {
-    t.is(err.message, msg);
+    t.is(err.message, msg)
   }
-});
+})
 
 test('Should throw an error when type number recieves non-number', t => {
-  const value = false;
-  const type = { type: 'number' };
-  const key = 'test';
-  const msg = configError({ key, value, type: type.type });
+  const value = false
+  const type = { type: 'number' }
+  const key = 'test'
+  const msg = configError({ key, value, type: type.type })
 
   try {
-    const parsed = processEntry(key, value, type);
+    const parsed = processEntry(key, value, type)
   } catch (err) {
-    t.is(err.message, msg);
+    t.is(err.message, msg)
   }
-});
+})
 
 test('Should throw an error when type array recieves non-array', t => {
-  const value = false;
-  const type = { type: 'array' };
-  const key = 'test';
-  const msg = configError({ key, value, type: type.type });
+  const value = false
+  const type = { type: 'array' }
+  const key = 'test'
+  const msg = configError({ key, value, type: type.type })
 
   try {
-    const parsed = processEntry(key, value, type);
+    const parsed = processEntry(key, value, type)
   } catch (err) {
-    t.is(err.message, msg);
+    t.is(err.message, msg)
   }
-});
+})
 
 test('Should throw an error when type path receives non-string', t => {
-  const value = true;
-  const type = { type: 'path' };
-  const key = 'test';
-  const msg = configError({ key, value, type: type.type });
+  const value = true
+  const type = { type: 'path' }
+  const key = 'test'
+  const msg = configError({ key, value, type: type.type })
 
   try {
-    const parsed = processEntry(key, value, type);
+    const parsed = processEntry(key, value, type)
   } catch (err) {
-    t.is(err.message, msg);
+    t.is(err.message, msg)
   }
-});
+})
 
 test('Should throw an error when type regex receives non-regex', t => {
-  const value = true;
-  const type = { type: 'regex' };
-  const key = 'test';
-  const msg = configError({ key, value, type: type.type });
+  const value = true
+  const type = { type: 'regex' }
+  const key = 'test'
+  const msg = configError({ key, value, type: type.type })
 
   try {
-    const parsed = processEntry(key, value, type);
+    const parsed = processEntry(key, value, type)
   } catch (err) {
-    t.is(err.message, msg);
+    t.is(err.message, msg)
   }
-});
+})
 
 test('Should throw an error when it receives an unknown type', t => {
-  const value = true;
-  const type = { type: 'buffer' };
-  const msg = 'Frost: Received an entry in config that is not supported. Found the following Entry \n\n test: true';
+  const value = true
+  const type = { type: 'buffer' }
+  const msg = 'Frost: Received an entry in config that is not supported. Found the following Entry \n\n test: true'
 
   try {
-    const parsed = processEntry('test', value, type);
+    const parsed = processEntry('test', value, type)
   } catch (err) {
-    t.is(err.message, msg);
+    t.is(err.message, msg)
   }
 })
 
@@ -111,22 +111,22 @@ test('Should throw an error when it receives an unknown type', t => {
 // ----- Success for coverage ------- //
 
 test('Should return when type number is correct', t => {
-  const num = 5;
-  const specs = { type: 'number' };
-  const parsed = processEntry('test', num, specs);
-  t.true(typeof parsed === 'number');
-});
+  const num = 5
+  const specs = { type: 'number' }
+  const parsed = processEntry('test', num, specs)
+  t.true(typeof parsed === 'number')
+})
 
 test('Should return when type array is correct', t => {
-  const arr = ['test'];
-  const specs = { type: 'array' };
-  const parsed = processEntry('test', arr, specs);
-  t.true(Array.isArray(parsed));
-});
+  const arr = ['test']
+  const specs = { type: 'array' }
+  const parsed = processEntry('test', arr, specs)
+  t.true(Array.isArray(parsed))
+})
 
 test('Should return when type regex is correct', t => {
-  const regexp = /\.js$/;
-  const specs = { type: 'regex' };
-  const parsed = processEntry('test', regexp, specs);
-  t.true(parsed.constructor == RegExp);
+  const regexp = /\.js$/
+  const specs = { type: 'regex' }
+  const parsed = processEntry('test', regexp, specs)
+  t.true(parsed.constructor == RegExp)
 })
