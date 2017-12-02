@@ -1,12 +1,29 @@
 import webpack from 'webpack';
 import { each } from 'frost-utils';
 import { emitEvent } from './emitter';
+import formatWebpackOutput from '../compilers/helpers/formatting';
 
 const Status = {
     Initializing: 0,
     Building: 1,
     Finished: 2
 };
+
+function webpackPromise(compiler) {
+    emitEvent(`before-webpack-${compiler.options.name}-compilation`);
+    return new Promise((resolve, reject) => {
+        compiler.plugin('done', stats => {
+            emitEvent('after-webpack-compilation', stats);
+            resolve(stats);
+        });
+
+        compiler.run((err, stats) => {
+            if (err) {
+                return reject(err);
+            }
+        });
+    });
+}
 
 export default class Builder {
     constructor() {
@@ -39,26 +56,10 @@ export default class Builder {
             return compiler;
         });
 
-        await each(this.compilers, compiler => {
-            emitEvent(`before-webpack-${compiler.options.name}-compilation`);
-            return new Promise((resolve, reject) => {
-                compiler.plugin('done', stats => {
-                    emitEvent('after-webpack-compilation', stats);
-                    process.nextTick(resolve);
-                });
-
-                compiler.run((err, stats) => {
-                    if (err) {
-                        console.error(err);
-                        return reject(err);
-                    }
-
-                    if (stats.hasErrors()) {
-                        return reject(new Error('Webpack build failed'));
-                    }
-                })
-            })
-        })
+        await each(this.compilers,  async compiler => {
+            const stats = await webpackPromise(compiler);
+            formatWebpackOutput(stats);
+        });
 
         return true;
     }
