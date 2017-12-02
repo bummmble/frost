@@ -1,4 +1,7 @@
 import webpack from 'webpack';
+import webpackDevMiddleware from 'webpack-dev-middleware';
+import webpackHotMiddleware from 'webpack-hot-middleware';
+import webpackHotServerMiddleware from 'webpack-hot-server-middleware';
 import Renderer from './renderer';
 import ClientCompiler from '../compilers/client';
 import ServerCompiler from '../compilers/server';
@@ -6,7 +9,8 @@ import ServerCompiler from '../compilers/server';
 const CommandMap = {
     'client': 'renderClient',
     'server': 'renderServer',
-    'universal': 'renderUniversal'
+    'universal': 'renderUniversal',
+    'dev': 'devServer'
 };
 
 export default class FrostRenderer extends Renderer {
@@ -33,6 +37,28 @@ export default class FrostRenderer extends Renderer {
     async renderUniversal(env) {
         await this.builder.build(this.createMultiCompiler(env), env);
         return this;
+    }
+
+    async devServer() {
+        const output = this.config.output;
+        const multiCompiler = webpack(this.createMultiCompiler('development'));
+        const client = multiCompiler.compilers[0];
+
+        const devMiddleware = webpackDevMiddleware(multiCompiler, {
+            publicPath: output.public,
+            quiet: true,
+            noInfo: true
+        });
+        const hotMiddleware = webpackHotMiddleware(client);
+        const hotSeverMiddleware = webpackHotServerMiddleware(multiCompiler, {
+            serverRendererOptions: {
+                outputPath: output.client
+            }
+        });
+
+        const middleware = [devMiddleware, hotMiddleware, hotSeverMiddleware];
+        await this.builder.startDev(multiCompiler);
+        this.listen(null, middleware);
     }
 
     createClientCompiler(env) {
