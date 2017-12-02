@@ -1,4 +1,6 @@
 import getPort from 'get-port';
+import http from 'http';
+import { createExpressServer } from 'frost-express';
 import Builder from '../core/builder';
 
 export default class Renderer {
@@ -12,7 +14,8 @@ export default class Renderer {
             isDev: env === 'development',
             isProd: env === 'production',
             isClient: target === 'client',
-            isServer: target === 'server'
+            isServer: target === 'server',
+            webpackTarget: target === 'client' ? 'web' : 'node'
         };
     }
 
@@ -20,7 +23,7 @@ export default class Renderer {
         let Server;
 
         if (!server) {
-            server = createExpressSerever({
+            server = createExpressServer({
                 afterSecurity: [],
                 beforeFallback: middleware ? [...middleware] : [],
                 enableNonce: false

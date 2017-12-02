@@ -31,7 +31,8 @@ export default class FrostRenderer extends Renderer {
     }
 
     async renderServer(env) {
-        await this.builder.build(this.createServerCompiler(env), env);
+        const compiler = this.createServerCompiler(env);
+        await this.builder.build([compiler], env);
         return this;
     }
 
@@ -60,6 +61,7 @@ export default class FrostRenderer extends Renderer {
         const middleware = [devMiddleware, hotMiddleware, hotSeverMiddleware];
         await this.builder.startDev(multiCompiler);
         this.listen(null, middleware);
+        return this;
     }
 
     createClientCompiler(env) {
@@ -75,7 +77,7 @@ export default class FrostRenderer extends Renderer {
     }
 
     createMultiCompiler(env) {
-        const multiCompiler = [createClientCompiler(env), createServerCompiler(env)];
-        return compilers;
+        const multiCompiler = [this.createClientCompiler(env), this.createServerCompiler(env)];
+        return multiCompiler;
     }
 }
