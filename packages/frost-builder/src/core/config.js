@@ -31,7 +31,7 @@ export function validateConfig(config, schema) {
 
 /* eslint-disable no-unused-vars */
 
-export function processEntry(key, value, { type }) {
+export function processEntry(key, value, { type, defaults }) {
   const props = { key, value, type }
   let parsed
 
@@ -43,6 +43,19 @@ export function processEntry(key, value, { type }) {
       }
       return value
 
+    case 'object-or-bool':
+        if (typeof value !== 'object' || typeof value !== 'boolean') {
+            throw new Error(configError(props));
+        }
+
+        if (typeof value === 'object') {
+            return value;
+        } else if (typeof value === 'boolean') {
+            if (value == true) {
+                return defaults;
+            }
+            return false;
+        }
     case 'number':
       parsed = parseFloat(value, 10)
       if (isNaN(parsed)) {
