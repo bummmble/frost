@@ -5,13 +5,15 @@ import resolvePkg from 'resolve-pkg';
 
 const BuiltIns = new Set(builtinModules);
 const WebpackRequired = new Set([
-    // These are necessary for universal imports
+    // These are required for universal imports to work properly
     'react-universal-component',
     'webpack-flush-chunks',
     'babel-plugin-universal-import'
 ]);
 
 const Problematic = new Set([
+    // These are things that are generally large or have problematic
+    // commonJS functionality
     'intl',
     'mime-db',
     'encoding',
@@ -20,8 +22,8 @@ const Problematic = new Set([
     'jsdom'
 ]);
 
-const bundleCache = {};
-const externalsCache = {};
+const BundleCache = {};
+const ExternalsCache = {};
 
 export function isLoaderFile(req) {
     if (req.charAt(0) === '!') {
@@ -33,7 +35,7 @@ export function isLoaderFile(req) {
     );
 }
 
-function shouldTry(resolved) {
+function tryResolveJson(resolved) {
     let json;
 
     try {
@@ -42,7 +44,6 @@ function shouldTry(resolved) {
 
     }
 }
-
 export function shouldBundlePackage(resolved) {
     let result = null;
 
@@ -50,25 +51,22 @@ export function shouldBundlePackage(resolved) {
     if (hasBinding) {
         result = false;
     } else {
-        const json = shouldTry(resolved);
-
+        const json = tryResolveJson(resolved);
         if (json) {
             if (json.module || json.style || json.browser || json['jsnext:main']) {
                 result = true;
             }
-
             if (json.binary != null) {
                 result = false;
             }
         }
     }
-
     return result;
 }
 
 export function shouldBeBundled(base) {
-    if (base in bundleCache) {
-        return bundleCache[base];
+    if (base in BundleCache) {
+        return BundleCache[base];
     }
 
     let resolved;
@@ -79,7 +77,7 @@ export function shouldBeBundled(base) {
     }
 
     const result = resolved ? shouldBeBundled(resolved) : null;
-    bundleCache[base] = result;
+    BundleCache[base] = result;
     return result;
 }
 
@@ -95,41 +93,31 @@ export function isExternalRequest(req) {
     const match = (/^((@[a-zA-Z0-9-_]+\/)?[a-zA-Z0-9_-]+)\/?/).exec(req);
     const basename = match ? match[1] : null;
 
-    if (basename == null) {
+    if (basename == null || Problematic.has(basename) || BuiltIns.has(basename)) {
         return true;
     }
-
-    if (BuiltIns.has(basename)) {
-        return true;
-    }
-
     if (WebpackRequired.has(basename)) {
         return false;
-    }
-
-    if (Problematic.has(basename)) {
-        return true;
     }
 
     const bundle = shouldBeBundled(basename);
     if (bundle != null) {
         return !bundle;
     }
-
     return false;
 }
 
-export function getExternals(light, entries) {
-    const entriesSet = new Set(entries);
-    return (context, req, cb) => {
-        if (entriesSet.has(req)) {
+export function getExternals(entries) {
+    const Entries = new Set(entries);
+    return (ctx, req, cb) => {
+        if (Entries.has(req)) {
             return cb();
         }
 
-        let isExternal = externalsCache[req];
+        let isExternal = ExternalsCache[req];
         if (isExternal == null) {
-            isExternal = isExternalRequest(req, light);
-            externalsCache[req] = isExternal;
+            isExternal = isExternalRequest(req);
+            ExternalsCache[req] = isExternal;
         }
 
         return isExternal ? cb(null, `commonjs ${req}`) : cb();
