@@ -39,7 +39,7 @@ export default class Builder {
             })
         })
 
-        return this;
+        return true;
     }
 
     startDev(multiCompiler) {
