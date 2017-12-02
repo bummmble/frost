@@ -1,9 +1,12 @@
 import webpack from 'webpack'
+import HappyPack from 'happypack';
 import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin'
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
 
 import ChunkHash from './plugins/ChunkHash';
 import MissingModules from './plugins/MissingModules';
+
+const LoaderPool = HappyPack.ThreadPool({ size: 5 });
 
 export default function BaseCompiler(props, config) {
   const { isDev, isProd, isClient, isServer, webpackTarget } = props
@@ -42,43 +45,71 @@ export default function BaseCompiler(props, config) {
         {
           test: config.files.babel,
           exclude: /node_modules/,
-          use: {
-            loader: 'babel-loader'
-          }
+          use: 'happypack/loader?id=js'
         },
 
         {
           test: config.files.fonts,
-          loader: 'file-loader',
-          options: {
-            name: isProd ? 'file-[hash:base62:8].[ext]' : '[path][name].[ext]',
-            emitFile: isClient
-          }
+          use: 'happypack/loaders?id=fonts'
         },
 
         {
           test: config.files.images,
-          use: [
-            'file-loader',
-            {
-              loader: 'image-webpack-loader'
-            }
-          ]
+          use: 'happypack/loaders?id=images'
         },
 
         {
           test: config.files.video,
-          use: {
-            loader: 'url-loader',
-            options: {
-              limit: 10000
-            }
-          }
+          use: 'happypack/loaders?id=videos'
         }
       ]
     },
 
     plugins: [
+      new HappyPack({
+        id: 'js',
+        loaders: [
+            { loader: 'babel-loader' }
+        ],
+        threadPool: LoaderPool
+      }),
+
+      new HappyPack({
+        id: 'fonts',
+        loaders: [
+            {
+                loader: 'file-loader',
+                options: {
+                    name: isProd ? 'file-[hash:base62:8].[ext]' : '[path][name].[ext]',
+                    emitFile: isClient
+                }
+            }
+        ],
+        threadPool: LoaderPool
+      }),
+
+      new HappyPack({
+        id: 'videos',
+        loaders: [
+            {
+                loader: 'url-loader',
+                options: {
+                    limit: 10000
+                }
+            }
+        ],
+        threadPool: LoaderPool
+      }),
+
+      new HappyPack({
+        id: 'images',
+        loaders: [
+            { loader: 'file-loader' },
+            { loader: 'image-webpack-loader' }
+        ],
+        threadPool: LoaderPool
+      }),
+
       // Improves OS Compat
       // See: https://github.com/Urthen/case-sensitive-paths-webpack-plugin
       new CaseSensitivePathsPlugin(),
