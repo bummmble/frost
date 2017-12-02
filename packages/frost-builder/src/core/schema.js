@@ -70,46 +70,55 @@ export default {
     }
   },
 
-  hmr: {
-    type: 'boolean',
-    defaults: true
-  },
-
-  postcss: {
-    type: 'boolean',
-    defaults: false
-  },
-
-  sourceMaps: {
-    type: 'boolean',
-    defaults: false
-  },
-
-  compression: {
-    kind: {
-      type: 'string',
-      defaults: 'babili'
+  build: {
+    useHmr: {
+        type: 'boolean',
+        defaults: true
     },
 
-    babiliClientOptions: {
-      type: 'object',
-      defaults: {}
+    postcss: {
+        type: 'object-or-bool',
+        defaults: {
+            loader: 'postcss-loader'
+        }
     },
 
-    babiliServerOptions: {
-      type: 'object',
-      defaults: {}
+    sourceMaps: {
+        type: 'boolean',
+        defaults: false
     },
 
-    uglifyOptions: {
-      type: 'object',
-      defaults: {}
+    compression: {
+        kind: {
+            type: 'string',
+            defaults: 'babili'
+        },
+
+        babiliClientOptions: {
+            type: 'object',
+            defaults: {}
+        },
+
+        babiliServerOptions: {
+            type: 'object',
+            defaults: {}
+        },
+
+        uglifyOptions: {
+            type: 'object',
+            defaults: {}
+        }
+    },
+
+    performance: {
+        type: 'object-or-bool',
+        defaults: false
+    },
+
+    images: {
+        type: 'object',
+        defaults: {}
     }
-  },
-
-  images: {
-    type: 'object',
-    defaults: {}
   },
 
   serverOptions: {
@@ -129,25 +138,15 @@ export default {
     }
   },
 
-  performance: {
-    type: 'boolean',
-    defaults: false
-  },
-
   pwa: {
-    type: 'object',
-    defaults: {}
-  },
-
-  autoDll: {
-    use: {
-      type: 'boolean',
-      defaults: false
+    hasServiceWorker: {
+        type: 'boolean',
+        defaults: false
     },
 
-    entries: {
-      type: 'object',
-      defaults: {}
+    workerEntry: {
+        type: 'path',
+        defaults: 'client/sw.js'
     }
   },
 

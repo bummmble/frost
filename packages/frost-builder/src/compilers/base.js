@@ -11,17 +11,23 @@ const LoaderPool = HappyPack.ThreadPool({ size: 5 });
 export default function BaseCompiler(props, config) {
   const { isDev, isProd, isClient, isServer, webpackTarget } = props
   const target = webpackTarget === 'node' ? 'server' : 'client';
-  const devtool = config.sourceMaps ? 'source-map' : false
+  const devtool = config.build.sourceMaps ? 'source-map' : false
+  const performance = config.build.performance && config.build.performance === true ? {
+    maxEntryPointSize: 1000000,
+    maxAssetSize: isClient ? 300000 : Infinity,
+    hints: isDev || isServer ? false : 'warning'
+  } : config.build.performance;
 
   console.log(`→ Webpack Target: ${webpackTarget}`);
   if (config.verbose) {
     console.log(`→ Enable Source Maps: ${devtool}`);
-    console.log(`→ Bundle Compression: ${config.compression.kind}`);
+    console.log(`→ Bundle Compression: ${config.build.compression.kind}`);
   }
 
   return {
     target: webpackTarget,
-    //devtool,
+    devtool,
+    performance,
     entry: {
       main: null,
     },

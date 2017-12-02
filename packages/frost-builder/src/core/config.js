@@ -35,6 +35,7 @@ export function processEntry(key, value, { type, defaults }) {
   const props = { key, value, type }
   let parsed
 
+  console.log(typeof value);
   switch (type) {
     case 'string':
     case 'url':
@@ -44,7 +45,7 @@ export function processEntry(key, value, { type, defaults }) {
       return value
 
     case 'object-or-bool':
-        if (typeof value !== 'object' || typeof value !== 'boolean') {
+        if (typeof value !== 'object' && typeof value !== 'boolean') {
             throw new Error(configError(props));
         }
 
@@ -56,6 +57,7 @@ export function processEntry(key, value, { type, defaults }) {
             }
             return false;
         }
+
     case 'number':
       parsed = parseFloat(value, 10)
       if (isNaN(parsed)) {

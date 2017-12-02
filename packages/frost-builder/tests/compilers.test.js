@@ -44,6 +44,13 @@ test('Builds a Production Base config for client', async t => {
     t.true(pluginNames.includes('BundleAnalyzerPlugin'));
 });
 
+test('Base Compiler should produce a default performance when config is true', async t => {
+    const { config } = await loadConfig('frost', {});
+    config.build.performance = true;
+    const result = BaseCompiler(prodCli, config);
+    t.true(result.performance.maxEntryPointSize === 1000000);
+});
+
 test('Builds a Development Client config', async t => {
     const { config } = await loadConfig('frost', {});
     const result = ClientCompiler(devCli, config);
@@ -64,7 +71,7 @@ test('Builds a Development Server config', async t => {
 
 test('Client uses HotModule Replacement in Development', async t => {
     const { config } = await loadConfig('frost', {});
-    config.useHmr = true;
+    config.build.useHmr = true;
 
     // weird hack fix
     const result = ClientCompiler({ isDev: true, isProd: false, isClient: true, isServer: false, webpackTarget: 'web' }, config);
@@ -73,14 +80,14 @@ test('Client uses HotModule Replacement in Development', async t => {
 
 test('Client Builder uses babili compression when specified', async t => {
     const { config } = await loadConfig('frost', {});
-    config.compression.kind = 'babili';
+    config.build.compression.kind = 'babili';
     const result = ClientCompiler(prodCli, config);
     t.true(result.plugins.map(plugin => plugin.constructor.name).includes('BabelMinifyPlugin'));
 });
 
 test('Client Compiler uses uglify compression when specified', async t => {
     const { config } = await loadConfig('frost', {});
-    config.compression.kind = 'uglify';
+    config.build.compression.kind = 'uglify';
     const result = ClientCompiler(prodCli, config);
     t.true(result.plugins.map(plugin => plugin.constructor.name).includes('UglifyJsPlugin'));
 });

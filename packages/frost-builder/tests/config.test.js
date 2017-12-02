@@ -43,6 +43,18 @@ test('Should throw an error when type string or url receives non-string', t => {
   }
 })
 
+test('Should throw an error when type object-or-bool when it receives a different type', t => {
+    const value = 5;
+    const type = { type: 'object-or-bool' };
+    const key = 'test';
+    const msg = configError({ key, value, type: type.type });
+    try {
+        const parsed = processEntry(key, value, type);
+    } catch (err) {
+        t.is(err.message, msg);
+    }
+});
+
 test('Should throw an error when type number recieves non-number', t => {
   const value = false
   const type = { type: 'number' }
@@ -130,3 +142,27 @@ test('Should return when type regex is correct', t => {
   const parsed = processEntry('test', regexp, specs)
   t.true(parsed.constructor == RegExp)
 })
+
+test('Should return value when object-or-bool is object', t => {
+    const value = { test: 'true' };
+    const specs = { type: 'object-or-bool' };
+    const key = 'test';
+    const parsed = processEntry(key, value, specs);
+    t.true(typeof parsed === 'object');
+} );
+
+test('Should return defaults when boolean in object-or-bool is true', t => {
+    const value = true;
+    const specs = { type: 'object-or-bool', defaults: { test: 'true' }};
+    const key = 'test';
+    const parsed = processEntry(key, value, specs);
+    t.true(parsed.test === 'true');
+});
+
+test('Should return false when boolean in object-or-bool is false', t => {
+    const value = false;
+    const specs = { type: 'object-or-bool' };
+    const key = 'test';
+    const parsed = processEntry(key, value, specs);
+    t.true(parsed === false);
+});
