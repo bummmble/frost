@@ -10,7 +10,7 @@ export default function ServerCompiler(props, config) {
     base.entry.main = config.entry.server;
     base.output.path = config.output.server;
 
-    base.loaders.push({
+    base.module.rules.push({
         test: config.files.styles,
         use: {
             loader: 'css-loader/locals'
@@ -20,4 +20,6 @@ export default function ServerCompiler(props, config) {
     base.plugins.push(new webpack.optimize.LimitChunkCountPlugin({
         maxChunks: 1
     }));
+
+    return base;
 }

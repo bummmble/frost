@@ -1,5 +1,6 @@
 import webpack from 'webpack';
 import BabiliMinifyPlugin from 'babel-minify-webpack-plugin';
+import StatsPlugin from 'stats-webpack-plugin';
 import UglifyPlugin from 'uglifyjs-webpack-plugin';
 
 import BaseCompiler from './base';

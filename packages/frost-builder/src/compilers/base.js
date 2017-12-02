@@ -1,6 +1,6 @@
 import webpack from 'webpack'
 import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin'
-import BundleAnalyzerPlugin from 'webpack-bundle-analyzer'
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
 
 import ChunkHash from './plugins/ChunkHash';
 import MissingModules from './plugins/MissingModules';
@@ -8,7 +8,7 @@ import MissingModules from './plugins/MissingModules';
 export default function BaseCompiler(props, config) {
   const { isDev, isProd, isClient, isServer, webpackTarget } = props
 
-  const devtool = config.build.sourceMaps ? 'source-map' : false
+  const devtool = config.sourceMaps ? 'source-map' : false
 
   return {
     target: webpackTarget,
@@ -79,7 +79,7 @@ export default function BaseCompiler(props, config) {
       new MissingModules(`${config.root}/node_modules`),
 
       isDev ? new webpack.NamedModulesPlugin() : null,
-      isDev ? new webpack.NoEmitOnErorsPlugin() : null,
+      isDev ? new webpack.NoEmitOnErrorsPlugin() : null,
 
       // Generates IDs that preserve over builds
       // https://github.com/webpack/webpack.js.org/issues/652#issuecomment-273324529
