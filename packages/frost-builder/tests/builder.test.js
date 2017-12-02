@@ -10,6 +10,5 @@ test('It should build a webpack config', async t => {
     const compiler = ClientCompiler({ isDev: true, isProd: false, isClient: true, isServer: false, webpackTarget: 'web' }, config);
     const builder = new Builder();
     const result = await builder.buildWebpack([compiler], 'development');
-    console.log(result);
     t.true(result === true);
 });
