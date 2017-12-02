@@ -1,6 +1,8 @@
 import getPort from 'get-port';
 import http from 'http';
+import https from 'https';
 import { createExpressServer } from 'frost-express';
+import getCerts from '../helpers/getCerts';
 import Builder from '../core/builder';
 
 export default class Renderer {
@@ -35,7 +37,8 @@ export default class Renderer {
         const protocol = isHttps ? 'https' : 'http';
 
         if (isHttps) {
-
+            const options = getCerts(this.config);
+            Server = https.createServer(options, server);
         } else {
             Server = http.createServer(server);
         }
