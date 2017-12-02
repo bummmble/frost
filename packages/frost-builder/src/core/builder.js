@@ -2,16 +2,29 @@ import webpack from 'webpack';
 import { each } from 'frost-utils';
 import { emitEvent } from './emitter';
 
+const Status = {
+    Initializing: 0,
+    Building: 1,
+    Finished: 2
+};
+
 export default class Builder {
     constructor() {
         this.compilers = [];
+        this.status = Status.Initializing;
     }
 
     async build(compilers, env) {
+        if (this.status === Status.Finished && env === 'development') {
+            // Only run dev build once
+            return this;
+        }
+        this.status = Status.Building;
         emitEvent('before-webpack-build', compilers);
 
         await this.buildWebpack(compilers, env);
 
+        this.status = Status.Finished;
         emitEvent('after-webpack-build');
 
         return this;
