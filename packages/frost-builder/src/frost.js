@@ -7,7 +7,7 @@ export default class Frost {
     constructor(config, renderers) {
         this.config = config;
         // Allow this to be extendable later
-        this.renderers = { 'frost': new FrostRenderer(this.config) };
+        this.renderers = this.prepareRenderers(renderers);
     }
 
     async run(env, command) {
@@ -39,5 +39,12 @@ export default class Frost {
             await this.renderers[renderer].build(env, command);
         });
         return this;
+    }
+
+    prepareRenderers(renderers) {
+        const renderProps = this.config;
+        if (!renderers) {
+            return { 'frost': new FrostRenderer(renderProps) };
+        }
     }
 }

@@ -2,9 +2,8 @@ import getPort from 'get-port';
 import Builder from '../core/builder';
 
 export default class Renderer {
-    constructor(name, config) {
+    constructor(config) {
         this.config = config;
-        this.name = name;
         this.builder = new Builder();
     }
 

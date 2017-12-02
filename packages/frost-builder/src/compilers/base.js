@@ -7,12 +7,18 @@ import MissingModules from './plugins/MissingModules';
 
 export default function BaseCompiler(props, config) {
   const { isDev, isProd, isClient, isServer, webpackTarget } = props
-
+  const target = webpackTarget === 'node' ? 'server' : 'client';
   const devtool = config.sourceMaps ? 'source-map' : false
+
+  console.log(`→ Webpack Target: ${webpackTarget}`);
+  if (config.verbose) {
+    console.log(`→ Enable Source Maps: ${devtool}`);
+    console.log(`→ Bundle Compression: ${config.compression.kind}`);
+  }
 
   return {
     target: webpackTarget,
-    devtool,
+    //devtool,
     entry: {
       main: null,
     },

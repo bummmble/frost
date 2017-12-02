@@ -25,7 +25,8 @@ export default class FrostRenderer extends Renderer {
     }
 
     async renderClient(env) {
-        await this.builder.build(this.createClientCompiler(env), env);
+        const compiler = this.createClientCompiler(env);
+        await this.builder.build([compiler], env);
         return this;
     }
 

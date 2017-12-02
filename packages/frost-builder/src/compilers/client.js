@@ -8,7 +8,6 @@ import BaseCompiler from './base';
 export default function ClientCompiler(props, config) {
     const base = BaseCompiler(props, config);
     const { isDev, isProd } = props;
-
     base.name = 'client';
     base.entry.main = config.entry.client;
     base.output.path = config.output.client;

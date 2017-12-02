@@ -72,17 +72,17 @@ export default {
 
   hmr: {
     type: 'boolean',
-    default: true
+    defaults: true
   },
 
   postcss: {
     type: 'boolean',
-    default: false
+    defaults: false
   },
 
   sourceMaps: {
     type: 'boolean',
-    default: false
+    defaults: false
   },
 
   compression: {
@@ -153,6 +153,6 @@ export default {
 
   verbose: {
     type: 'boolean',
-    default: false
+    defaults: false
   }
 }
