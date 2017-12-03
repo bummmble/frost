@@ -1,12 +1,16 @@
 import webpack from 'webpack'
 import HappyPack from 'happypack';
+import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import ExtractCssChunks from 'extract-css-chunks-webpack-plugin';
 import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin'
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
 
 import ChunkHash from './plugins/ChunkHash';
 import MissingModules from './plugins/MissingModules';
+import loadStyles from './helpers/styles';
 
 const LoaderPool = HappyPack.ThreadPool({ size: 5 });
+
 
 export default function BaseCompiler(props, config) {
   const { isDev, isProd, isClient, isServer, webpackTarget } = props
@@ -17,6 +21,17 @@ export default function BaseCompiler(props, config) {
     maxAssetSize: isClient ? 300000 : Infinity,
     hints: isDev || isServer ? false : 'warning'
   } : config.build.performance;
+
+  const styles = loadStyles(props, config);
+  let extractPlugin;
+
+  if (config.build.css.extract && isClient) {
+    if (config.build.css.extract === 'text') {
+        extractPlugin = new ExtractTextPlugin({});
+    } else if (config.build.css.extract === 'chunks') {
+        extractPlugin = new ExtractCssChunks({});
+    }
+  }
 
   console.log(`→ Webpack Target: ${webpackTarget}`);
   if (config.verbose) {
@@ -55,6 +70,11 @@ export default function BaseCompiler(props, config) {
         },
 
         {
+            test: config.files.styles,
+            use: 'happypack/loaders?id=styles'
+        },
+
+        {
           test: config.files.fonts,
           use: 'happypack/loaders?id=fonts'
         },
@@ -78,6 +98,11 @@ export default function BaseCompiler(props, config) {
             { loader: 'babel-loader' }
         ],
         threadPool: LoaderPool
+      }),
+
+      new HappyPack({
+        id: 'styles',
+        loaders: styles
       }),
 
       new HappyPack({
@@ -116,6 +141,7 @@ export default function BaseCompiler(props, config) {
         threadPool: LoaderPool
       }),
 
+      extractPlugin,
       // Improves OS Compat
       // See: https://github.com/Urthen/case-sensitive-paths-webpack-plugin
       new CaseSensitivePathsPlugin(),

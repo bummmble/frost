@@ -91,3 +91,16 @@ test('Client Compiler uses uglify compression when specified', async t => {
     const result = ClientCompiler(prodCli, config);
     t.true(result.plugins.map(plugin => plugin.constructor.name).includes('UglifyJsPlugin'));
 });
+
+test('Client Compiler should handle vendor Entries', async t => {
+    const { config } = await loadConfig('frost', {});
+    config.entry.vendor = ['react', '/es6-promise/'];
+    const result = ClientCompiler(prodCli, config);
+    const chunks = result.plugins
+        .map(plugin => plugin.constructor.name)
+        .filter(name => name === 'CommonsChunkPlugin');
+    console.log(chunks);
+    t.true(result.entry.vendor === config.entry.vendor);
+    t.true(chunks.length === 2);
+
+})

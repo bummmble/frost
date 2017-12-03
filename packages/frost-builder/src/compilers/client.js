@@ -3,7 +3,6 @@ import ServiceWorkerPlugin from 'serviceworker-webpack-plugin';
 import BabiliMinifyPlugin from 'babel-minify-webpack-plugin';
 import StatsPlugin from 'stats-webpack-plugin';
 import UglifyPlugin from 'uglifyjs-webpack-plugin';
-
 import BaseCompiler from './base';
 
 function buildCommonChunks(base) {
@@ -35,6 +34,7 @@ function buildCommonChunks(base) {
 export default function ClientCompiler(props, config) {
     const base = BaseCompiler(props, config);
     const { isDev, isProd } = props;
+    const styles = loadStyles(props, config);
     base.name = 'client';
     base.entry.main = config.entry.client;
     base.output.path = config.output.client;

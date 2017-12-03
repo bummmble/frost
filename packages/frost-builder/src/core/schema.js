@@ -46,7 +46,7 @@ export default {
 
     styles: {
       type: 'regex',
-      defaults: /\.(css|sss|pcss)$/,
+      defaults: /\.(css|sss|pcss|less|sass|scss|styl|stylus)$/,
     },
 
     images: {
@@ -76,16 +76,31 @@ export default {
         defaults: true
     },
 
-    postcss: {
-        type: 'object-or-bool',
-        defaults: {
-            loader: 'postcss-loader'
-        }
-    },
-
     sourceMaps: {
         type: 'boolean',
         defaults: false
+    },
+
+    css: {
+        postcss: {
+            type: 'object-or-bool',
+            defaults: true
+        },
+
+        cssLoader: {
+            type: 'object-or-bool',
+            defaults: false
+        },
+
+        preprocessor: {
+            type: 'string',
+            defaults: 'none'
+        },
+
+        extract: {
+            type: 'string',
+            defaults: 'chunks'
+        }
     },
 
     compression: {
