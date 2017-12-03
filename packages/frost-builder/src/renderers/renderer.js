@@ -1,9 +1,22 @@
 import getPort from 'get-port';
 import http from 'http';
 import https from 'https';
+import { readFileSync, existsSync } from 'fs-extra';
 import { createExpressServer } from 'frost-express';
-import getCerts from '../helpers/getCerts';
 import Builder from '../core/builder';
+
+function getCerts({ serverOptions }) {
+    let key;
+    let cert;
+
+    if (existsSync(serverOptions.key) && existsSync(serverOptions.cert)) {
+        key = readFileSync(serverOptions.key);
+        cert = readFileSync(serverOptions.cert);
+        return { key, cert };
+    } else {
+        throw new Error('Frost: No certs found for https');
+    }
+}
 
 export default class Renderer {
     constructor(config) {

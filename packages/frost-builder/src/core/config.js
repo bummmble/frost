@@ -35,7 +35,6 @@ export function processEntry(key, value, { type, defaults }) {
   const props = { key, value, type }
   let parsed
 
-  console.log(typeof value);
   switch (type) {
     case 'string':
     case 'url':

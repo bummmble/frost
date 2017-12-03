@@ -80,27 +80,27 @@ export function formatFromJson(json) {
     return results;
 }
 
-export default function formatWebpackOutput(stats) {
+export default function formatWebpackOutput(stats, target) {
     const { errors, warnings } = formatFromJson(stats.toJson({}));
     const isSuccessful = !errors.length && !warnings.length;
 
     if (isSuccessful) {
-        console.log(chalk.green('Compiled successfully!'));
+        console.log(chalk.green(`${target} compiled successfully`));
     }
 
     if (errors.length) {
-        console.log(chalk.red('Failed to compile!'));
+        console.log(chalk.red(`${target} failed to compile`));
         console.log(errors.join('\n\n'));
         throw new Error(`Failed to compile`);
     }
 
     if (warnings.length && !errors.length) {
-        console.log(chalk.yellow('Compiled with warnings'));
+        console.log(chalk.yellow(`${target} compiled with warnings`));
         console.log(warnings.join('\n\n'));
     }
 
     const compileTime = getCompileTime(stats);
-    console.log(chalk.cyan(`Compiled in ${compileTime}ms`));
+    console.log(chalk.cyan(`${target} Compiled in ${compileTime}ms`));
 
     return true;
 }

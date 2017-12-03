@@ -4,7 +4,7 @@ import { emitEvent } from './core/emitter';
 
 
 export default class Frost {
-    constructor(config, renderers) {
+    constructor(config, renderers = []) {
         this.config = config;
         // Allow this to be extendable later
         this.renderers = this.prepareRenderers(renderers);
@@ -43,8 +43,13 @@ export default class Frost {
 
     prepareRenderers(renderers) {
         const renderProps = this.config;
-        if (!renderers) {
+        if (!renderers.length > 0) {
             return { 'frost': new FrostRenderer(renderProps) };
         }
+
+        return renderers.map(renderer => {
+            const pkg = require.resolve(renderer);
+            return pkg;
+        });
     }
 }

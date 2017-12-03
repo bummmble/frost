@@ -34,7 +34,6 @@ function buildCommonChunks(base) {
 export default function ClientCompiler(props, config) {
     const base = BaseCompiler(props, config);
     const { isDev, isProd } = props;
-    const styles = loadStyles(props, config);
     base.name = 'client';
     base.entry.main = config.entry.client;
     base.output.path = config.output.client;

@@ -31,7 +31,7 @@ export default class Builder {
         this.status = Status.Initializing;
     }
 
-    async build(compilers, env) {
+    async build(compilers, env, target) {
         if (this.status === Status.Finished && env === 'development') {
             // Only run dev build once
             return this;
@@ -39,7 +39,7 @@ export default class Builder {
         this.status = Status.Building;
         emitEvent('before-webpack-build', compilers);
 
-        await this.buildWebpack(compilers, env);
+        await this.buildWebpack(compilers, env, target);
 
         this.status = Status.Finished;
         emitEvent('after-webpack-build');
@@ -47,7 +47,7 @@ export default class Builder {
         return this;
     }
 
-    async buildWebpack(compilers, env) {
+    async buildWebpack(compilers, env, target) {
         const cache = {};
 
         this.compilers = compilers.map(config => {
@@ -57,18 +57,19 @@ export default class Builder {
         });
 
         await each(this.compilers,  async compiler => {
+            target ? compiler.options.name : target + compiler.options.name;
             const stats = await webpackPromise(compiler);
-            formatWebpackOutput(stats);
+            formatWebpackOutput(stats, target);
         });
 
         return true;
     }
 
-    startDev(multiCompiler) {
+    startDev(multiCompiler, target = '') {
         emitEvent('before-dev-server-start', multiCompiler);
         return new Promise((resolve, reject) => {
             multiCompiler.plugin('invalid', () => {
-                console.log('Dev Server Compiling');
+                console.log(target + 'Dev Server Compiling');
             });
 
             multiCompiler.plugin('done', stats => {
