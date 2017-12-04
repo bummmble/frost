@@ -5,7 +5,7 @@ import { readFileSync, existsSync } from 'fs-extra';
 import { createExpressServer } from 'frost-express';
 import Builder from '../core/builder';
 
-function getCerts({ serverOptions }) {
+function getCerts(serverOptions) {
     let key;
     let cert;
 
@@ -50,7 +50,7 @@ export default class Renderer {
         const protocol = isHttps ? 'https' : 'http';
 
         if (isHttps) {
-            const options = getCerts(this.config);
+            const options = getCerts(serverOptions);
             Server = https.createServer(options, server);
         } else {
             Server = http.createServer(server);
