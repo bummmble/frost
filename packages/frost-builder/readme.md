@@ -163,7 +163,7 @@ Frost supports the use of Sass, Scss, Less, and Stylus. None of them are enabled
 const config = {
     build: {
         css: {
-            preprocess: 'sass' // 'scss', 'less', 'stylus'
+            preprocessor: 'sass' // 'scss', 'less', 'stylus'
         }
     }
 }
@@ -178,6 +178,60 @@ const config = {
         css: {
             extract: 'text' // 'chunks', 'none'
         }
+    }
+}
+```
+### Specifying custom cssLoader and postcssLoader rules
+You can also override the css-loader and post-css loader options. By default they are true, which means that interally Frost will assign a configuration to them. If you provide an object here, it will use that instead of the defaults, or if it receives false, will not use the loader at all.
+
+```js
+const config = {
+    build: {
+        css: {
+            postcss: {
+                query: {
+                    sourceMaps: true        
+                }
+            } // or true or false
+        }
+    }
+}
+```
+
+### Using minification for your js files
+Frost supports standard UglifyJS minification as well a Babili Minification for more modern builds. By default minification will only run on production builds and the type can be specified in the config.
+
+```js
+const config = {
+    build: {
+        compression: {
+            kind: 'babili' // or uglify
+        }
+    }
+}
+```
+
+### Using HTTPS
+You can enable HTTPS by flipping the config option to true and providing paths for your cert and key files.
+
+```js
+const config = {
+    serverOptions: {
+        useHttps: true,
+        keyPath: 'certs/localhost.key',
+        certPath: 'certs/localhost.cert'
+    }
+}
+```
+
+### Enabling Service Workers
+Frost provides some PWA options to help you get set up with a service worker. All you need to do is turn on workers and then provide the path to your worker entry file.
+
+```js
+const config = {
+    pwa: {
+        hasServiceWorker: true,
+        workerEntry: 'my/worker/path.js'
     }
 }
 ```
