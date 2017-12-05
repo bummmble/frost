@@ -92,3 +92,92 @@ config config = {
 
 ## Creating your own Renderer
 ...coming soon!
+
+
+## Modifying the build through the configuration
+
+For most builds that will not require custom renderers, the configuration file you provide is the easiest place to tweak your builds to your liking. For a full list of options, check out the [schema](https://github.com/Bashkir15/frost/blob/master/packages/frost-builder/src/core/schema.js)
+
+### Modifying the entry
+The config provides a client and server entry file location
+
+```js
+const config = {
+    entry: {
+        client: 'path/to/entry.js',
+        server: 'path/to/server.js'
+    }
+};
+```
+
+### Creating a Vendor Bundle
+Simply add the names of the vendors to the config vendor entry array
+
+```js
+const config = {
+    entry: {
+        ...,
+        vendor: ['react', 'react-router', ...]
+    }
+};
+```
+
+### Customizing the output
+Customizing the output is essentially the same as the entry.
+
+```js
+const config = {
+    output: {
+        server: 'path/to/server/output',
+        client: 'path/to/client/output',
+        public: '/your/public/path'
+    }
+}
+```
+
+### Using Hot-Module Reloading
+To use Hot-Module Reloading, in addition to running the dev command, you must have it turned on in the config (defaults to true)
+
+```js
+const config = {
+    build: {
+        useHmr: true
+    }
+}
+```
+
+### Enabling Source-Maps
+Source maps slow down build time, but are incredibly useful. You can enable them in the build section of the config
+
+```js
+const config = {
+    build: {
+        sourceMaps: true
+    }
+}
+```
+### Using a CSS Preprocessor
+Frost supports the use of Sass, Scss, Less, and Stylus. None of them are enabled by default.
+
+```js
+const config = {
+    build: {
+        css: {
+            preprocess: 'sass' // 'scss', 'less', 'stylus'
+        }
+    }
+}
+```
+
+### Extracting CSS
+By Default, Frost is setup to extract CSS Chunks, this is useful for code-split, universal applications. You can turn off extraction entirely, or only extract a single file with extract-text.
+
+```js
+const config = {
+    build: {
+        css: {
+            extract: 'text' // 'chunks', 'none'
+        }
+    }
+}
+```
