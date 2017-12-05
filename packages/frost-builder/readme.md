@@ -40,3 +40,55 @@ runSequence(sequence) {
     // sequence: [{ env: 'development', renderer: 'frost', command: 'server' }]
 }
 ```
+
+### Default Usage
+
+As said above, Frost comes packaged with a default Renderer that will run your builds when there is no custom Renderer specified. Fine grained options can be tuned in your frost.config file, but the main commands exposed by the default Renderer are
+
+#### Client
+
+```js
+client(env) {
+    // client takes the client entry from your frost config and creates a bundle in the specified env
+}
+```
+
+#### Server
+
+```js
+server(env) {
+    // Server takes the server entry from your frost config and creates a bundle in the specified env
+}
+```
+
+#### Universal
+
+```js
+universal(env) {
+    // Universal looks at both the client and server entry and creates a Webpack Multicompiler to bundle both builds in the specified env
+}
+```
+
+#### Dev
+
+```js
+dev() {
+    // Dev creates a Universal, hot-reloaded development server by creating a Webpack Multicompiler and express server to reload on changes
+}
+```
+
+### With a set of custom renderers
+
+Using Frost with custom renderers is as easy as making the appropriate changes to your config file. Simply create a renderers entry, and populate the Array with the name of the renderers you would like to include. Frost will resolve them from your node_modules
+
+```js
+
+config config = {
+    ...,
+    renderers: ['custom-renderer1', 'custom-renderer2']
+}
+```
+
+
+## Creating your own Renderer
+...coming soon!
