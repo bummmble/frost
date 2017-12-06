@@ -89,11 +89,6 @@ config config = {
 }
 ```
 
-
-## Creating your own Renderer
-...coming soon!
-
-
 ## Modifying the build through the configuration
 
 For most builds that will not require custom renderers, the configuration file you provide is the easiest place to tweak your builds to your liking. For a full list of options, check out the [schema](https://github.com/Bashkir15/frost/blob/master/packages/frost-builder/src/core/schema.js)
@@ -235,3 +230,60 @@ const config = {
     }
 }
 ```
+
+## Creating your own Renderer
+
+Really, a Renderer is something that controls the actual build process itself. They extend the base Renderer class (not to be confused with the default Frost Renderer) and expose a build method. This build method should be the method that executes your process.
+
+Frost is target towards Application Bundles, providing default Webpack configurations to extend and build Renderers from. Other bundlers, while they might function, are not officially supported but could possibly be in the future. 
+
+To solidify this concept, we can build a small example Renderer below. This Renderer will be simple and have one-job -- to create a multi-entry webpack build and generate html-templates that only contain the relevant js chunks that pertain to them. 
+
+
+** More on this coming soon ** 
+
+```js
+import { Renderer, ClientCompiler } from 'frost-builder';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+
+export default class TemplateRenderer extends Renderer {
+    constructor(templates) {
+        // we call super here so we have access to a config file and a builder, the webpack execution layer
+        super();
+        this.templates = templates;
+    }
+
+    // The build method as described above is mandatory. This is the entry to your renderer. All this.builder methods return promises.
+
+    async build(env) {
+        const compiler = this.createCompiler(env);
+
+        // call the method to run a webpack compiler on the builder
+        await this.builder.build(compiler, env);
+        return this.
+    }
+
+    createPlugin() {
+        // create an array of html webpack plugins with some template data
+        return this.templates.map(template => {
+            new HtmlWebpackPlugin({
+                template: template.template,
+                chunks: [`${template.name}`],
+                filename: `${template.name}.html
+            })
+        });
+    }
+
+    createCompiler(env) {
+        // The parent renderer class exposes a getProps method which returns variables about the environment of the build
+        const props = this.getProps(env, 'client');
+
+        // Create a ClientCompiler only, but this could be worked into a MultiCompiler architecture faily easily
+        const compiler = ClientCompiler(props, this.config);
+        const plugins = this.createPlugin();
+
+        // Add the new plugins to the existing compiler and return it
+        compiler.plugins.push(...plugins);
+        return compiler;
+    }
+}
