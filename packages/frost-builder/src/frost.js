@@ -55,9 +55,15 @@ export default class Frost {
 
         return renderers.map(renderer => {
             if (renderer.charAt(0) === '.') {
-                return require(resolve(config.root, renderer));
-            } else {
-                return require.resolve(renderer);
+                const r = require(resolve(config.root, renderer));
+                const name = renderer.slice(renderer.lastIndexOf('/'), renderer.length);
+                return { `${name}`: new r(this.config) };
+            } else if (renderer === 'frost') {
+                return { frost: new FrostRenderer(this.config) };
+            }
+            else {
+                const r = require.resolve(renderer);
+                return { `${renderer}`: new r(this.config) };
             }
         });
     }
