@@ -61,5 +61,6 @@ export default function loadStyles({ isServer, isClient }, { build }) {
             });
         }
     }
+
     return [cssLoader, ...loaders];
 }

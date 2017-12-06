@@ -7,6 +7,7 @@ import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
 
 import ChunkHash from './plugins/ChunkHash';
 import MissingModules from './plugins/MissingModules';
+import Progress from './plugins/Progress';
 import loadStyles from './helpers/styles';
 
 const LoaderPool = HappyPack.ThreadPool({ size: 5 });
@@ -140,6 +141,9 @@ export default function BaseCompiler(props, config) {
         ],
         threadPool: LoaderPool
       }),
+
+      // Enables custom Progress plugin for better DX
+      process.stdout.isTTY && config.verbose ? new Progress({ prefix: 'frost' }) : null,
 
       extractPlugin,
       // Improves OS Compat
