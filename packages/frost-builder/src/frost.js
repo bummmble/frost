@@ -1,4 +1,5 @@
 import { each } from 'frost-utils';
+import { resolve } from 'path';
 import FrostRenderer from './renderers/FrostRenderer';
 import { emitEvent } from './core/emitter';
 
@@ -42,14 +43,22 @@ export default class Frost {
     }
 
     prepareRenderers(renderers) {
-        const renderProps = this.config;
-        if (!renderers.length > 0) {
-            return { 'frost': new FrostRenderer(renderProps) };
+        if (!renderers.length > 0 && !this.config.renderers) {
+            return {
+                frost: new FrostRenderer(this.config)
+            };
+        }
+
+        if (this.config.renderers && this.config.renderers.length > 0) {
+            renderers = renderers.concat(this.config.renderers);
         }
 
         return renderers.map(renderer => {
-            const pkg = require.resolve(renderer);
-            return pkg;
+            if (renderer.charAt(0) === '.') {
+                return require(resolve(config.root, renderer));
+            } else {
+                return require.resolve(renderer);
+            }
         });
     }
 }
