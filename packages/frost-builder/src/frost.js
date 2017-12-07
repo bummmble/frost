@@ -13,11 +13,11 @@ export default class Frost {
 
     async run(env, command) {
         emitEvent('beforeRun', command);
-
-        const keys = Object.keys(this.renderers);
+        console.log(this.renderers);
+        const keys = this.renderers.keys();
         try {
             await each(keys, async key => {
-                const renderer = this.renderers[key];
+                const renderer = this.renderers.get(key);
                 await renderer.build(env, command);
             });
         } catch (err) {
@@ -29,7 +29,7 @@ export default class Frost {
 
     async runOne(env, renderer, command) {
         emitEvent('beforeRunOne', renderer, command);
-        await this.renderers[renderer].build(env, command);
+        await this.renderers.get(renderer).build(env, command);
         return this;
     }
 
@@ -37,34 +37,39 @@ export default class Frost {
         emitEvent('beforeSequence', sequence);
         await each(sequence, async item => {
             const { env, renderer, command } = item;
-            await this.renderers[renderer].build(env, command);
+            await this.renderers.get(renderer).build(env, command);
         });
+
         return this;
     }
 
     prepareRenderers(renderers) {
+        const Renderers = new Map();
+
         if (!renderers.length > 0 && !this.config.renderers) {
-            return {
-                frost: new FrostRenderer(this.config)
-            };
+            Renderers.set('frost', new FrostRenderer(this.config));
         }
 
         if (this.config.renderers && this.config.renderers.length > 0) {
             renderers = renderers.concat(this.config.renderers);
         }
 
-        return renderers.map(renderer => {
+        renderers.forEach(renderer => {
             if (renderer.charAt(0) === '.') {
                 const r = require(resolve(config.root, renderer));
                 const name = renderer.slice(renderer.lastIndexOf('/'), renderer.length);
-                return { `${name}`: new r(this.config) };
+                const instance = new r(this.config);
+                Renderers.set(name, instance);
             } else if (renderer === 'frost') {
-                return { frost: new FrostRenderer(this.config) };
-            }
-            else {
+                const instance = new FrostRenderer(this.config);
+                Renderers.set('frost', instance);
+            } else {
                 const r = require.resolve(renderer);
-                return { `${renderer}`: new r(this.config) };
+                const instance = new r(this.config);
+                Renderers.set(renderer, instance);
             }
         });
+
+        return Renderers;
     }
 }

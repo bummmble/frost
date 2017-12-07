@@ -46,6 +46,7 @@ test('Builds a Production Base config for client', async t => {
 
 test('Base Compiler should produce a default performance when config is true', async t => {
     const { config } = await loadConfig('frost', {});
+    console.log(config);
     config.build.performance = true;
     const result = BaseCompiler(prodCli, config);
     t.true(result.performance.maxEntryPointSize === 1000000);
