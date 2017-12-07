@@ -173,5 +173,10 @@ export default {
   renderers: {
     type: 'array',
     defaults: []
+  },
+
+  sequence: {
+    type: 'array',
+    defaults: []
   }
 }
