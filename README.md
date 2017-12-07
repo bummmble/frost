@@ -32,6 +32,7 @@
 - A boilerplate for creating Universal React Apps using the Frost Builder
 
 ### [Frost Utils](https://github.com/Bashkir15/frost/tree/master/packages/frost-utils)
+- A functional set of utilities for types, objects, strings, arrays, and promises
 
 ### [Frost Backup](https://github.com/Bashkir15/frost/tree/master/packages/frost-backup)
 - An extremely simple ecnrypted and compressed backup to Amazon S3 for MongoDB/Redis 
