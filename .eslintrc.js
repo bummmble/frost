@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ['frost'],
+  extends: ['airbnb'],
   rules: {
     'promise/params-names': 1,
     'import/no-unresolved': 0,

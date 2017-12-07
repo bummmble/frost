@@ -3,9 +3,7 @@
   "scripts": {
     "build": "node ./scripts/build/build.js",
     "lint": "node ./scripts/lint/eslint.js",
-    "precommit": "lint-staged",
-    "prettier": "node ./scripts/prettier/index.js write-changed",
-    "prettier-all": "node ./scripts/prettier/index.js write"
+    "precommit": "lint-staged"
   },
   "lint-staged": {
     "*.js": [
