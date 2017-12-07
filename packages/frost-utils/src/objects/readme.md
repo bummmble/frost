@@ -64,7 +64,7 @@ console.log(newObject);
 // Would print { first: 8, second: 6, third: 24 };
 ```
 
-objectRemoveEmpty
+### objectRemoveEmpty
 
 ```js
 objectRemoveEmpty(object)

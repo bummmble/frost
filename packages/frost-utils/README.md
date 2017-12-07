@@ -9,3 +9,4 @@ Frost Utils represents a set of basic utilities for building applications.
 Below are the packages separated by functionality. Their documentation is found in the readme of each directory
 
 [Array Utilties](https://github.com/Bashkir15/frost/tree/master/packages/frost-utils/src/array)
+[Object Utilities](https://github.com/Bashkir15/frost/tree/master/packages/frost-utils/src/objects)
