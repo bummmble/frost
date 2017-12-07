@@ -21,7 +21,7 @@ export function validateConfig(config, schema) {
       if (config[curr]) {
         acc[curr] = processEntry(curr, value, structure)
       } else {
-        acc[curr] = structure.defaults || config[curr];
+        acc[curr] = structure.defaults
       }
     }
 

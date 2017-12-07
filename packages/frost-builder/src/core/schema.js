@@ -168,5 +168,10 @@ export default {
   verbose: {
     type: 'boolean',
     defaults: false
+  },
+
+  renderers: {
+    type: 'array',
+    defaults: []
   }
 }
