@@ -47,5 +47,3 @@
 - Supports Dynamic CSS loading and automatic chunkNames using [universal-import](https://github.com/faceyspacey/babel-plugin-universal-import)
 - Prefers external polyfills and helpers instead of baked-in code which helps out largely with code-splitting and caching
 - Transpilation ignores Generators. Transpiling these results in super slow code
-
-### [Frost Eslint](https://github.com/Bashkir15/frost/tree/master/packages/frost-eslint)
