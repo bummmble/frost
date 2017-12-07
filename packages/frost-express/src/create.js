@@ -9,18 +9,18 @@ const defaultStatic = {
   path: 'build/client',
 };
 
-export default ({
+export default function createServer({
   staticConfig = defaultStatic,
   afterSecurity = [],
   beforeFallback = [],
   enableNonce = false,
-}) => {
+}) {
   const server = express();
   createError(server);
   createSecurity(server, { enableNonce });
 
   if (afterSecurity.length > 0) {
-    afterSecurity.forEach(middleware => {
+    afterSecurity.forEach((middleware) => {
       if (Array.isArray(middleware)) {
         server.use(...middleware);
       } else {
@@ -35,7 +35,7 @@ export default ({
   }
 
   if (beforeFallback.length > 0) {
-    beforeFallback.forEach(middleware => {
+    beforeFallback.forEach((middleware) => {
       if (Array.isArray(middleware)) {
         server.use(...middleware);
       } else {
@@ -46,4 +46,4 @@ export default ({
 
   createFallback(server);
   return server;
-};
+}

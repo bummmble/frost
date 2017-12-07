@@ -1,4 +1,5 @@
-export default server => {
+/* eslint-disable no-unused-vars */
+export default function createFallback(server) {
   /** Handle 404 erros
    *  Note: If doing isomorphic rendering with something like
    *  Universal Component it will handle 404 paths, but it is good
@@ -6,7 +7,7 @@ export default server => {
    *  middleware.
    */
 
-  server.use((req, res, next) => {
+  server.use((req, res) => {
     res.status(404).send('Sorry, that resource was not found');
   });
 
@@ -21,4 +22,4 @@ export default server => {
 
     res.status(500).send('Sorry, an unexpected error occurred');
   });
-};
+}

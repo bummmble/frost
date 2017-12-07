@@ -2,7 +2,7 @@ import helmet from 'helmet';
 import parameterProtection from 'hpp';
 import uuid from 'uuid';
 
-export default (server, { enableNonce = true }) => {
+export default function createSecurity(server, { enableNonce = true }) {
   if (enableNonce) {
     server.use((req, res, next) => {
       res.locals.nonce = uuid();
@@ -24,4 +24,4 @@ export default (server, { enableNonce = true }) => {
 
   server.use(helmet.ieNoOpen());
   server.use(helmet.noSniff());
-};
+}
