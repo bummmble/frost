@@ -8,18 +8,17 @@
 ## Packages
 
 ### [Frost Builder](https://github.com/Bashkir15/frost/tree/master/packages/frost-builder)
-- Doesn't plan for or care what framework you are or are not using
+- Is completely framework agnostic
+- Supports complex build chains and minimal-configuration builds
+- Support for Sass, Less, Stylus.
+- Supports Extracting CSS Chunks for Universal Applications and Extract Text for other cases
+- Packed with Service Worker Support
+- Custom Renderers for complex, multi-step builds
 - Semi-Automatic Code-Splitting for CSS and JS
-- Allows for Tree-Shaking of CommonJS Modules
-- Parallelize expensive loaders
-- Supports CSS Modules for isolated component style
-- Supports bundling both Client and Server for isomorphic rendering
-- Hot Loading for both the Client and theServer
-- Supports postcss and progressive image-loading out of the box
-- Supports source-maps and compile-time linting
-- Comes packaged with prettier for lovely code
-- Serviceworker support out of the box as well as manifest loading through the pwa config option
-- Easy to use cli interface, but is easily usable in external build scripts
+- Parallelizes expensive loaders
+- Supports CSS Modules for isolated component style along with the full PostCSS Plugin ecosystem
+- Comes with a default renderer that will create a Client and Server bundle as well as spin-up a Hot-Module Reloaded Universal DevServer
+- Easy to integrate existing builds into
 
 ### [Frost Express](https://github.com/Bashkir15/frost/tree/master/packages/frost-express)
 - A solid foundation for starting an Express project
