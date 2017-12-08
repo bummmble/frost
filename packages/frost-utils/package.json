@@ -9,8 +9,13 @@
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
   "scripts": {
-    "build:node": "node ./build.js --cjs",
-    "build:es": "node ./build.js --es"
+    "test": "NODE_ENV=test nyc ava --verbose"
+  },
+  "ava": {
+    "require": [
+      "babel-register"
+    ],
+    "babel": "inherit"
   },
   "license": "MIT",
   "repository": {
@@ -18,7 +23,14 @@
     "url": "https://github.com/Bashkir15/frost/tree/master/packages/frost-utils"
   },
   "devDependencies": {
+    "ava": "^0.24.0",
+    "babel": "^6.23.0",
+    "babel-core": "^6.26.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-register": "^6.26.0",
     "minimist": "^1.2.0",
+    "nyc": "^11.3.0",
     "rollup": "^0.51.5",
     "rollup-plugin-commonjs": "^8.2.6"
   }

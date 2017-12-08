@@ -31,7 +31,7 @@ export { wrap } from './strings/wrap'
 export { default as Deferred } from './promise/promiseDeferred'
 export { default as PromiseMap } from './promise/promiseMap'
 export { promisify } from './promise/promisify'
-export { each } from './promise/promiseEach'
+export { promiseEach } from './promise/promiseEach'
 
 export { default as areEqual } from './types/areEqual'
 export { isArray } from './types/isArray'

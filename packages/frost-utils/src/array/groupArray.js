@@ -7,5 +7,5 @@ export function groupArray(arr, fn) {
     }
     result[res].push(arr[i]);
   }
-  return res;
+  return result;
 }
