@@ -10,4 +10,5 @@ Below are the packages separated by functionality. Their documentation is found 
 
 - [Array Utilties](https://github.com/Bashkir15/frost/tree/master/packages/frost-utils/src/array)
 - [Object Utilities](https://github.com/Bashkir15/frost/tree/master/packages/frost-utils/src/objects)
+- [Type Utilities](https://github.com/Bashkir15/frost/tree/master/packages/frost-utils/src/types)
 - [Promise Utilities](https://github.com/Bashkir15/frost/tree/master/packages/frost-utils/src/promise)
