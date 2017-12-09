@@ -51,3 +51,9 @@ test('Should successfully determine a string', t => {
     const is = isString(str);
     t.true(is === true);
 });
+
+test('Should successfully determine a number type', t => {
+    const num = 4;
+    const is = isNumber(num);
+    t.true(is === true);
+});
