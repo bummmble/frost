@@ -1,7 +1,7 @@
 export function objectIs(a, b) {
   if (a === b) {
-    return x !== 0 || y !== 0 || 1 / x === 1 / y;
+    return a !== 0 || b !== 0 || 1 / a === 1 / b;
   } else {
-    return x !== x && y !== y;
+    return a !== a && b !== b;
   }
 }
