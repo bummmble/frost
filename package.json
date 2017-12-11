@@ -12,9 +12,10 @@
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
   "scripts": {
-    "build:es": "node build.js --node --es",
-    "build:node": "node build.js --node --cjs",
-    "build:cli": "node build.js --cli --cjs",
+    "build:es": "node build.js --es",
+    "build:cjs": "node build.js --cjs",
+    "build:cli": "node build.js --cli",
+    "build": "npm run build:es && npm run build:cjs && npm run build:cli",
     "test": "NODE_ENV=test nyc ava --verbose",
     "coverage": "tests/coverage.sh"
   },
@@ -88,6 +89,7 @@
     "remap-istanbul": "^0.9.5",
     "rollup": "^0.51.5",
     "rollup-plugin-alias": "^1.4.0",
-    "rollup-plugin-commonjs": "^8.2.6"
+    "rollup-plugin-commonjs": "^8.2.6",
+    "rollup-plugin-exec": "^0.1.0"
   }
 }

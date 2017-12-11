@@ -77,12 +77,12 @@ var Schema = {
   files: {
     babel: {
       type: 'regex',
-      defaults: /\.(js|mjs|jsx)$/
+      defaults: /\.(js|mjs|jsx)$/,
     },
 
     styles: {
       type: 'regex',
-      defaults: /\.(css|sss|pcss|less|sass|scss|styl|stylus)$/
+      defaults: /\.(css|sss|pcss|less|sass|scss|styl|stylus)$/,
     },
 
     images: {
@@ -108,67 +108,67 @@ var Schema = {
 
   build: {
     useHmr: {
-      type: 'boolean',
-      defaults: true
+        type: 'boolean',
+        defaults: true
     },
 
     sourceMaps: {
-      type: 'boolean',
-      defaults: false
+        type: 'boolean',
+        defaults: false
     },
 
     css: {
-      postcss: {
-        type: 'object-or-bool',
-        defaults: true
-      },
+        postcss: {
+            type: 'object-or-bool',
+            defaults: true
+        },
 
-      cssLoader: {
-        type: 'object-or-bool',
-        defaults: false
-      },
+        cssLoader: {
+            type: 'object-or-bool',
+            defaults: false
+        },
 
-      preprocessor: {
-        type: 'string',
-        defaults: 'none'
-      },
+        preprocessor: {
+            type: 'string',
+            defaults: 'none'
+        },
 
-      extract: {
-        type: 'string',
-        defaults: 'chunks'
-      }
+        extract: {
+            type: 'string',
+            defaults: 'chunks'
+        }
     },
 
     compression: {
-      kind: {
-        type: 'string',
-        defaults: 'babili'
-      },
+        kind: {
+            type: 'string',
+            defaults: 'babili'
+        },
 
-      babiliClientOptions: {
-        type: 'object',
-        defaults: {}
-      },
+        babiliClientOptions: {
+            type: 'object',
+            defaults: {}
+        },
 
-      babiliServerOptions: {
-        type: 'object',
-        defaults: {}
-      },
+        babiliServerOptions: {
+            type: 'object',
+            defaults: {}
+        },
 
-      uglifyOptions: {
-        type: 'object',
-        defaults: {}
-      }
+        uglifyOptions: {
+            type: 'object',
+            defaults: {}
+        }
     },
 
     performance: {
-      type: 'object-or-bool',
-      defaults: false
+        type: 'object-or-bool',
+        defaults: false
     },
 
     images: {
-      type: 'object',
-      defaults: {}
+        type: 'object',
+        defaults: {}
     }
   },
 
@@ -191,13 +191,13 @@ var Schema = {
 
   pwa: {
     hasServiceWorker: {
-      type: 'boolean',
-      defaults: false
+        type: 'boolean',
+        defaults: false
     },
 
     workerEntry: {
-      type: 'path',
-      defaults: 'client/sw.js'
+        type: 'path',
+        defaults: 'client/sw.js'
     }
   },
 
@@ -219,7 +219,8 @@ var Schema = {
 
 const Root = appRootDir.get();
 
-const configError = ({ key, value, type }) => `Frost: The config for ${key} is of the wrong type. Frost expected a ${type} but received ${typeof value}`;
+const configError = ({ key, value, type }) =>
+  `Frost: The config for ${key} is of the wrong type. Frost expected a ${type} but received ${typeof value}`;
 
 function validateConfig(config, schema) {
   return Object.keys(schema).reduce((acc, curr) => {
@@ -236,8 +237,8 @@ function validateConfig(config, schema) {
       }
     }
 
-    return acc;
-  }, {});
+    return acc
+  }, {})
 }
 
 /* eslint-disable no-unused-vars */
@@ -250,54 +251,54 @@ function processEntry(key, value, { type, defaults }) {
     case 'string':
     case 'url':
       if (typeof value !== 'string') {
-        throw new Error(configError(props));
+        throw new Error(configError(props))
       }
-      return value;
+      return value
 
     case 'object-or-bool':
-      if (typeof value !== 'object' && typeof value !== 'boolean') {
-        throw new Error(configError(props));
-      }
-
-      if (typeof value === 'object') {
-        return value;
-      } else if (typeof value === 'boolean') {
-        if (value == true) {
-          return defaults;
+        if (typeof value !== 'object' && typeof value !== 'boolean') {
+            throw new Error(configError(props));
         }
-        return false;
-      }
+
+        if (typeof value === 'object') {
+            return value;
+        } else if (typeof value === 'boolean') {
+            if (value == true) {
+                return defaults;
+            }
+            return false;
+        }
 
     case 'number':
       parsed = parseFloat(value, 10);
       if (isNaN(parsed)) {
-        throw new Error(configError(props));
+        throw new Error(configError(props))
       }
-      return parsed;
+      return parsed
 
     case 'array':
       if (!Array.isArray(value)) {
-        throw new Error(configError(props));
+        throw new Error(configError(props))
       }
-      return value;
+      return value
 
     case 'boolean':
-      return !!value;
+      return !!value
 
     case 'regex':
       if (value.constructor !== RegExp) {
-        throw new Error(configError(props));
+        throw new Error(configError(props))
       }
-      return value;
+      return value
 
     case 'path':
       if (typeof value !== 'string') {
-        throw new Error(configError(props));
+        throw new Error(configError(props))
       }
-      return path.resolve(Root, value);
+      return path.resolve(Root, value)
 
     default:
-      throw new Error(`Frost: Received an entry in config that is not supported. Found the following Entry \n\n ${key}: ${value}`);
+      throw new Error(`Frost: Received an entry in config that is not supported. Found the following Entry \n\n ${key}: ${value}`)
   }
 }
 
@@ -307,7 +308,7 @@ function setFlags(flags, config) {
     config[key] = flags[key];
   }
 
-  return config;
+  return config
 }
 
 async function loadConfig(prefix = 'frost', flags = {}) {
@@ -321,7 +322,7 @@ async function loadConfig(prefix = 'frost', flags = {}) {
   const config = validateConfig(setFlags(flags, result.config), Schema);
   config.root = Root;
 
-  return { config, root };
+  return { config, root }
 }
 
 const emitter = new EventEmitter();
@@ -378,19 +379,28 @@ function formatWebpackMessage(message, isError) {
 
     // Cleans syntax error
     if (lines[1].indexOf('Module build failed: ') === 0) {
-        lines[1] = lines[1].replace('Module build failed: SyntaxError', 'Syntax Error');
+        lines[1] = lines[1].replace(
+            'Module build failed: SyntaxError',
+            'Syntax Error'
+        );
     }
 
     // Cleans export errors
     if (lines[1].match(ExportError)) {
-        lines[1] = lines[1].replace(ExportError, "$1 '$4' does not contain an export named '$3'.");
+        lines[1] = lines[1].replace(
+            ExportError,
+            "$1 '$4' does not contain an export named '$3'."
+        );
     }
 
     message = lines.join('\n');
 
     // Strip internal stacks because they are generally useless
     // with the exception of some stacks containing 'webpack:'. For
-    message = message.replace(WebpackStacks, '');
+    message = message.replace(
+        WebpackStacks,
+        ''
+    );
 
     return message.trim();
 }
@@ -485,7 +495,7 @@ class Builder {
             return compiler;
         });
 
-        await frostUtils.each(this.compilers, async compiler => {
+        await frostUtils.each(this.compilers,  async compiler => {
             target ? compiler.options.name : target + compiler.options.name;
             const stats = await webpackPromise(compiler);
             formatWebpackOutput(stats, target);
@@ -600,10 +610,14 @@ class ChunkHash {
     apply(compiler) {
         compiler.plugin('compilation', compilation => {
             compilation.plugin('chunk-hash', (chunk, chunkHash) => {
-                const source = chunk.mapModules(module => module).sort(compareModules).map(getSource).reduce(concatenateSource, '');
+                const source = chunk
+                    .mapModules(module => module)
+                    .sort(compareModules)
+                    .map(getSource)
+                    .reduce(concatenateSource, '');
                 const hash = loaderUtils.getHashDigest(source, HashType, DigestType, DigestLength);
 
-                chunkHash.digest = function () {
+                chunkHash.digest = function() {
                     return hash;
                 };
             });
@@ -646,7 +660,7 @@ class Progress {
                 spinner.text = prefix + message;
                 spinner.render();
             } else {
-                spinner.succeed(prefix, +'Done!');
+                spinner.succeed(prefix, + 'Done!');
             }
         }
 
@@ -763,6 +777,7 @@ function loadStyles({ isServer, isClient }, { build }) {
         }
     }
 
+
     let cssLoaderOptions = {
         modules: true,
         localIdentName: '[local]-[hash:base62:8]',
@@ -781,9 +796,15 @@ function loadStyles({ isServer, isClient }, { build }) {
         options: cssLoaderOptions
     };
 
-    const sassLoader = css.preprocessor === 'sass' || css.preprocessor === 'scss' ? { loader: 'sass-loader' } : false;
-    const lessLoader = css.preprocessor === 'less' ? { loader: 'less-loader' } : false;
-    const stylusLoader = css.preprocessor === 'stylus' ? { loader: 'stylus-loader' } : false;
+    const sassLoader = css.preprocessor === 'sass' || css.preprocessor === 'scss'
+        ? { loader: 'sass-loader' }
+        : false;
+    const lessLoader = css.preprocessor === 'less'
+        ? { loader: 'less-loader' }
+        : false;
+    const stylusLoader = css.preprocessor === 'stylus'
+        ? { loader: 'stylus-loader' }
+        : false;
 
     const loaders = [postcssLoader, sassLoader, lessLoader, stylusLoader].filter(Boolean);
 
@@ -791,11 +812,17 @@ function loadStyles({ isServer, isClient }, { build }) {
         if (css.extract === 'text') {
             return ExtractTextPlugin.extract({
                 fallback: 'style-loader',
-                use: [cssLoader, ...loaders]
+                use: [
+                    cssLoader,
+                    ...loaders
+                ]
             });
         } else if (css.extract === 'chunks') {
             return ExtractCssChunks.extract({
-                use: [cssLoader, ...loaders]
+                use: [
+                    cssLoader,
+                    ...loaders
+                ]
             });
         }
     }
@@ -804,6 +831,7 @@ function loadStyles({ isServer, isClient }, { build }) {
 }
 
 const LoaderPool = HappyPack.ThreadPool({ size: 5 });
+
 
 function BaseCompiler(props, config) {
   const { isDev, isProd, isClient, isServer, webpackTarget } = props;
@@ -819,9 +847,9 @@ function BaseCompiler(props, config) {
 
   if (config.build.css.extract && isClient) {
     if (config.build.css.extract === 'text') {
-      extractPlugin = new ExtractTextPlugin({});
+        extractPlugin = new ExtractTextPlugin({});
     } else if (config.build.css.extract === 'chunks') {
-      extractPlugin = new ExtractCssChunks({});
+        extractPlugin = new ExtractCssChunks({});
     }
   }
 
@@ -836,11 +864,11 @@ function BaseCompiler(props, config) {
     devtool,
     performance,
     entry: {
-      main: null
+      main: null,
     },
 
     output: {
-      libraryTarget: isServer ? 'commonjs2' : 'var',
+      libraryTarget: isServer ? 'commonjs2': 'var',
       filename: isDev || isServer ? '[name].js' : '[name]-[chunkhash].js',
       chunkFilename: isDev || isServer ? '[name].js' : '[name]-[chunkhash].js',
       publicPath: config.output.public,
@@ -854,87 +882,130 @@ function BaseCompiler(props, config) {
     },
 
     module: {
-      rules: [{
-        test: config.files.babel,
-        exclude: /node_modules/,
-        use: 'happypack/loader?id=js'
-      }, {
-        test: config.files.styles,
-        use: 'happypack/loaders?id=styles'
-      }, {
-        test: config.files.fonts,
-        use: 'happypack/loaders?id=fonts'
-      }, {
-        test: config.files.images,
-        use: 'happypack/loaders?id=images'
-      }, {
-        test: config.files.video,
-        use: 'happypack/loaders?id=videos'
-      }]
+      rules: [
+        {
+          test: config.files.babel,
+          exclude: /node_modules/,
+          use: 'happypack/loader?id=js'
+        },
+
+        {
+            test: config.files.styles,
+            use: 'happypack/loaders?id=styles'
+        },
+
+        {
+          test: config.files.fonts,
+          use: 'happypack/loaders?id=fonts'
+        },
+
+        {
+          test: config.files.images,
+          use: 'happypack/loaders?id=images'
+        },
+
+        {
+          test: config.files.video,
+          use: 'happypack/loaders?id=videos'
+        }
+      ]
     },
 
-    plugins: [new HappyPack({
-      id: 'js',
-      loaders: [{ loader: 'babel-loader' }],
-      threadPool: LoaderPool
-    }), new HappyPack({
-      id: 'styles',
-      loaders: styles
-    }), new HappyPack({
-      id: 'fonts',
-      loaders: [{
-        loader: 'file-loader',
-        options: {
-          name: isProd ? 'file-[hash:base62:8].[ext]' : '[path][name].[ext]',
-          emitFile: isClient
-        }
-      }],
-      threadPool: LoaderPool
-    }), new HappyPack({
-      id: 'videos',
-      loaders: [{
-        loader: 'url-loader',
-        options: {
-          limit: 10000
-        }
-      }],
-      threadPool: LoaderPool
-    }), new HappyPack({
-      id: 'images',
-      loaders: [{ loader: 'file-loader' }, { loader: 'image-webpack-loader' }],
-      threadPool: LoaderPool
-    }),
+    plugins: [
+      new HappyPack({
+        id: 'js',
+        loaders: [
+            { loader: 'babel-loader' }
+        ],
+        threadPool: LoaderPool
+      }),
 
-    // Enables custom Progress plugin for better DX
-    process.stdout.isTTY && config.verbose ? new Progress({ prefix: 'frost' }) : null, extractPlugin,
-    // Improves OS Compat
-    // See: https://github.com/Urthen/case-sensitive-paths-webpack-plugin
-    new CaseSensitivePathsPlugin(), new MissingModules(`${config.root}/node_modules`), isDev ? new webpack.NamedModulesPlugin() : null, isDev ? new webpack.NoEmitOnErrorsPlugin() : null,
+      new HappyPack({
+        id: 'styles',
+        loaders: styles
+      }),
 
-    // Generates IDs that preserve over builds
-    // https://github.com/webpack/webpack.js.org/issues/652#issuecomment-273324529
-    isProd ? new webpack.HashedModuleIdsPlugin() : null,
+      new HappyPack({
+        id: 'fonts',
+        loaders: [
+            {
+                loader: 'file-loader',
+                options: {
+                    name: isProd ? 'file-[hash:base62:8].[ext]' : '[path][name].[ext]',
+                    emitFile: isClient
+                }
+            }
+        ],
+        threadPool: LoaderPool
+      }),
 
-    // Hoists statics
-    isProd ? new webpack.optimize.ModuleConcatenationPlugin() : null,
+      new HappyPack({
+        id: 'videos',
+        loaders: [
+            {
+                loader: 'url-loader',
+                options: {
+                    limit: 10000
+                }
+            }
+        ],
+        threadPool: LoaderPool
+      }),
 
-    // This is used to guarentee that our generated [chunkhash]'s are different ONLY
-    // if the content for the respective chunks have changed. This allows for maximization
-    // of a long-term browser caching strategy for the client bundle, avoiding cases
-    // where browsers end up having to download all of the chunks again even though
-    // only one or two may have changed
-    isProd ? new ChunkHash() : null, isProd ? new webpackBundleAnalyzer.BundleAnalyzerPlugin({
-      analyzerMode: 'static',
-      defaultSizes: isServer ? 'parsed' : 'gziped',
-      logLevel: 'silent',
-      openAnalyzer: false,
-      reportFilename: 'report.html'
-    }) : null].filter(Boolean)
-  };
+      new HappyPack({
+        id: 'images',
+        loaders: [
+            { loader: 'file-loader' },
+            { loader: 'image-webpack-loader' }
+        ],
+        threadPool: LoaderPool
+      }),
+
+      // Enables custom Progress plugin for better DX
+      process.stdout.isTTY && config.verbose ? new Progress({ prefix: 'frost' }) : null,
+
+      extractPlugin,
+      // Improves OS Compat
+      // See: https://github.com/Urthen/case-sensitive-paths-webpack-plugin
+      new CaseSensitivePathsPlugin(),
+      new MissingModules(`${config.root}/node_modules`),
+
+      isDev ? new webpack.NamedModulesPlugin() : null,
+      isDev ? new webpack.NoEmitOnErrorsPlugin() : null,
+
+      // Generates IDs that preserve over builds
+      // https://github.com/webpack/webpack.js.org/issues/652#issuecomment-273324529
+      isProd ? new webpack.HashedModuleIdsPlugin() : null,
+
+      // Hoists statics
+      isProd ? new webpack.optimize.ModuleConcatenationPlugin() : null,
+
+      // This is used to guarentee that our generated [chunkhash]'s are different ONLY
+      // if the content for the respective chunks have changed. This allows for maximization
+      // of a long-term browser caching strategy for the client bundle, avoiding cases
+      // where browsers end up having to download all of the chunks again even though
+      // only one or two may have changed
+      isProd ? new ChunkHash() : null,
+
+      isProd ? new webpackBundleAnalyzer.BundleAnalyzerPlugin({
+        analyzerMode: 'static',
+        defaultSizes: isServer ? 'parsed' : 'gziped',
+        logLevel: 'silent',
+        openAnalyzer: false,
+        reportFilename: 'report.html'
+      }) : null
+    ].filter(Boolean)
+  }
 }
 
 function buildCommonChunks(base) {
-    const possibleVendor = ['/regenerator-runtime/', '/es6-promise/', '/babel-runtime/', '/raf-polyfill/', '/lodash/'];
+    const possibleVendor = [
+        '/regenerator-runtime/',
+        '/es6-promise/',
+        '/babel-runtime/',
+        '/raf-polyfill/',
+        '/lodash/'
+    ];
 
     base.plugins.unshift(new webpack.optimize.CommonsChunkPlugin({
         name: 'vendor',
@@ -944,7 +1015,8 @@ function buildCommonChunks(base) {
                 return true;
             }
 
-            return (/node_modules/.test(context) &&
+            return (
+                /node_modules/.test(context) &&
                 // Do not externalize the request if it is a css file
                 !/\.(css|less|scss|sass|styl|stylus|pcss)$/.test(request)
             );
@@ -1002,13 +1074,22 @@ function ClientCompiler(props, config) {
 
 const BuiltIns = new Set(builtinModules);
 const WebpackRequired = new Set([
-// These are required for universal imports to work properly
-'react-universal-component', 'webpack-flush-chunks', 'babel-plugin-universal-import']);
+    // These are required for universal imports to work properly
+    'react-universal-component',
+    'webpack-flush-chunks',
+    'babel-plugin-universal-import'
+]);
 
 const Problematic = new Set([
-// These are things that are generally large or have problematic
-// commonJS functionality
-'intl', 'mime-db', 'encoding', 'ajv', 'colors', 'jsdom']);
+    // These are things that are generally large or have problematic
+    // commonJS functionality
+    'intl',
+    'mime-db',
+    'encoding',
+    'ajv',
+    'colors',
+    'jsdom'
+]);
 
 const BundleCache = {};
 const ExternalsCache = {};
@@ -1018,7 +1099,9 @@ function isLoaderFile(req) {
         return true;
     }
 
-    return Boolean(/\.(eot|woff|woff2|ttf|otf|svg|png|jpg|jpeg|gif|webp|webm|ico|mp4|mp3|ogg|html|pdf|css|scss|sass|sss|less|zip)$/.exec(req));
+    return Boolean(
+       /\.(eot|woff|woff2|ttf|otf|svg|png|jpg|jpeg|gif|webp|webm|ico|mp4|mp3|ogg|html|pdf|css|scss|sass|sss|less|zip)$/.exec(req)
+    );
 }
 
 
@@ -1049,7 +1132,7 @@ function isExternalRequest(req) {
         return false;
     }
 
-    const match = /^((@[a-zA-Z0-9-_]+\/)?[a-zA-Z0-9_-]+)\/?/.exec(req);
+    const match = (/^((@[a-zA-Z0-9-_]+\/)?[a-zA-Z0-9_-]+)\/?/).exec(req);
     const basename = match ? match[1] : null;
 
     if (basename == null || Problematic.has(basename) || BuiltIns.has(basename)) {
@@ -1080,7 +1163,7 @@ function getExternals(entries) {
         }
 
         return isExternal ? cb(null, `commonjs ${req}`) : cb();
-    };
+    }
 }
 
 function ServerCompiler(props, config) {
