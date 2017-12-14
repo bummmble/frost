@@ -7,8 +7,6 @@ const args = require('minimist')(process.argv.slice(2));
 const pkg = require('./package.json');
 const external = Object.keys(pkg.dependencies).concat(builtinModules);
 
-const removePromise = promisify(remove);
-
 function getFormat() {
     let format;
     if (args.cli || args.cjs) {

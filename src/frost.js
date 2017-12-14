@@ -7,13 +7,12 @@ import { emitEvent } from './core/emitter';
 export default class Frost {
     constructor(config, renderers = []) {
         this.config = config;
-        // Allow this to be extendable later
         this.renderers = this.prepareRenderers(renderers);
     }
 
     async run(env, command) {
         emitEvent('beforeRun', command);
-        console.log(this.renderers);
+
         const keys = this.renderers.keys();
         try {
             await each(keys, async key => {
@@ -58,15 +57,12 @@ export default class Frost {
             if (renderer.charAt(0) === '.') {
                 const r = require(resolve(config.root, renderer));
                 const name = renderer.slice(renderer.lastIndexOf('/'), renderer.length);
-                const instance = new r(this.config);
-                Renderers.set(name, instance);
+                Renderers.set(name, new r(this.config));
             } else if (renderer === 'frost') {
-                const instance = new FrostRenderer(this.config);
-                Renderers.set('frost', instance);
+                Renderers.set('frost', new FrostRenderer(this.config));
             } else {
                 const r = require.resolve(renderer);
-                const instance = new r(this.config);
-                Renderers.set(renderer, instance);
+                Renderers.set(renderer, new r(this.config));
             }
         });
 
