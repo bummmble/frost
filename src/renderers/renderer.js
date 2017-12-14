@@ -2,7 +2,7 @@ import getPort from 'get-port';
 import http from 'http';
 import https from 'https';
 import { readFileSync, existsSync } from 'fs-extra';
-import { createExpressServer } from 'frost-express';
+import { createServer } from 'bummmble-hive';
 import Builder from '../core/builder';
 
 function getCerts(serverOptions) {
@@ -38,7 +38,7 @@ export default class Renderer {
         let Server;
 
         if (!server) {
-            server = createExpressServer({
+            server = createServer({
                 afterSecurity: [],
                 beforeFallback: middleware ? [...middleware] : [],
                 enableNonce: false
