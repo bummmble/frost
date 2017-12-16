@@ -1,0 +1,5 @@
+client
+server
+*.log
+.nyc_output
+tests
