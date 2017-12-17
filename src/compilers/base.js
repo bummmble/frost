@@ -16,6 +16,9 @@ const LoaderPool = HappyPack.ThreadPool({ size: 5 });
 export default function BaseCompiler(props, config) {
   const { isDev, isProd, isClient, isServer, webpackTarget } = props
   const target = webpackTarget === 'node' ? 'server' : 'client';
+  const env = isDev ? 'development' : 'production';
+  const babelEnv = `${env}-${target}`;
+
   const devtool = config.build.sourceMaps ? 'source-map' : false
   const performance = config.build.performance && config.build.performance === true ? {
     maxEntryPointSize: 1000000,
@@ -96,7 +99,12 @@ export default function BaseCompiler(props, config) {
       new HappyPack({
         id: 'js',
         loaders: [
-            { loader: 'babel-loader' }
+            {
+                loader: 'babel-loader',
+                options: {
+                    forceEnv: babelEnv
+                }
+            }
         ],
         threadPool: LoaderPool
       }),
