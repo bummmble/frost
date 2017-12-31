@@ -1,8 +1,7 @@
-import { each } from 'frost-utils';
 import { resolve } from 'path';
 import FrostRenderer from './renderers/FrostRenderer';
 import { emitEvent } from './core/emitter';
-
+import { each } from './utils';
 
 export default class Frost {
     constructor(config, renderers = []) {
