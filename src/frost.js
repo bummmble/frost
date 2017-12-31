@@ -12,17 +12,14 @@ export default class Frost {
 
     async run(env, command) {
         emitEvent('beforeRun', command);
-
-        const keys = this.renderers.keys();
+        const keys = Array.from(this.renderers.keys());
         try {
             await each(keys, async key => {
-                const renderer = this.renderers.get(key);
-                await renderer.build(env, command);
+                await this.renderers.get(key).build(env, command);
             });
         } catch (err) {
             throw new Error(err);
         }
-
         return this;
     }
 
@@ -44,23 +41,30 @@ export default class Frost {
 
     prepareRenderers(renderers) {
         const Renderers = new Map();
-
-        if (!renderers.length > 0 && !this.config.renderers) {
+        // If there are no renderers set, apply the default Frost renderer
+        // and return
+        if (!renderers.length > 0 && !this.config.renderers.length > 0) {
             Renderers.set('frost', new FrostRenderer(this.config));
+            return Renderers;
         }
-
-        if (this.config.renderers && this.config.renderers.length > 0) {
-            renderers = renderers.concat(this.config.renderers);
+        if (this.config.renderers.length > 0) {
+            renderers = [
+                ...renderers,
+                ...this.config.renderers
+            ];
         }
 
         renderers.forEach(renderer => {
+            // Resolve local renderers
             if (renderer.charAt(0) === '.') {
-                const r = require(resolve(config.root, renderer));
-                const name = renderer.slice(renderer.lastIndexOf('/'), renderer.length);
+                const path = resolve(this.config.root, renderer);
+                const name = path.slice(path.lastIndexOf('/'), path.length);
+                const r = require(path);
                 Renderers.set(name, new r(this.config));
             } else if (renderer === 'frost') {
                 Renderers.set('frost', new FrostRenderer(this.config));
             } else {
+                // Resolve renderer from node_modules
                 const r = require.resolve(renderer);
                 Renderers.set(renderer, new r(this.config));
             }

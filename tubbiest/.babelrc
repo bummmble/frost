@@ -1,0 +1,9 @@
+{
+    "presets": [
+        ["frost", {
+            modules: "commonjs",
+            imports: "webpack",
+            target: "modern"
+        }]
+    ]
+}
