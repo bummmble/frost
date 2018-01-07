@@ -3,13 +3,21 @@ import { resolve, relative } from 'path';
 import { get as getRoot } from 'app-root-dir';
 
 import Schema from './schema';
+import { isString, isBoolean, isObject, isFunction } from '../utils';
+
 export const Root = getRoot();
 
-export const configError = ({ key, value, type }, type2) => `
-    Frost: This config for ${key} is of the wrong type. Frost expected type ${type2 ? `${type} or ${type2}` : type} but received ${typeof value}
+export const configError = ({ key, value, type }, type2, type3) => `
+    Frost: the config for ${key} is of the wrong type.
+    Frost expected type ${type2
+        ? type3
+            ? `${type} or ${type2} or ${type3}`
+            : `${type} or ${type2}`
+        : type}
+    but received ${typeof value}
 `;
 
-export function processConfig(key, value, { type, defaults }) {
+export function processConfigEntry(key, value, { type, defaults }) {
     const props = { key, value, type };
     let parsed;
 
@@ -17,7 +25,7 @@ export function processConfig(key, value, { type, defaults }) {
         case 'string':
         case 'url':
         case 'path':
-            if (typeof value !== 'string') {
+            if (!isString(value)) {
                 throw new Error(configError(props));
             }
             if (type === 'path') {
@@ -38,17 +46,14 @@ export function processConfig(key, value, { type, defaults }) {
             }
             return value;
 
+        case 'boolean':
+            return !!value;
+
         case 'object':
-            // Since all objects passed to config will be
-            // Simple objects, not functions or anything
-            // This naive check should be enough
-            if (typeof value !== 'object') {
+            if (!isObject(value)) {
                 throw new Error(configError(props));
             }
             return value;
-
-        case 'boolean':
-            return !!value;
 
         case 'regex':
             if (value.constructor !== RegExp) {
@@ -56,58 +61,57 @@ export function processConfig(key, value, { type, defaults }) {
             }
             return value;
 
-        case 'object-or-bool':
-            if (typeof value !== 'object' && typeof value !== 'boolean') {
-                throw new Error(configError({
-                    ...props,
-                    type: 'object'
-                }, 'boolean'));
-            }
-            if (typeof value === 'object') {
-                return value;
-            }
-            if (value == true) {
-                return defaults;
-            }
-            return false;
-
         case 'string-or-bool':
-            if (typeof value !== 'string' && typeof value !== 'boolean') {
+            if (!isString(value) && !isBoolean(value)) {
                 throw new Error(configError({
                     ...props,
                     type: 'string'
                 }, 'boolean'));
             }
-            if (typeof value === 'string') {
+            if (isString(value)) {
                 return value;
             }
-            if (value == true) {
+            if (value === true) {
                 return defaults;
             }
             return false;
 
+        case 'object-or-bool':
+            if (!isObject(value) && !isBoolean(value)) {
+                throw new Error(configError({
+                    ...props,
+                    type: 'object'
+                }, 'boolean'));
+            }
+            if (isObject(value)) {
+                return value;
+            }
+            if (value === true) {
+                return defaults;
+            }
+            return false;
+
+        case 'object-or-bool-or-function':
+            if (!isObject(value) && !isBoolean(value) && !isFunction(value)) {
+                throw new Error(configError({
+                    ...props,
+                    type: 'object'
+                }, 'boolean', 'function'));
+            }
+            if (isObject(value) || isFunction(value)) {
+                return value;
+            }
+            if (value === true) {
+                if (defaults === false) {
+                    return value;
+                }
+                return defaults;
+            }
+            return false;
     }
 }
 
-export function validateConfig(config, schema) {
-    return Object.keys(schema).reduce((acc, curr) => {
-        const structure = schema[curr];
-        const value = config[curr] || {};
-
-        if (!structure.type) {
-            acc[curr] = validateConfig(value, structure);
-        } else {
-            if (config[curr]) {
-                acc[curr] = processConfig(curr, value, structure);
-            } else {
-                acc[curr] = structure.defaults;
-            }
-        }
-        return acc;
-    }, {});
-}
-
-function setFlags(flags, config) {
+export function setFlags(flags, config) {
     for (const key in flags) {
         config[key] = flags[key];
     }
@@ -119,10 +123,11 @@ export async function loadConfig(prefix = 'frost', flags = {}) {
         rcExtensions: true,
         stopDir: Root
     });
+
     const result = await loader.load(Root);
     const root = relative(Root, result.filepath);
     const config = validateConfig(setFlags(flags, result.config), Schema);
-    config.root = Root;
+    config.root = root;
 
-    return { config, root };
+    return config;
 }
