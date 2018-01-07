@@ -12,7 +12,7 @@
     "build:es": "node build.js --es",
     "build:cjs": "node build.js --cjs",
     "build": "npm run build:es && npm run build:cjs",
-    "test": "NODE_ENV=test nyc ava --verbose && npm run coverage",
+    "test": "NODE_ENV=test nyc ava --verbose",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
   },
   "lint-staged": {

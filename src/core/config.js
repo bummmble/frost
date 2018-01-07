@@ -102,13 +102,29 @@ export function processConfigEntry(key, value, { type, defaults }) {
                 return value;
             }
             if (value === true) {
-                if (defaults === false) {
-                    return value;
-                }
                 return defaults;
             }
             return false;
     }
+}
+
+export function validateConfig(config, schema) {
+    return Object.keys(schema).reduce((acc, curr) => {
+        const structure = schema[curr];
+        const value = config[curr] || {};
+
+        if (!structure.type) {
+            acc[curr] = validateConfig(value, structure)
+        } else {
+            if (config[curr]) {
+                acc[curr] = processConfigEntry(curr, value, structure);
+            } else {
+                acc[curr] = structure.defaults;
+            }
+        }
+
+        return acc;
+    }, {});
 }
 
 export function setFlags(flags, config) {

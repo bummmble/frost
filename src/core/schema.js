@@ -224,7 +224,13 @@ export default {
 
         performance: {
             type: 'object-or-bool-or-function',
-            defaults: false
+            defaults: function(isDev, isServer) {
+                return {
+                    maxEntryPointSize: 1000000,
+                    maxAssetSize: isServer ? Infinity : 300000,
+                    hints: isDev || isServer ? false : 'warning'
+                };
+            }
         },
 
         plugins: {
