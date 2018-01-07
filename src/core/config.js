@@ -2,6 +2,7 @@ import cosmiconfig from 'cosmiconfig';
 import { resolve, relative } from 'path';
 import { get as getRoot } from 'app-root-dir';
 
+import Schema from './schema';
 export const Root = getRoot();
 
 export const configError = ({ key, value, type }, type2) => `
@@ -56,9 +57,9 @@ export function processConfig(key, value, { type, defaults }) {
             return value;
 
         case 'object-or-bool':
-            if (typeof value !== 'object' || typeof value !== 'boolean') {
+            if (typeof value !== 'object' && typeof value !== 'boolean') {
                 throw new Error(configError({
-                    ...props
+                    ...props,
                     type: 'object'
                 }, 'boolean'));
             }
@@ -71,7 +72,7 @@ export function processConfig(key, value, { type, defaults }) {
             return false;
 
         case 'string-or-bool':
-            if (typeof value !== 'string' || typeof value !== 'boolean') {
+            if (typeof value !== 'string' && typeof value !== 'boolean') {
                 throw new Error(configError({
                     ...props,
                     type: 'string'

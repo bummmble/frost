@@ -21,9 +21,9 @@ export default {
         },
         server: {
             type: 'path',
-            defauls: 'build/server'
+            defaults: 'build/server'
         },
-        public: {
+        publicPath: {
             type: 'url',
             defaults: '/static/'
         }
@@ -81,25 +81,29 @@ export default {
             type: 'object-or-bool',
             defaults: false
         },
+
         cssLoader: {
             type: 'object-or-bool',
-            defaults: true
+            defaults: false
         },
+
         preprocessor: {
             type: 'string',
             defaults: 'none'
         },
+
         extract: {
             type: 'string',
             defaults: 'none'
         },
+
         extractOptions: {
             type: 'object',
             defaults: {}
         }
     },
 
-    babel: {
+    babelOptions: {
         type: 'object',
         defaults: {}
     },
@@ -109,10 +113,12 @@ export default {
             type: 'string',
             defaults: 'babili'
         },
+
         babiliClientOptions: {
             type: 'object',
             defaults: {}
         },
+
         babiliServerOptions: {
             type: 'object',
             defaults: {
@@ -123,6 +129,7 @@ export default {
                 mergeVars: false
             }
         },
+
         uglifyOptions: {
             type: 'object',
             defaults: {
@@ -145,10 +152,12 @@ export default {
             type: 'boolean',
             defaults: false
         },
+
         keyPath: {
             type: 'path',
             defaults: 'localhost.key'
         },
+
         certPath: {
             type: 'path',
             defaults: 'localhost.cert'
@@ -157,26 +166,11 @@ export default {
 
     sourceMaps: {
         type: 'string-or-bool',
-        defualts: false
+        defaults: true
     },
 
     subresourceIntegrity: {
-        type: 'boolean',
-        defaults: false
-    },
-
-    useTypescript: {
-        type: 'boolean',
-        defaults: false
-    },
-
-    useElm: {
-        type: 'boolean',
-        defaults: false
-    },
-
-    useRust: {
-        type: 'boolean',
+        type: 'object-or-bool',
         defaults: false
     },
 
@@ -185,10 +179,36 @@ export default {
             type: 'boolean',
             defaults: false
         },
+
         workerEntry: {
             type: 'path',
             defaults: 'client/sw.js'
         }
+    },
+
+    useTypescript: {
+        type: 'object-or-bool',
+        defaults: false
+    },
+
+    useElm: {
+        type: 'object-or-bool',
+        defaults: false
+    },
+
+    useRust: {
+        type: 'object-or-bool',
+        defaults: false
+    },
+
+    verbose: {
+        type: 'boolean',
+        defaults: false
+    },
+
+    quiet: {
+        type: 'boolean',
+        defaults: false
     },
 
     webpack: {
@@ -203,16 +223,7 @@ export default {
         },
 
         performance: {
-            type: 'object-or-bool',
-            defaults: false
-        },
-
-        // This feature could possibly break your application
-        // I currently have a fork of this repo and am working on
-        // fixing some issues. This will remain expirimental
-        // until that is resolved.
-        expirimentalShakeCommonModules: {
-            type: 'boolean',
+            type: 'object-or-bool-or-function',
             defaults: false
         },
 
@@ -228,23 +239,34 @@ export default {
         }
     },
 
+    framework: {
+        name: {
+            type: 'string',
+            defaults: 'none'
+        },
+
+        react: {
+            useHotLoader: {
+                type: 'boolean',
+                defaults: false
+            }
+        },
+
+        vue: {
+            useVueLoader: {
+                type: 'object-or-bool',
+                defaults: false
+            },
+
+            useSSR: {
+                type: 'object-or-bool',
+                defaults: false
+            }
+        }
+    },
+
     renderers: {
         type: 'array',
         defaults: []
-    },
-
-    sequence: {
-        type: 'array',
-        defaults: []
-    },
-
-    verbose: {
-        type: 'boolean',
-        defaults: false
-    },
-
-    quiet: {
-        type: 'boolean',
-        defaults: false
     }
 }

@@ -1,63 +1,57 @@
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
-import ExtractCssChunks from 'extract-css-chunks-webpack-plugin';
+import ExtractCSSChunks from 'extract-css-chunks-webpack-plugin';
 
-export default function loadStyles({ isServer, isClient }, { build }) {
-    const { sourceMaps, css } = build;
-
-    let postcssLoader;
-    if (css.postcss) {
-        postcssLoader = { loader: 'postcss-loader' };
-        if (typeof css.postcss === 'object') {
-            postcssLoader.options = build.postcss;
-        }
-    }
-
-
+export default function loadStyles(isServer, { styles, sourceMaps }) {
     let cssLoaderOptions = {
         modules: true,
-        localIdentName: '[local]-[hash:base62:8]',
-        minimize: css.postcss ? false : true
+        localIdentName: '[name]-[local]-[hash:base64:5]',
+        minimize: styles.postcss ? false : true
     };
 
-    if (css.cssLoader && typeof css.cssLoader === 'object') {
-        cssLoaderOptions = css.cssLoader;
+    if (styles.cssLoader && typeof styles.cssLoader === 'object') {
+        cssLoaderOptions = {
+            ...cssLoaderOptions,
+            ...styles.cssLoader
+        };
     }
 
-    const cssLoader = isClient ? {
-        loader: 'css-loader',
+    const cssLoader = isServer ? }
+        loader: 'css-loader/locals',
         options: cssLoaderOptions
     } : {
-        loader: 'css-loader/locals',
+        loader: 'css-loader',
         options: cssLoaderOptions
     };
 
-    const sassLoader = css.preprocessor === 'sass' || css.preprocessor === 'scss'
+    const { preprocessor } = styles;
+    const sassLoader = preprocessor === 'sass' || preprocessor === 'scss'
         ? { loader: 'sass-loader' }
         : false;
-    const lessLoader = css.preprocessor === 'less'
+    const lessLoader = preprocessor === 'less'
         ? { loader: 'less-loader' }
         : false;
-    const stylusLoader = css.preprocessor === 'stylus'
+    const stylusLoader = preprocessor === 'stylus'
         ? { loader: 'stylus-loader' }
         : false;
 
-    const loaders = [postcssLoader, sassLoader, lessLoader, stylusLoader].filter(Boolean);
+    let postcssLoader;
+    if (styles.postcss) {
+        postcssLoader = { loader: 'postcss-loader' };
+        if (typeof styles.postcss === 'object') {
+            postcssLoader.options = styles.postcss;
+        }
+    }
 
-    if (css.extract && isClient) {
-        if (css.extract === 'text') {
+    const loaders = [postcssLoader, sassLoader, lessLoader, stylusLoader].filter(Boolean);
+    if (!isServer && styles.extract !== 'none') {
+        if (styles.extract === 'text') {
             return ExtractTextPlugin.extract({
                 fallback: 'style-loader',
-                use: [
-                    cssLoader,
-                    ...loaders
-                ]
+                use: [cssLoader, ...loaders]
             });
-        } else if (css.extract === 'chunks') {
-            return ExtractCssChunks.extract({
-                use: [
-                    cssLoader,
-                    ...loaders
-                ]
+        } else if (styles.extract === 'chunk') {
+            return ExtractCSSChunks.extract({
+                use: [cssLoader, ...loaders]
             });
         }
     }

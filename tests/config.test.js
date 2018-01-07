@@ -1,5 +1,5 @@
 import test from 'ava'
-import { loadConfig, validateConfig, processEntry, configError } from '../src/core/config'
+import { loadConfig, validateConfig, processConfig as processEntry, configError } from '../src/core/config'
 import Schema from '../src/core/schema'
 
 const base = {
@@ -47,7 +47,7 @@ test('Should throw an error when type object-or-bool when it receives a differen
     const value = 5;
     const type = { type: 'object-or-bool' };
     const key = 'test';
-    const msg = configError({ key, value, type: type.type });
+    const msg = configError({ key, value, type: type.type }, 'boolean');
     try {
         const parsed = processEntry(key, value, type);
     } catch (err) {
