@@ -1,22 +1,22 @@
 export function configureEntry(isDev, isServer, { entry, webpack, framework }) {
-    const mainEntry = isServer ? entry.server : entry.client;
-    const entry = { main: [mainEntry] };
+    const currentEntry = isServer ? entry.server : entry.client;
+    const mainEntry = { main: [currentEntry] };
 
     if (!isServer && isDev && webpack.useHmr) {
-        entry.main = [
-            ...entry.main,
+        mainEntry.main = [
+            ...mainEntry.main,
             'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=false&quiet=false&noInfo-false'
         ];
     }
 
     if (!isServer && framework.name === 'react' && framework.react.useHotLoader) {
-        entry.main = [
+        mainEntry.main = [
             'react-hot-loader',
-            ...entry.main
+            ...mainEntry.main
         ];
     }
 
-    return entry;
+    return mainEntry;
 }
 
 export function configureOutput(isDev, isServer, { output }) {
