@@ -1,13 +1,12 @@
 import { isString, isBoolean } from '../../utils';
 
 export default function createDevtool(isProd, { sourceMaps, compression, useTypescript }) {
-    let devtool;
+    let devtool = false;
 
     if (isBoolean(sourceMaps)) {
         if (sourceMaps === true) {
             devtool = isProd ? 'source-map' : 'eval';
         }
-        return false;
     }
 
     if (isString(sourceMaps)) {
