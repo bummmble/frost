@@ -12,3 +12,12 @@ export function objectRemoveEmpty(obj) {
         return acc;
     }, {});
 }
+
+export function filterOutKeys(obj, keys) {
+    return Object.keys(obj).reduce((acc, curr) => {
+        if (!keys.includes(curr)) {
+            acc[curr] = obj[curr];
+        }
+        return acc;
+    }, {});
+}

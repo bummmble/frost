@@ -8,7 +8,8 @@ import {
     configurePerformance,
     configureDevtool,
     configureLoaders
-}from './helpers';
+} from './helpers';
+import { createHappyPlugins } from './plugins';
 
 export default function BaseCompiler(props, config) {
     const { isProd, isDev, isServer, isClient } = props;
