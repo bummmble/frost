@@ -1,7 +1,7 @@
 module.exports = {
     entry: {
-        client: 'test/fixtures/client/index.js',
-        server: 'test/fixtures/server/index.js',
+        client: 'tests/fixtures/client/index.js',
+        server: 'tests/fixtures/server/index.js',
         vendor: []
     },
     output: {

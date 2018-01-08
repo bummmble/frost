@@ -16,7 +16,7 @@ const props = {
 test('Should create a valid development compiler for client', t => {
     const base = BaseCompiler(props, testConfig);
     const names = getPluginNames(base.plugins.filter(Boolean));
-    t.true(base.entry.main.includes('test/fixtures/client/index.js'));
+    t.true(base.entry.main.includes('tests/fixtures/client/index.js'));
     t.true(names.includes('NamedModulesPlugin'));
     t.true(names.includes('NoEmitOnErrorsPlugin'));
 });
@@ -40,7 +40,7 @@ test('Should create a valid development compiler for server', t => {
         isServer: true
     }, testConfig);
     const names = getPluginNames(base.plugins.filter(Boolean));
-    t.true(base.entry.main.includes('test/fixtures/server/index.js'));
+    t.true(base.entry.main.includes('tests/fixtures/server/index.js'));
 });
 
 test('Should create a valid production compiler for server', t => {
