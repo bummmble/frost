@@ -1,5 +1,5 @@
 import test from 'ava';
-import { configurePerformance, configureDevtool, configureEntry, configureOutput } from '../../../src/compilers/helpers';
+import { configurePerformance, configureDevtool, configureEntry, configureOutput, configureExternals } from '../../../src/compilers/helpers';
 import testConfig from '../../helpers/test.config';
 
 // --- Performance ---
@@ -137,3 +137,13 @@ test('Should handle production options for output', t => {
     t.true(output.chunkFilename == '[name].[chunkhash].js');
 });
 
+// --- Externals ---
+// configureExternals(config)
+test('Should probably configure externals', t => {
+    const externals = configureExternals(testConfig);
+    const [key] = Object.keys(externals);
+    const [common] = externals[key].split(' ');
+
+    t.true(typeof externals === 'object');
+    t.true(common === 'commonjs');
+});
