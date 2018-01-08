@@ -39,7 +39,7 @@ export default function ClientCompiler(env = 'development', config) {
             : null,
 
         config.webpack.plugins.client.length > 0
-            ? createProvidedPlugin('client', config.webpack)
+            ? (...createProvidedPlugin('client', config.webpack))
             : null,
     ];
 

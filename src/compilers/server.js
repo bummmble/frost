@@ -1,6 +1,7 @@
 import webpack from 'webpack';
 
 import BaseCompiler from './base';
+import { createProvidedPlugin } from './plugins';
 
 export default function ServerCompiler(env = 'development', config) {
     const isDev = env === 'development';
@@ -15,7 +16,11 @@ export default function ServerCompiler(env = 'development', config) {
     const serverPlugins = [
         new webpack.optimize.LimitChunkCountPlugin({
             maxChunks: 1
-        })
+        }),
+
+        config.webpack.plugins.server.length > 0
+            ? (...createProvidedPlugin('server', config.webpack))
+            : null
     ];
 
     const compiler = {
