@@ -134,6 +134,7 @@ export function setFlags(flags, config) {
     return config;
 }
 
+/* istanbul ignore else */
 export async function loadConfig(prefix = 'frost', flags = {}) {
     const loader = cosmiconfig(prefix, {
         rcExtensions: true,

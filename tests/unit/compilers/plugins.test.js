@@ -15,6 +15,18 @@ test('Should return false when extract is not provided', t => {
     t.true(extract === false);
 });
 
+test('Should return proper file name defaults for environment', t => {
+    const config = {
+        styles: {
+            extract: 'text',
+            extractOptions: {}
+        }
+    };
+    const dev = createExtractPlugin(true, config);
+    const prod = createExtractPlugin(false, config);
+    t.true(dev.filename === '[name].css');
+    t.true(prod.filename === '[name]-[contenthash:base62:8].css');
+})
 test('Should apply extract options', t => {
     const config = {
         styles: {

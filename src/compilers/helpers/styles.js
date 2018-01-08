@@ -64,6 +64,7 @@ export default function loadStyles(isDev, isServer, { styles }) {
                 use: loaders
             });
         }
+        /* istanbul ignore else */
         if (styles.extract === 'chunks') {
             return ExtractCSSChunks.extract({
                 use: loaders

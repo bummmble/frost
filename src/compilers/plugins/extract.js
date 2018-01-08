@@ -3,6 +3,7 @@ import ExtractCSSChunksPlugin from 'extract-css-chunks-webpack-plugin';
 
 export function createExtractPlugin(isDev, { styles }) {
     let options = { filename: isDev ? '[name].css' : '[name]-[contenthash:base62:8].css' };
+    /* istanbul ignore else */
     if (styles.extractOptions) {
         options = {
             ...options,

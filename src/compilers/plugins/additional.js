@@ -5,6 +5,7 @@ export function createProvidedPlugin(type, { plugins }) {
         if (isObject(plugin) || isFunction(plugin)) {
             return plugin;
         }
+        /* istanbul ignore else */
         if (isString(plugin)) {
             const resolved = require.resolve(plugin);
             const p = require(resolved);
