@@ -12,7 +12,7 @@ module.exports = {
     files: {
         babel: /\.(js|mjs|jsx)$/,
         styles: /\.(css|sss|pcss|sass|scss|less|styl|stylus)$/,
-        ts: /\.(ts|tsx)$/,
+        typescript: /\.(ts|tsx)$/,
         elm: /\.elm$/,
         rust: /\.rs$/,
         graphql: /\.(graphql|gql)$/,

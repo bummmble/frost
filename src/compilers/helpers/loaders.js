@@ -28,6 +28,6 @@ export default function createLoaders(isDev, isServer, babelEnv, config) {
         ts: config.useTypescript ? createTsLoader() : '',
         elm: config.useElm ? createElmLoader() : '',
         rust: config.useRust ? createRustLoader() : '',
-        styles: createJsLoader(isDev, isServer, config)
+        styles: createStyleLoader(isDev, isServer, config)
     });
 }

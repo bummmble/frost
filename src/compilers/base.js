@@ -50,7 +50,7 @@ export default function BaseCompiler(props, config) {
                     exclude: /node_modules/,
                     use: useHappyPack && (isServer || config.styles.extract === 'none')
                         ? 'happypack/loader?id=styles'
-                        : loaders.style
+                        : loaders.styles
                 },
                 config.useElm ? {
                     test: config.files.elm,
@@ -69,7 +69,7 @@ export default function BaseCompiler(props, config) {
                     use: useHappyPack
                         ? 'happypack/loader?id=rust'
                         : loaders.rust
-                }
+                } : null
             ].filter(Boolean)
         },
 
