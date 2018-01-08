@@ -2,6 +2,8 @@ import webpack from 'webpack';
 import StatsPlugin from 'stats-webpack-plugin';
 import BabiliMinifyPlugin from 'babel-minify-webpack-plugin';
 import UglifyPlugin from 'uglifyjs-webpack-plugin';
+import ServiceWorkerPlugin from 'serviceworker-webpack-plugin';
+
 import { resolve } from 'path';
 
 import BaseCompiler from './base';
@@ -46,6 +48,11 @@ export default function ClientCompiler(env = 'development', config) {
             async: 'vendor-async',
             children: true,
             minChunks: 3
+        }) : null,
+
+        config.pwa.hasServiceWorker ? new ServiceWorkerPlugin({
+            entry: config.pwa.workerEntry,
+            exclude: ['*hot-update', '**/*.map', '**/stats.json']
         }) : null,
 
         isDev && config.webpack.useHmr
