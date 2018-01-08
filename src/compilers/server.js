@@ -1,6 +1,7 @@
 import webpack from 'webpack';
 
 import BaseCompiler from './base';
+import { configureExternals } from './helpers';
 import { createProvidedPlugin } from './plugins';
 
 export default function ServerCompiler(env = 'development', config) {
@@ -27,6 +28,7 @@ export default function ServerCompiler(env = 'development', config) {
         ...base,
         name: 'server',
         target: 'node',
+        externals: configureExternals(config),
         plugins: [
             ...base.plugins,
             ...serverPlugins
