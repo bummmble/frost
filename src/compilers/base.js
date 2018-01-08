@@ -73,7 +73,20 @@ export default function BaseCompiler(props, config) {
         },
 
         plugins: [
-            ...HappyPlugin
+            ...HappyPlugin,
+
+            isDev ? new webpack.NamedModulesPlugin() : null,
+            isDev ? new webpack.NoEmitOnErrorsPlugin() : null,
+
+            isProd ? new webpack.HashedModuleIdsPlugin() : null,
+            isProd ? new webpack.optimize.ModuleConcatenationPlugin() : null,
+            isProd ? new BundleAnalyzerPlugin({
+                analyzerMode: 'static',
+                defaultSizes: isServer ? 'parsed' : 'gziped',
+                logLevel: 'silent',
+                openAnalyzer: false,
+                reportFilename: 'report.html'
+            }) : null
         ]
     };
 }
