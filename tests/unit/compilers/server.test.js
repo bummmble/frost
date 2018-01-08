@@ -19,3 +19,24 @@ test('Should generate a valid production server compiler', t => {
     t.true(server.entry.main.includes('tests/fixtures/server/index.js'));
     t.true(names.includes('LimitChunkCountPlugin'));
 });
+
+// --- Config Options
+
+test('Should apply provided plugins to server plugins', t => {
+    const plugin = class Plugin { constructor() { this.test = true }}
+    const p = new plugin();
+    const config = {
+        ...testConfig,
+        webpack: {
+            ...testConfig.webpack,
+            plugins: {
+                ...testConfig.webpack.plugins,
+                server: [p]
+            }
+        }
+    };
+    const server = ServerCompiler('development', config);
+    const names = getPluginNames(server.plugins);
+    t.true(names.includes('Plugin'));
+});
+

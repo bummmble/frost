@@ -96,6 +96,7 @@
     "lint-staged": "^6.0.0",
     "minimist": "^1.2.0",
     "nyc": "^11.3.0",
+    "react": "^16.2.0",
     "remap-istanbul": "^0.9.5",
     "rollup": "^0.51.5",
     "rollup-plugin-alias": "^1.4.0",

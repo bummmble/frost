@@ -14,14 +14,16 @@ export default function ServerCompiler(env = 'development', config) {
         isServer: true
     }, config);
 
+    const providedPlugins = config.webpack.plugins.server.length > 0
+        ? createProvidedPlugin('server', config.webpack)
+        : [];
+
     const serverPlugins = [
         new webpack.optimize.LimitChunkCountPlugin({
             maxChunks: 1
         }),
 
-        config.webpack.plugins.server.length > 0
-            ? (...createProvidedPlugin('server', config.webpack))
-            : null
+        ...providedPlugins
     ];
 
     const compiler = {

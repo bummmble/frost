@@ -1,3 +1,5 @@
+const { resolve } = require('path');
+
 module.exports = {
     entry: {
         client: 'tests/fixtures/client/index.js',
@@ -68,5 +70,6 @@ module.exports = {
             useSSR: true
         }
     },
-    renderers: []
+    renderers: [],
+    root: resolve(__dirname, '../fixtures')
 }
