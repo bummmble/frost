@@ -1,4 +1,5 @@
 import webpack from 'webpack';
+import WebpackMd5Hash from 'webpack-md5-hash';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { resolve } from 'path';
 
@@ -75,6 +76,7 @@ export default function BaseCompiler(props, config) {
         plugins: [
             ...HappyPlugin,
 
+            new WebpackMd5Hash(),
             isDev ? new webpack.NamedModulesPlugin() : null,
             isDev ? new webpack.NoEmitOnErrorsPlugin() : null,
 
