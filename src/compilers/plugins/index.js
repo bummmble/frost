@@ -1,1 +1,2 @@
-export { createHappyPlugins } from './happy';
+export { createHappyPlugin } from './happy';
+export { createExtractPlugin } from './extract';

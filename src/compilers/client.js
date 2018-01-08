@@ -4,6 +4,7 @@ import BabiliMinifyPlugin from 'babel-minify-webpack-plugin';
 import UglifyPlugin from 'uglifyjs-webpack-plugin';
 
 import BaseCompiler from './base';
+import { createExtractPlugin } from './plugins';
 
 export default function ClientCompiler(env = 'development', config) {
     const isDev = env === 'development';
@@ -16,6 +17,10 @@ export default function ClientCompiler(env = 'development', config) {
     }, config);
 
     const clientPlugins = [
+        config.styles.extract !== 'none'
+            ? createExtractPlugin(isDev, config)
+            : null,
+
         isDev && config.webpack.useHmr
             ? new webpack.HotModuleReplacementPlugin()
             : null,

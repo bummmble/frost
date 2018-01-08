@@ -10,7 +10,7 @@ import {
     configureDevtool,
     configureLoaders
 } from './helpers';
-import { createHappyPlugins } from './plugins';
+import { createHappyPlugin } from './plugins';
 import { filterOutKeys } from '../utils';
 
 export default function BaseCompiler(props, config) {
@@ -26,8 +26,8 @@ export default function BaseCompiler(props, config) {
     const useHappyPack = config.webpack.useHappyPack;
     const HappyPlugin = useHappyPack
         ? config.styles.extract !== 'none' && !isServer
-            ? createHappyPlugins(filterOutKeys(loaders, ['styles']))
-            : createHappyPlugins(loaders)
+            ? createHappyPlugin(filterOutKeys(loaders, ['styles']))
+            : createHappyPlugin(loaders)
         : [];
 
     return {

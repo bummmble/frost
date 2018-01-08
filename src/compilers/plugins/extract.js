@@ -1,7 +1,7 @@
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import ExtractCSSChunks from 'extract-css-chunks-webpack-plugin';
 
-export function createExtractPlugins(isDev, { styles }) {
+export function createExtractPlugin(isDev, { styles }) {
     let options = { filename: isDev ? '[name].css' : '[name]-[contenthash:base62:8].css' };
     if (styles.extractOptions) {
         options = {
