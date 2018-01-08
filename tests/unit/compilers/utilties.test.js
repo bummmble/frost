@@ -139,7 +139,7 @@ test('Should handle production options for output', t => {
 
 // --- Externals ---
 // configureExternals(config)
-test('Should probably configure externals', t => {
+test('Should properly configure externals', t => {
     const externals = configureExternals(testConfig);
     const [key] = Object.keys(externals);
     const [common] = externals[key].split(' ');
