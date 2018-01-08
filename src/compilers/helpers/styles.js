@@ -47,7 +47,7 @@ export const preprocessorMap = {
     'styl': generateStylusLoader
 };
 
-export default function loadStyles(isDev, isServer, { styles, sourceMaps }) {
+export default function loadStyles(isDev, isServer, { styles }) {
     const cssLoader = generateCssLoader(isDev, isServer, styles);
     const postcssLoader = styles.postcss ? generatePostcssLoader(styles) : false;
     const loaders = [cssLoader, postcssLoader].filter(Boolean);
@@ -59,13 +59,13 @@ export default function loadStyles(isDev, isServer, { styles, sourceMaps }) {
 
     if (!isServer && styles.extract !== 'none') {
         if (styles.extract === 'text') {
-            return ExtractTextPlugin({
+            return ExtractTextPlugin.extract({
                 fallback: 'style-loader',
                 use: loaders
             });
         }
         if (styles.extract === 'chunks') {
-            return ExtractCSSChunks({
+            return ExtractCSSChunks.extract({
                 use: loaders
             });
         }
