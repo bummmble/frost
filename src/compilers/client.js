@@ -2,6 +2,7 @@ import webpack from 'webpack';
 import StatsPlugin from 'stats-webpack-plugin';
 import BabiliMinifyPlugin from 'babel-minify-webpack-plugin';
 import UglifyPlugin from 'uglifyjs-webpack-plugin';
+import { resolve } from 'path';
 
 import BaseCompiler from './base';
 import { createExtractPlugin, createProvidedPlugin } from './plugins';
@@ -16,10 +17,36 @@ export default function ClientCompiler(env = 'development', config) {
         isClient: true
     }, config);
 
+    const hasVendors = config.entry.vendor.length > 0;
+
     const clientPlugins = [
         config.styles.extract !== 'none'
             ? createExtractPlugin(isDev, config)
             : null,
+
+        hasVendors ? new webpack.optimize.CommonsChunkPlugin({
+            name: 'vendor',
+            filename: isDev ? '[name].js' : '[name].[chunkhash].js',
+            minChunks({ resource }) {
+                return (
+                    resource && /\.js$/.test(resource) &&
+                    resource.indexOf(resolve(config.root, 'node_modules')) === 0
+                )
+            }
+        }) : null,
+
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'manifest.js',
+            minChunks: Infinity,
+            filename: 'manifest.js'
+        }),
+
+        hasVendors ? new webpack.optimize.CommonsChunkPlugin({
+            name: 'main',
+            async: 'vendor-async',
+            children: true,
+            minChunks: 3
+        }) : null,
 
         isDev && config.webpack.useHmr
             ? new webpack.HotModuleReplacementPlugin()
