@@ -4,7 +4,7 @@ import BaseCompiler from './base';
 import { configureExternals } from './helpers';
 import { createProvidedPlugin } from './plugins';
 
-export default function ServerCompiler(env = 'development', config) {
+export default function ServerCompiler(env = 'development', config = {}) {
     const isDev = env === 'development';
     const isProd = env === 'production';
     const base = BaseCompiler({

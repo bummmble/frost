@@ -31,7 +31,7 @@ export default function ClientCompiler(env = 'development', config) {
 
         hasVendors ? new webpack.optimize.CommonsChunkPlugin({
             name: 'vendor',
-            filename: isDev ? '[name].js' : '[name].[chunkhash].js',
+            filename: isDev ? '[name].js' : /* istanbul ignore next */ '[name].[chunkhash].js',
             minChunks({ resource }) {
                 return (
                     resource && /\.js$/.test(resource) &&

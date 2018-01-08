@@ -2,4 +2,6 @@ client
 server
 *.log
 .nyc_output
+coverage
+coverage.lcov
 tests
