@@ -2,7 +2,13 @@ import webpack from 'webpack';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { resolve } from 'path';
 
-import { configureEntry, configureOutput, configurePerformance, configureDevtool }from './helpers';
+import {
+    configureEntry,
+    configureOutput,
+    configurePerformance,
+    configureDevtool,
+    configureLoaders
+}from './helpers';
 
 export default function BaseCompiler(props, config) {
     const { isProd, isDev, isServer, isClient } = props;
@@ -12,6 +18,7 @@ export default function BaseCompiler(props, config) {
 
     const devtool = configureDevtool(isProd, config);
     const performance = configurePerformance(isDev, isServer, config);
+    const loaders = configureLoaders(isDev, isServer, babelEnv, config);
 
     return {
         context: config.root,
