@@ -4,7 +4,7 @@ import BabiliMinifyPlugin from 'babel-minify-webpack-plugin';
 import UglifyPlugin from 'uglifyjs-webpack-plugin';
 
 import BaseCompiler from './base';
-import { createExtractPlugin } from './plugins';
+import { createExtractPlugin, createProvidedPlugin } from './plugins';
 
 export default function ClientCompiler(env = 'development', config) {
     const isDev = env === 'development';
@@ -36,7 +36,11 @@ export default function ClientCompiler(env = 'development', config) {
                 parallel: true,
                 uglifyOptions: config.compression.uglifyOptions
               })
-            : null
+            : null,
+
+        config.webpack.plugins.client.length > 0
+            ? createProvidedPlugin('client', config.webpack)
+            : null,
     ];
 
     const compiler = {
