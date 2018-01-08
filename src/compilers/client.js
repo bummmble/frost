@@ -20,6 +20,9 @@ export default function ClientCompiler(env = 'development', config) {
     }, config);
 
     const hasVendors = config.entry.vendor.length > 0;
+    const providedPlugins = config.webpack.plugins.client.length > 0
+        ? createProvidedPlugin('client', config.webpack)
+        : [];
 
     const clientPlugins = [
         config.styles.extract !== 'none'
@@ -72,9 +75,7 @@ export default function ClientCompiler(env = 'development', config) {
               })
             : null,
 
-        config.webpack.plugins.client.length > 0
-            ? (...createProvidedPlugin('client', config.webpack))
-            : null,
+        ...providedPlugins
     ];
 
     const compiler = {

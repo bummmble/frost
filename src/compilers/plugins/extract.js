@@ -1,5 +1,5 @@
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
-import ExtractCSSChunks from 'extract-css-chunks-webpack-plugin';
+import ExtractCSSChunksPlugin from 'extract-css-chunks-webpack-plugin';
 
 export function createExtractPlugin(isDev, { styles }) {
     let options = { filename: isDev ? '[name].css' : '[name]-[contenthash:base62:8].css' };
@@ -14,7 +14,7 @@ export function createExtractPlugin(isDev, { styles }) {
         return new ExtractTextPlugin(options);
     }
     if (styles.extract === 'chunks') {
-        return new ExtractCSSChunks(options);
+        return new ExtractCSSChunksPlugin(options);
     }
 
     return false;
