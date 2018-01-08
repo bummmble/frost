@@ -1,19 +1,32 @@
 import webpack from 'webpack';
+
 import BaseCompiler from './base';
-import { getExternals } from './helpers/externals';
 
-export default function ServerCompiler(props, config) {
-    const base = BaseCompiler(props, config);
+export default function ServerCompiler(env = 'development', config) {
+    const isDev = env === 'development';
+    const isProd = env === 'production';
+    const base = BaseCompiler({
+        isDev,
+        isProd,
+        isClient: false,
+        isServer: true
+    }, config);
 
-    base.name = 'server';
-    base.target = 'node';
-    base.entry.main = config.entry.server;
-    base.output.path = config.output.server;
-    base.externals = getExternals(config.entry.server);
+    const serverPlugins = [
+        new webpack.optimize.LimitChunkCountPlugin({
+            maxChunks: 1
+        })
+    ];
 
-    base.plugins.push(new webpack.optimize.LimitChunkCountPlugin({
-        maxChunks: 1
-    }));
+    const compiler = {
+        ...base,
+        name: 'server',
+        target: 'node',
+        plugins: [
+            ...base.plugins,
+            ...serverPlugins
+        ].filter(Boolean)
+    };
 
-    return base;
+    return compiler;
 }
