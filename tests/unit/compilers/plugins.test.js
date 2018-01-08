@@ -1,6 +1,9 @@
 import test from 'ava';
+import testConfig from '../../helpers/test.config';
+
 import { getPluginNames } from '../../helpers/compiler';
-import { createExtractPlugin, createProvidedPlugin } from '../../../src/compilers/plugins';
+import { createExtractPlugin, createProvidedPlugin, createCommonChunks } from '../../../src/compilers/plugins';
+import { createBasicCommons } from '../../../src/compilers/plugins/commons';
 
 // -- Extract Plugin --
 // createExtractPlugin(isDev, config)
@@ -49,5 +52,39 @@ test('Should return a plugin instance from a string', t => {
     const plugins = createProvidedPlugin('client', config);
     const names = getPluginNames(plugins);
     t.true(names.includes('StatsPlugin'));
+});
+
+// The follow tests are mostly fluff and are incredibly fragile
+// The CommonsChunkPlugin is well tested, but trying to mock it
+// for coverage is a waste of time, but this impacts coverage in a
+// very annoying way if left out since the client compiler is so small
+
+test('Should the appropriate commonsChunkPlugins', t => {
+    const config = {
+        ...testConfig,
+        entry: {
+            ...testConfig.entry,
+            vendor: ['react']
+        }
+    };
+    const plugins = createCommonChunks(true, config);
+    const [commons] = plugins;
+
+    t.true(plugins.length === 3);
+    t.true(commons.filenameTemplate === '[name].js');
+});
+
+test('Commons Chunk should handle resources properly', t => {
+    const config = {
+        ...testConfig,
+        entry: {
+            ...testConfig.entry,
+            vendor: ['path']
+        }
+    };
+    const plugin = createBasicCommons(false, config);
+    const item = { resource: 'tests/fixtures/node_modules/path/path.js' };
+    t.true(plugin.filenameTemplate === '[name].[chunkhash].js');
+    t.true(plugin.minChunks(item) === false);
 });
 

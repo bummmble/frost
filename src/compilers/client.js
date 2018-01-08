@@ -7,7 +7,7 @@ import ServiceWorkerPlugin from 'serviceworker-webpack-plugin';
 import { resolve } from 'path';
 
 import BaseCompiler from './base';
-import { createExtractPlugin, createProvidedPlugin } from './plugins';
+import { createExtractPlugin, createProvidedPlugin, createCommonChunks } from './plugins';
 
 export default function ClientCompiler(env = 'development', config) {
     const isDev = env === 'development';
@@ -23,35 +23,14 @@ export default function ClientCompiler(env = 'development', config) {
     const providedPlugins = config.webpack.plugins.client.length > 0
         ? createProvidedPlugin('client', config.webpack)
         : [];
+    const commonChunks = createCommonChunks(isDev, config);
 
     const clientPlugins = [
         config.styles.extract !== 'none'
             ? createExtractPlugin(isDev, config)
             : null,
 
-        hasVendors ? new webpack.optimize.CommonsChunkPlugin({
-            name: 'vendor',
-            filename: isDev ? '[name].js' : /* istanbul ignore next */ '[name].[chunkhash].js',
-            minChunks({ resource }) {
-                return (
-                    resource && /\.js$/.test(resource) &&
-                    resource.indexOf(resolve(config.root, 'node_modules')) === 0
-                )
-            }
-        }) : null,
-
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'manifest.js',
-            minChunks: Infinity,
-            filename: 'manifest.js'
-        }),
-
-        hasVendors ? new webpack.optimize.CommonsChunkPlugin({
-            name: 'main',
-            async: 'vendor-async',
-            children: true,
-            minChunks: 3
-        }) : null,
+        ...commonChunks,
 
         config.pwa.hasServiceWorker ? new ServiceWorkerPlugin({
             entry: config.pwa.workerEntry,

@@ -13,7 +13,7 @@
     "build:cjs": "node build.js --cjs",
     "build": "npm run build:es && npm run build:cjs",
     "test": "NODE_ENV=test nyc ava --verbose",
-    "view-coverage": "npm run test && nyc report --reporter=html && open -a 'Google Chrome' '$coverage/index.html'",
+    "view-coverage": "npm run test && nyc report --reporter=html",
     "coverage": "npm run test && nyc report --reporter=text-lcov > coverage.lcov && codecov"
   },
   "lint-staged": {

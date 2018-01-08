@@ -53,6 +53,12 @@ test('Should create a loader and apply config options', t => {
     t.true(loader.options.forceEnv == 'test');
 });
 
+test('Should apply default babelOptions to make istanbul happy', t => {
+    const [loader] = createJsLoader('test');
+    const keys = Object.keys(loader.options);
+    t.true(keys.length === 1);
+});
+
 // --- Other Loaders ---
 test('Should create other loaders', t => {
     const [elm] = createElmLoader();
