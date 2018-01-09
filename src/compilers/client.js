@@ -7,7 +7,7 @@ import ServiceWorkerPlugin from 'serviceworker-webpack-plugin';
 import { resolve } from 'path';
 
 import BaseCompiler from './base';
-import { createExtractPlugin, createProvidedPlugin, createCommonChunks } from './plugins';
+import { createExtractPlugin, createProvidedPlugin, createCommonChunks } from './plugins/index';
 
 export default function ClientCompiler(env = 'development', config) {
     const isDev = env === 'development';

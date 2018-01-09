@@ -4,6 +4,7 @@ const { rollup } = require('rollup');
 const builtinModules = require('builtin-modules');
 const args = require('minimist')(process.argv.slice(2));
 const pkg = require('./package.json');
+const babel = require('rollup-plugin-babel');
 const external = Object.keys(pkg.dependencies).concat(builtinModules);
 
 function getFormatAndName() {
@@ -17,7 +18,8 @@ function build() {
     const { name, format } = getFormatAndName();
     return rollup({
         entry: 'src/index.js',
-        external
+        external,
+        plugins: [babel()]
     })
     .then(({ write }) => write({
         dest: `dist/${name}`,

@@ -5,6 +5,8 @@
 
 # Frost Builder
 
+Note: This readme is currently out of date and is being updated to reflect new changes in the coming release!
+
 > A simple way to control your application builds and targets
 
 Frost does offer a framework agnostic "Renderer" that builds production ready bundles and has a universal development server, but that isn't the goal. The goal is to make complex builds simpler.

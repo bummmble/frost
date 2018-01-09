@@ -1,7 +1,6 @@
 import webpack from 'webpack';
 import { each } from 'frost-utils';
 import { emitEvent } from './emitter';
-import formatWebpackOutput from '../compilers/helpers/formatting';
 
 const Status = {
     Initializing: 0,
@@ -59,7 +58,6 @@ export default class Builder {
         await each(this.compilers,  async compiler => {
             target ? compiler.options.name : target + compiler.options.name;
             const stats = await webpackPromise(compiler);
-            formatWebpackOutput(stats, target);
         });
 
         return true;

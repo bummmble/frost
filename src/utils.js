@@ -21,3 +21,9 @@ export function filterOutKeys(obj, keys) {
         return acc;
     }, {});
 }
+
+export function each(arr, fn) {
+    return arr.reduce((promises, curr) => promise.then(() => {
+        return fn(task);
+    }), Promise.resolve());
+}

@@ -1,8 +1,8 @@
 import webpack from 'webpack';
 
 import BaseCompiler from './base';
-import { configureExternals } from './helpers';
-import { createProvidedPlugin } from './plugins';
+import { configureExternals } from './helpers/index';
+import { createProvidedPlugin } from './plugins/index';
 
 export default function ServerCompiler(env = 'development', config = {}) {
     const isDev = env === 'development';

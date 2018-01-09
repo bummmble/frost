@@ -13,7 +13,7 @@
     "build:cjs": "node build.js --cjs",
     "build": "npm run build:es && npm run build:cjs",
     "test": "NODE_ENV=test nyc ava --verbose && nyc report --reporter=text-lcov > coverage.lcov && codecov",
-    "view-coverage": "npm run test && nyc report --reporter=html",
+    "view-coverage": "npm run test && nyc report --reporter=html"
   },
   "lint-staged": {
     "*.js": [
@@ -28,12 +28,14 @@
     "babel": "inherit"
   },
   "nyc": {
-    "require": ["babel-register"],
+    "require": [
+      "babel-register"
+    ],
     "sourceMap": false,
     "instrument": false,
     "exclude": [
-        "src/core/schema.js",
-        "tests/**/*.js"
+      "src/core/schema.js",
+      "tests/**/*.js"
     ]
   },
   "repository": {
@@ -109,6 +111,7 @@
     "remap-istanbul": "^0.9.5",
     "rollup": "^0.51.5",
     "rollup-plugin-alias": "^1.4.0",
+    "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-commonjs": "^8.2.6"
   }
 }

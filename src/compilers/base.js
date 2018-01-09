@@ -9,8 +9,8 @@ import {
     configurePerformance,
     configureDevtool,
     configureLoaders
-} from './helpers';
-import { createHappyPlugin } from './plugins';
+} from './helpers/index';
+import { createHappyPlugin } from './plugins/index';
 import { filterOutKeys } from '../utils';
 
 export default function BaseCompiler(props, config) {
