@@ -28,11 +28,6 @@
     "babel": "inherit"
   },
   "nyc": {
-    "require": [
-      "babel-register"
-    ],
-    "sourceMap": false,
-    "instrument": false,
     "exclude": [
       "src/core/schema.js",
       "tests/**/*.js"
