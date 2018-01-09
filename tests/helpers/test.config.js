@@ -71,5 +71,5 @@ module.exports = {
         }
     },
     renderers: [],
-    root: resolve(__dirname, '../fixtures')
+    root: resolve(__dirname, '../../')
 }
